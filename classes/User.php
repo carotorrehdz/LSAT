@@ -78,13 +78,13 @@ class User {
 		return true;
 	}
 
-	public function redirectToDashboard(){
+	public function redirectToDefault(){
 		$page = "index.php";
 		  if($this->data()->role == "admin"){
-		    $page = 'dashboardA.php';
+		    $page = 'registerTeacher.php';
 		  }
 		  else if($this->data()->role == "teacher"){
-		    $page = 'dashboardT.php';
+		    $page = 'groups.php';
 		  }
 		  else if($this->data()->role == "student"){
 		    $page = 'dashboardS.php';

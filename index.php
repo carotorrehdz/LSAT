@@ -3,7 +3,7 @@ require 'core/init.php';
 
 $user = new User();
 if ($user->isLoggedIn()){
-  $user->redirectToDashboard();
+  $user->redirectToDefault();
 }
 
 ?>

@@ -16,7 +16,7 @@ if(Input::exists()) {
 			$page = 'registerTeacher.php';
 		}
 		else if($user->data()->role == "teacher"){
-			$page = 'dashboardT.php';
+			$page = 'groups.php';
 		}
 		else if($user->data()->role == "student"){
 			$page = 'dashboardS.php';

@@ -7,10 +7,10 @@
         <li class="heading">Teachers</li>
         <li><a href="registerTeacher.php">Register new </a></li>
         <li><a href="manageTeachers.php">View / Edit </a></li>
-        
+
         <li class="divider"></li>
-        
-        <li class="heading">Levels</li>
+
+        <li class="heading">Difficulty</li>
         <li><a href="levels.php" title="Difficulty level for questions">Manage levels</a></li>
 
         <li class="divider"></li>
