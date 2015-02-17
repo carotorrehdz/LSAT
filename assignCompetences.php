@@ -23,8 +23,8 @@ $user->checkIsValidUser('teacher');
     <div class="row">
     <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
-        <h3>Assign competences</h3>
-        <h4 class="subheader">Manage groups</h4>
+        <h3>Asignar competencias</h3>
+        <h4 class="subheader">Asignar competencias a los grupos</h4>
         <hr>  
         
      </div>

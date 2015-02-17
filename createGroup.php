@@ -35,7 +35,7 @@ $user->checkIsValidUser('teacher');
           </div>
           <div class="row"> 
             <div class="large-12 columns"> 
-              <label>Students<input id="students" type="text" placeholder="Comma sepparated list of the student id numbers" /> </label> 
+              <label>Students<input id="students" type="text" placeholder="Matriculas de alumnos separadas por comas"/> </label>
             </div> 
           </div>  
           <a href="#" onclick="createGroup()" class="button round small right">Create</a>
@@ -48,9 +48,9 @@ $user->checkIsValidUser('teacher');
 
   <?php include 'includes/templates/footer.php' ?>
 
-
   <script src="js/vendor/jquery.js"></script>
   <script src="js/foundation.min.js"></script>
+
   <script>
     $(document).foundation();
 
@@ -65,7 +65,6 @@ $user->checkIsValidUser('teacher');
         if(data.message == 'success'){
           alert("El grupo fue creado exitosamente");
           window.location.reload();
-
         }else{
           alert("There was an error: " + data.message);
         }

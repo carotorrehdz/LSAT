@@ -10,7 +10,8 @@ try {
 		'mail' 	=> "lsatitesm@gmail.com",
 		'password' 	=> Hash::make("123", $salt),
 		'salt'		=> $salt,
-		'username' 		=> "Admin"
+		'username' 		=> "Admin",
+		'role'      => 'admin'
 		));
 
 	echo "success";	

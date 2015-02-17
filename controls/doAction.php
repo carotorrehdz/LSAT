@@ -67,31 +67,48 @@ if(Input::exists()) {
 		break;
 
 		case "createGroup":
-		/*Debemos de crear una nueva cuenta para cada alumno y asignarle el nuevo grupo
-		pero si el alumno ya existe solo le asignamos el grupo*/
 
+		//Necesitamos la matricula del profesor, que es el usuario logueado
 		$user = new User();
-		$salt = Hash::salt(32);
-
+		$teacherId = $user->data()->idNumber;
 		$groupname = Input::get('groupname');
 		$students  = Input::get('students');
 
 		try {
-			//Crear cada estudiante
-			$idnumber = "";
-			$mail = $idnumber . "@itesm.mx";
-			$username = "Estudiante" . $idnumber;
-			$user->create(array(
-				'mail' 	=> $mail,
-				'password' 	=> Hash::make("123", $salt),
-				'salt'		=> $salt,
-				'username'  => $username,
-				'idnumber'  => $idnumber,
-				'role'      =>'student'
+
+			/*Crear el nuevo grupo*/
+			$group = new Groups();
+			$group->create(array(
+				'professor' => $teacherId,
+				'name'  => $groupname,
+				'term'  => ''
 				));
 
+			//Crear cada estudiante
+			$studentIds = explode(',', $students);
+			foreach ($studentIds as $idnumber){
+				/*Debemos de crear una nueva cuenta para cada alumno y asignarle el nuevo grupo
+				pero si el alumno ya existe solo le asignamos el grupo*/
+
+				$salt = Hash::salt(32);
+				$mail = $idnumber . "@itesm.mx";
+				$username = "Estudiante - " . $idnumber;
+
+				$user->create(array(
+					'mail' 	=> $mail,
+					'password' 	=> Hash::make("123", $salt),
+					'salt'		=> $salt,
+					'username'  => $username,
+					'idnumber'  => $idnumber,
+					'role'      =>'student'
+					));
+
+				//studentsingroup - groupId studentId
+
+			}
+
 		} catch(Exception $e) {
-			$response = array( "message" => "Error:004 ".$e->getMessage());
+			$response = array( "message" => "Error:005 ".$e->getMessage());
 			die(json_encode($response));
 		}
 		$response = array( "message" => "success");

@@ -38,15 +38,17 @@ class DB {
 				}
 			}
 
-			/*var_dump($sql);
-			var_dump($params);*/
+			// var_dump($sql);
+			// var_dump($params);
 
 			if($this->_query->execute()) {
 				$this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
 				$this->_count = $this->_query->rowCount();
 			} else {
 				$this->_error = true;
+				echo "Error :(";
 			}
+			
 		}
 		
 		return $this;
@@ -78,6 +80,13 @@ class DB {
 			}
 			
 			return false;
+		}else{
+			$sql = "{$action} FROM {$table}";
+
+				if(!$this->query($sql, array())->error()) {
+					return $this;
+				}
+				echo($this->error());
 		}
 	}
 

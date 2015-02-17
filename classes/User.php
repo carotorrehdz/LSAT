@@ -111,6 +111,7 @@ class User {
 			$user = $this->find($username);
 			if($user) {
 				if($this->data()->password === Hash::make($password, $this->data()->salt)) {
+					//var_dump('iguales');
 					Session::put($this->_sessionName, $this->data()->mail);
 					$this->_isLoggedIn = true;
 
