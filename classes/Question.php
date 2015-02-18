@@ -2,41 +2,18 @@
 
 class User {
 	private $_db,
-	$_sessionName = null,
-	$_cookieName = null,
 	$_data = array(),
-	$_isLoggedIn = false,
-	$_userTableName = 'user';
+	$_tableName = 'question';
 
-	public function __construct($user = null) {
+	public function __construct() {
 		$this->_db = DB::getInstance();
-		
-		$this->_sessionName = Config::get('session/session_name');
-		$this->_cookieName = Config::get('remember/cookie_name');
-
-		// Check if a session exists and set user if so.
-		if(Session::exists($this->_sessionName) && !$user) {
-			$user = Session::get($this->_sessionName);
-
-			if($this->find($user)) {
-				$this->_isLoggedIn = true;
-			} else {
-				$this->logout();
-			}
-		} else {
-			$this->find($user);
-		}
-	}
-
-	public function exists() {
-		return (!empty($this->_data)) ? true : false;
 	}
 
 	public function find($user = null) {
-		// Check if user_id is specified and grab details
+		// Check if user_id specified and grab details
 		if($user) {
 			$field = (is_numeric($user)) ? 'id' : 'mail';
-			$data = $this->_db->get($this->_userTableName, array($field, '=', $user));
+			$data = $this->_db->get($this->_tableName, array($field, '=', $user));
 
 			if($data->count()) {
 				$this->_data = $data->first();
@@ -46,17 +23,9 @@ class User {
 		return false;
 	}
 
-	public function getByIdNumber($idNumber){
-		$db = $this->_db->get($this->_userTableName, array('idNumber', '=', $idNumber));
-		if($db->count()) {
-				return $db->first();
-		}
-		return false;
-	}
-
 	public function create($fields = array()) {
-		if(!$this->_db->insert('user', $fields)) {
-			throw new Exception('There was a problem creating an account.');
+		if(!$this->_db->insert($this->_tableName, $fields)) {
+			throw new Exception('There was a problem creating the question.');
 		}
 	}
 
@@ -105,7 +74,7 @@ class User {
 			$id = $this->data()->id;
 		}
 
-		if(!$this->_db->update($this->_userTableName, $id, $fields)) {
+		if(!$this->_db->update($this->_tableName, $id, $fields)) {
 			throw new Exception('There was a problem updating.');
 		}
 	}
@@ -170,7 +139,7 @@ class User {
 
 		$users = array();
 
-		$db = $this->_db->get($this->_userTableName, array('role', '=', $role));
+		$db = $this->_db->get($this->_tableName, array('role', '=', $role));
 		if($db->count()) {
 				$users = $db->results();
 			}

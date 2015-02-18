@@ -76,35 +76,56 @@ if(Input::exists()) {
 
 		try {
 
-			/*Crear el nuevo grupo*/
+			$db = DB::getInstance();
+			
+			// Crear el nuevo grupo
 			$group = new Groups();
 			$group->create(array(
 				'professor' => $teacherId,
 				'name'  => $groupname,
-				'term'  => ''
+				'term'  => '1'
 				));
+
+			// Obtener el id que se le asigno en la BD
+			$groupId = $group->getGroupByName($groupname)->id;
 
 			//Crear cada estudiante
 			$studentIds = explode(',', $students);
 			foreach ($studentIds as $idnumber){
 				/*Debemos de crear una nueva cuenta para cada alumno y asignarle el nuevo grupo
 				pero si el alumno ya existe solo le asignamos el grupo*/
+				$studentId = 0;
+				$student = $user->getByIdNumber($idnumber);
+				if($student == false){
+					$salt = Hash::salt(32);
+					$mail = $idnumber . "@itesm.mx";
+					$username = "Estudiante - " . $idnumber;
 
-				$salt = Hash::salt(32);
-				$mail = $idnumber . "@itesm.mx";
-				$username = "Estudiante - " . $idnumber;
+					$user->create(array(
+						'mail' 	=> $mail,
+						'password' 	=> Hash::make("123", $salt),
+						'salt'		=> $salt,
+						'username'  => $username,
+						'idnumber'  => $idnumber,
+						'role'      =>'student'
+						));
 
-				$user->create(array(
-					'mail' 	=> $mail,
-					'password' 	=> Hash::make("123", $salt),
-					'salt'		=> $salt,
-					'username'  => $username,
-					'idnumber'  => $idnumber,
-					'role'      =>'student'
-					));
+					$studentId = $user->getByIdNumber($idnumber)->id;
 
+				}else{
+					$studentId = $student->id;
+				}
+
+				
 				//studentsingroup - groupId studentId
-
+				$fields = array(
+					'groupId' 	=> intval($groupId),
+					'studentId' => intval($studentId),
+					'active' => 1);
+				if(!$db->insert('studentsingroup', $fields)) {
+					throw new Exception('There was a problem assigning the student to the group.');
+				}
+				
 			}
 
 		} catch(Exception $e) {

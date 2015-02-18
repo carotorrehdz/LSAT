@@ -32,7 +32,7 @@ $user->checkIsValidUser('teacher');
           <div class="row"> 
             <div class="large-12 columns">
               <label>Texto de la pregunta 
-                <textarea placeholder=""></textarea> 
+                <textarea placeholder="" id="qtext"></textarea> 
               </label>
             </div>
           </div>
@@ -40,7 +40,7 @@ $user->checkIsValidUser('teacher');
           <div class="row"> 
             <div class="large-12 columns"> 
               <label>Url media
-              <input type="text" placeholder="URL de una imagen o video que ayude a explicar la pregunta" /> 
+                <input type="text" id="qurl" placeholder="URL de una imagen o video que ayude a explicar la pregunta" /> 
               </label> 
             </div> 
           </div> 
@@ -48,7 +48,7 @@ $user->checkIsValidUser('teacher');
           <div class="row"> 
             <div class="large-6 columns"> 
               <label>Dificultad
-                <select> 
+                <select id="qgrade"> 
                   <option value="1">Baja</option> 
                   <option value="2">Media</option> 
                   <option value="3">Alta</option> 
@@ -58,7 +58,7 @@ $user->checkIsValidUser('teacher');
 
             <div class="large-6 columns"> 
               <label>Tema
-                <select> 
+                <select id="qtopic"> 
                   <option value="1">1</option> 
                   <option value="2">2</option> 
                 </select> 
@@ -105,6 +105,29 @@ $user->checkIsValidUser('teacher');
   <script src="js/foundation.min.js"></script>
   <script>
     $(document).foundation();
+
+    function createQuestion(){
+      var qtopic  = $("#qtopic").val();
+      var qgrade  = $("#qgrade").val();
+      var qurl    = $("#qurl").val();
+      var qtext   = $("#qtext").val();
+      
+      $.post( "controls/doAction.php", {  action: "createQuestion", 
+                                          qtopic: qtopic,
+                                          qgrade: qgrade,
+                                          qurl: qurl,
+                                          qtext: qtext})
+      .done(function( data ) {
+
+        data = JSON.parse(data);
+        if(data.message == 'success'){
+          alert("La pregunta fue creada");
+        }else{
+          alert("There was an error: " + data.message);
+        }
+
+      });
+    }
 
   </script>
 </body>

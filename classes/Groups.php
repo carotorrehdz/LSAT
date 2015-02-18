@@ -3,7 +3,7 @@
 class Groups {
 	private $_db,
 	$_data = array(),
-	$_tableName = 'groups';
+	$_tableName = "groups";
 
 	public function __construct() {
 		$this->_db = DB::getInstance();
@@ -15,14 +15,25 @@ class Groups {
 		$db = $this->_db->get($this->_tableName, array('professor', '=', $teacherId));
 
 		if($db && $db->count()) {
-			$this->_data = $db->results();
+			return $db->results();
 		}
 
-		return $db->results();
+		return null;
+	}
+
+	public function getGroupByName($groupname = null){
+		if ($groupname == null) return null;
+
+		$db = $this->_db->get($this->_tableName, array('name', '=', $groupname));
+
+		if($db && $db->count()) {
+			return $db->first();
+		}
+
+		return null;
 	}
 
 	public function create($fields = array()) {
-		// var_dump($fields);
 		if(!$this->_db->insert($this->_tableName, $fields)) {
 			throw new Exception('There was a problem creating the group.');
 		}
