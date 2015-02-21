@@ -38,15 +38,15 @@ class DB {
 				}
 			}
 
-			// var_dump($sql);
-			// var_dump($params);
+			 //var_dump($sql);
+			 //var_dump($params);
 
 			if($this->_query->execute()) {
 				$this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
 				$this->_count = $this->_query->rowCount();
 			} else {
 				$this->_error = true;
-				echo "Error :(";
+				//echo "Error :(";
 			}
 			
 		}
@@ -151,5 +151,9 @@ class DB {
 
 	public function error() {
 		return $this->_error;
+	}
+
+	public function lastInsertId(){
+		return $this->_pdo->lastInsertId();
 	}
 }

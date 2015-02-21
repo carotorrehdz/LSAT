@@ -70,18 +70,24 @@ if(Input::exists()) {
 
 		//Necesitamos la matricula del profesor, que es el usuario logueado
 		$user = new User();
-		$teacherId = $user->data()->idNumber;
+		$teacherId = $user->data()->id;
 		$groupname = Input::get('groupname');
 		$students  = Input::get('students');
 
 		try {
 
 			$db = DB::getInstance();
-			
+
 			// Crear el nuevo grupo
 			$group = new Groups();
+			if($group->getGroupByName($groupname)){
+				$response = array( "message" => "El grupo ya existe");
+				echo json_encode($response);
+				return;
+			}
+
 			$group->create(array(
-				'professor' => $teacherId,
+				'professor' => intval($teacherId),
 				'name'  => $groupname,
 				'term'  => '1'
 				));
@@ -127,6 +133,75 @@ if(Input::exists()) {
 				}
 				
 			}
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:005 ".$e->getMessage());
+			die(json_encode($response));
+		}
+		$response = array( "message" => "success");
+		echo json_encode($response);
+		break;
+
+		case "createQuestion":
+
+		$user = new User();
+		if($user->data()->role != 'teacher'){
+			return; /*Solo un maestro puede crear preguntas*/
+		}
+		
+		//Necesitamos el id del profesor, que es el usuario logueado para ligar las preguntas con el
+		$teacherId = $user->data()->id;
+
+		try {
+			//Esto lo usamos para convertir el objeto que le mandamos con toda la informacion
+            //De esta forma nos queda como un hash map en el que podemos accesar a todos los valores facilmente
+			$data = json_decode(stripslashes($_POST['data']),true);
+
+			//Datos de la pregunta
+			$text = $data['text'];
+			$url = $data['url'];
+			$grade = $data['grade'];
+			$topic = $data['topic'];
+
+			$db = DB::getInstance();
+
+			$options = array(4);
+
+			//Crear las 4 respuestas
+			$ans = new Answer();
+			for ($i = 1; $i <= 4; $i++) {
+
+				//Crear la respuesta
+				$ans->create(array(
+					'text' => $data['ans'.$i],
+					'urlImage' => $data['feed'.$i],
+					'textFeedback' => $data['urla'.$i],
+					'imageFeedback' => $data['urlf'.$i],
+    				'correct' => ($i==1)? true : false,  //La primera respuesta siempre sera la correcta
+    				));
+
+    			//Obtener el id de la respuesta
+				$answerId = intval($db->lastInsertId());
+				$options[$i-1] = $answerId;
+			}
+			
+			// Crear la pregunta
+			$question = new Question();
+			$question->create(array(
+				'professor' => intval($teacherId),
+				'topic' => intval($topic),
+				'difficulty' => intval($grade),
+				'urlImage' => $url,
+				'text' => $text,
+				'optionA' => $options[0],
+				'optionB' => $options[1],
+				'optionC' => $options[2],
+				'optionD' => $options[3]
+				));
+
+			// Obtener el id que se le asigno en la BD
+			$questionId = intval($db->lastInsertId());
+
 
 		} catch(Exception $e) {
 			$response = array( "message" => "Error:005 ".$e->getMessage());

@@ -66,7 +66,7 @@ $user->checkIsValidUser('teacher');
           alert("El grupo fue creado exitosamente");
           window.location.reload();
         }else{
-          alert("There was an error: " + data.message);
+          alert("Error: \n\n" + data.message);
         }
 
       });

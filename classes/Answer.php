@@ -1,9 +1,9 @@
 <?php
 
-class Question {
+class Answer {
 	private $_db,
 	$_data = array(),
-	$_tableName = 'question';
+	$_tableName = 'answer';
 
 	public function __construct() {
 		$this->_db = DB::getInstance();
@@ -15,8 +15,8 @@ class Question {
 		}
 	}
 
-	public function update($questionId, $fields = array()) {
-		if(!$this->_db->update($this->_tableName, $questionId, $fields)) {
+	public function update($answerId, $fields = array()) {
+		if(!$this->_db->update($this->_tableName, $answerId, $fields)) {
 			throw new Exception('There was a problem updating.');
 		}
 	}

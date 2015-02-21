@@ -14,7 +14,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Groups</title>
+  <title>LSAT | Webs</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -27,15 +27,15 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
     <div class="row">
     <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
-        <h3>Grupos</h3>
-        <h4 class="subheader">Administracion de grupos</h4>
+        <h3>Redes</h3>
+        <h4 class="subheader">Mis redes de aprendizaje</h4>
         <hr>  
 
         <table> 
          <thead> 
            <tr> 
-             <th width="300">Grupo</th> 
-             <th width="200">Periodo</th> 
+             <th width="300">Red</th> 
+             <th width="200">Fecha de creacion</th> 
              <th width="300">Edit</th> 
            </tr> 
          </thead>
