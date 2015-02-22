@@ -121,7 +121,6 @@ if(Input::exists()) {
 				}else{
 					$studentId = $student->id;
 				}
-
 				
 				//studentsingroup - groupId studentId
 				$fields = array(
@@ -141,6 +140,7 @@ if(Input::exists()) {
 		$response = array( "message" => "success");
 		echo json_encode($response);
 		break;
+
 
 		case "createQuestion":
 
@@ -209,6 +209,18 @@ if(Input::exists()) {
 		}
 		$response = array( "message" => "success");
 		echo json_encode($response);
+		break;
+
+		case "filterQuestions":
+
+		$difficulty = Input::get('difficulty');
+		$topic      = Input::get('topic');
+
+		$question = new Question();
+		$filteredQuestions = $question->getFilteredQuestions($topic, $difficulty);
+
+		echo json_encode($filteredQuestions);
+
 		break;
 
 		default:

@@ -23,19 +23,19 @@ $user->checkIsValidUser('teacher');
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
-        <h3>Group</h3>
-        <h4 class="subheader">Create new group</h4>
+        <h3>Grupo</h3>
+        <h4 class="subheader">Crear nuevo grupo</h4>
         <hr>  
 
         <form> 
           <div class="row"> 
             <div class="large-4 columns"> 
-            <label>Group name <input id="groupname" type="text" placeholder="TC-0001" /> </label> 
+            <label>Nombre del grupo <input id="groupname" type="text" placeholder="TC-0001" /> </label> 
             </div>
           </div>
           <div class="row"> 
             <div class="large-12 columns"> 
-              <label>Students<input id="students" type="text" placeholder="Matriculas de alumnos separadas por comas"/> </label>
+              <label>Alumnos<input id="students" type="text" placeholder="Matriculas de alumnos separadas por comas"/> </label>
             </div> 
           </div>  
           <a href="#" onclick="createGroup()" class="button round small right">Create</a>

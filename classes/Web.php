@@ -1,15 +1,15 @@
 <?php
 
-class Groups {
+class Web {
 	private $_db,
 	$_data = array(),
-	$_tableName = "groups";
+	$_tableName = "web";
 
 	public function __construct() {
 		$this->_db = DB::getInstance();
 	}
 
-	public function getGroupsForTeacher($teacherId = null){
+	public function getWebsForTeacher($teacherId = null){
 		if ($teacherId == null) return;
 
 		$db = $this->_db->get($this->_tableName, array('professor', '=', $teacherId));
@@ -19,18 +19,6 @@ class Groups {
 		}
 
 		return array();
-	}
-
-	public function getGroupByName($groupname = null){
-		if ($groupname == null) return false;
-
-		$db = $this->_db->get($this->_tableName, array('name', '=', $groupname));
-
-		if($db && $db->count()) {
-			return $db->first();
-		}
-
-		return false;
 	}
 
 	public function create($fields = array()) {

@@ -6,7 +6,7 @@
     </div>
     <div class="small-12 medium-3 large-4 columns">
       <i class="fi-html5"></i>
-      <p>This site was buitl using the latest technology.</p>
+      <p>This site was built using the latest technology.</p>
     </div>
     <div class="small-6 medium-3 large-2 columns">
       <h4>Who?</h4>

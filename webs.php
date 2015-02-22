@@ -5,8 +5,8 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('teacher');
 $teacherId = $user->data()->id;
-$groups = new Groups();
-$teacherGroups = $groups->getGroupsForTeacher($teacherId);
+$web = new Web();
+$teacherWebs = $web->getWebsForTeacher($teacherId);
 //var_dump($teacherGroups);
 
 ?>
@@ -42,12 +42,12 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
 
          <tbody> 
            <?php
-           foreach ($teacherGroups as $group) {
+           foreach ($teacherWebs as $web) {
 
-              echo "<tr id='$group->id'> 
-                    <td> $group->name </td>
-                    <td> $group->term </td>
-                    <td> <a onclick=\"editGroup($group->id);\" class='tiny button secondary'>Editar</a> </td> 
+              echo "<tr id='$web->id'> 
+                    <td> $web->name </td>
+                    <td> $web->term </td>
+                    <td> <a onclick=\"editWeb($web->id);\" class='tiny button secondary'>Editar</a> </td> 
                     </tr>";
          }
 

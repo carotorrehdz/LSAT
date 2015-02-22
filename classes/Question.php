@@ -21,6 +21,20 @@ class Question {
 		}
 	}
 
+	public function getFilteredQuestions($topic, $difficulty){
+		
+		$sql = "SELECT * FROM question WHERE topic =  ? AND difficulty = ?";
+		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
+			if($this->_db->count()) {
+				//echo "aqui";
+				//var_dump($this->_db->results());
+				return $this->_db->results();
+			}
+		}
+		//echo "aca";
+		return array();
+	}
+
 	public function data() {
 		return $this->_data;
 	}
