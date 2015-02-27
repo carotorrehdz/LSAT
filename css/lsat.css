@@ -1,5 +1,9 @@
 body, h1, h2, h3, h4, h5, h6{
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+.row {
+  max-width: 80rem;
 }
 
 .text-centered{
@@ -12,12 +16,12 @@ body, h1, h2, h3, h4, h5, h6{
 
 .centeredXY{
 	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
 }
 
 ul#dashboard-actions{
@@ -29,40 +33,40 @@ ul#dashboard-actions li{
 }
 
 .ajaxWaiting{
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    background: rgba(0,0,0,0.5);
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.5);
 }
 
 .ajaxWaiting img{
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }
 
 
 table td{
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .apprvd{
-    color: #61AD22;
+  color: #61AD22;
 }
 
 .rjctd{
-    color: #FF0000;   
+  color: #FF0000;   
 }
 
 .white{
-    color: #FFF;
+  color: #FFF;
 }
 
 .grey{
@@ -70,10 +74,10 @@ table td{
 }
 
 .backgroundImg{
-        background:url('../img/cover.png') no-repeat center center;
-        min-height:100%;
-        background-size:cover;
-    }
+  background:url('../img/cover.png') no-repeat center center;
+  min-height:100%;
+  background-size:cover;
+}
 
 .h1-intro{
   font-size: 100pt;
@@ -105,37 +109,37 @@ table td{
 
 .shadow1{
   text-shadow: 0 1px 0 #bbb,
-               0 2px 0 #b9b9b9,
-               0 3px 0 #aaa,
-               0 4px 0 #a9a9a9,
-               0 5px 0 #999,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
+  0 2px 0 #b9b9b9,
+  0 3px 0 #aaa,
+  0 4px 0 #a9a9a9,
+  0 5px 0 #999,
+  0 6px 1px rgba(0,0,0,.1),
+  0 0 5px rgba(0,0,0,.1),
+  0 1px 3px rgba(0,0,0,.3),
+  0 3px 5px rgba(0,0,0,.2),
+  0 5px 10px rgba(0,0,0,.25),
+  0 10px 10px rgba(0,0,0,.2),
+  0 20px 20px rgba(0,0,0,.15);
 }
 
 .shadow2{
   text-shadow: 0 1px 0 #ccc,
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
+  0 2px 0 #c9c9c9,
+  0 3px 0 #bbb,
+  0 4px 0 #b9b9b9,
+  0 5px 0 #aaa,
+  0 6px 1px rgba(0,0,0,.1),
+  0 0 5px rgba(0,0,0,.1),
+  0 1px 3px rgba(0,0,0,.3),
+  0 3px 5px rgba(0,0,0,.2),
+  0 5px 10px rgba(0,0,0,.25),
+  0 10px 10px rgba(0,0,0,.2),
+  0 20px 20px rgba(0,0,0,.15);
 }
 
 .blured{
-    filter: grayscale(0.6) blur(1px);
-    -webkit-filter: grayscale(0.6) blur(1px);
+  filter: grayscale(0.6) blur(1px);
+  -webkit-filter: grayscale(0.6) blur(1px);
 }
 
 
@@ -196,3 +200,122 @@ table td{
 .grey2{
   background: #DEDEDE;
 }
+
+
+/* New web*/
+.weblevels{
+  margin-left: 200px;
+}
+
+.weblevels ul{
+  list-style: outside none none;
+  margin: 0;
+}
+
+.weblevels ul li{
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 120px;
+  color: #FFF;
+}
+
+.weblevels ul li h5{
+  color: #FFF;
+  margin: 0;
+}
+
+.weblevels ul li:hover{
+  cursor: pointer;
+}
+
+.level1{
+  background: #0DC4E0;
+}
+
+.level2{
+  background: #0174AD;
+}
+
+.level3{
+  background: #2B36A8;
+}
+
+.level4{
+  background: #205BFC;
+}
+
+.level5{
+  background: #07AF8B;
+}
+
+.level6{
+  background: #A1F47A;
+}
+
+.level7{
+  background: #FCCA55;
+}
+
+.level8{
+  background: #FFAC54;
+}
+
+.level9{
+  background: #ED826A;
+}
+
+.level10{
+  background: #D63356;
+}
+
+.weblevels ul li.addLevel{
+  width: 50px;
+  background: #7C0EA0;
+}
+
+.webStructure{
+  width: 1000px;
+  min-height: 500px;
+}
+
+.questionFilter{
+  float: left;
+  width: 200px;
+}
+
+#questionFilter #filter {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+}
+
+.questionFilter .component{
+  display: block;
+  margin-bottom: 5px;
+}
+
+.questionFilter .component select{
+  height: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.questionFilter .btn{
+  background:#c97df2;
+  margin: 0;
+  width: 100%;
+}
+
+.questionFilter .results{
+  margin-top: 20px;
+}
+
+.searchResults{
+  background: #FFF;
+  float: left;
+  padding: 25px;
+  width: 790px;
+  margin: 5px;
+}
+

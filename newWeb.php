@@ -23,6 +23,7 @@ $teacherId = $user->data()->id;
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
+        <br/>
         <h3>Nueva red</h3>
         <h4 class="subheader">Crear una nueva red de aprendizaje</h4>
         <hr>  
@@ -30,64 +31,73 @@ $teacherId = $user->data()->id;
         <form id="newWeb"> 
 
           <div class="row"> 
-            <div class="large-12 columns">
-              <label>Nombre de la red <input type="text" name="name"/></label>
-            </div>
-          </div>
+            <label>Nombre de la red <input type="text" name="name"/></label>
 
-          <div class="row"> 
-            <div class="weblevels">
+            <div id="weblevels" class="weblevels">
               <ul class="">
                 <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> <span id="ql1"> Vacio</span></li>
                 <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> <span id="ql2"> Vacio</span></li>
                 <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> <span id="ql3"> Vacio</span></li>
-                <li class="addLevel" onclick="addLevel(3)"> <h5> + </h5> <span> Nuevo</span> </li>
+                <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> <span> Nuevo</span> </li>
               </ul>
             </div>
 
-            <div id="questionFilter" class="questionFilter level1">
+            <div id="webStructure" class="webStructure level1">
 
-              <div id="filter">
-                <div class="component">
-                  Tema
-                  <select id="topic" name="topic"> 
-                    <option value="1">1</option> 
-                    <option value="2">2</option> 
-                  </select> 
+              <div id="questionFilter" class="questionFilter">
+
+                <div id="filter">
+                  <div class="component">
+                    Tema
+                    <select id="topic" name="topic"> 
+                      <option value="1">1</option> 
+                      <option value="2">2</option> 
+                    </select> 
+                  </div>
+
+                  <div class="component">
+                    Dificultad
+                    <select id="difficulty" name="difficulty"> 
+                      <option value="1">1</option> 
+                      <option value="2">2</option> 
+                    </select> 
+                  </div>
+
+                  <a href="#" onclick="filterQuestions()" class="button tiny btn">Get</a>
                 </div>
 
-                <div class="component">
-                  Dificultad
-                  <select id="difficulty" name="difficulty"> 
-                    <option value="1">1</option> 
-                    <option value="2">2</option> 
-                  </select> 
+                <div id="questionsForLevel">
+                  <ul>
+                    <li> 
+                      <a class="delete" onclick="deleteQuestion()"> X </a>
+                      <a href=""></a>
+                    </li>
+                  </ul>
                 </div>
 
-                <a href="#" onclick="filterQuestions()" class="button round tiny right">Get</a>
               </div>
 
-              <table class="results"> 
-               <thead> 
-                 <tr> 
-                  <th width="700">Texto Pregunta</th> 
-                  <th width="80">Agregar</th> 
-                </tr> 
-              </thead>
+              <div id="searchResults" class="searchResults">
+                <table class="results"> 
+                  <thead> 
+                    <tr> 
+                      <th width="700">Texto Pregunta</th> 
+                      <th width="80">Agregar</th> 
+                    </tr> 
+                  </thead>
+                  <tbody> 
+                  </tbody>
+                </table>
+            </div>
 
-              <tbody> 
-
-              </tbody>
-            </table>
-
+            <div style="clear: both;"></div>
           </div>
         </div>
-      </div>
 
-    </form>
+      </form>
 
+    </div>
   </div>
-</div>
 </section>
 
 
@@ -101,17 +111,32 @@ $teacherId = $user->data()->id;
   $(document).foundation();
 
   var currentLevel = 1;
-  var questionsForLevel = [[],[],[]];
+  var maxLevels = 10;
+  var nextLevel = 4;
+  var questionsForLevel = [[],[],[],[],[],[],[],[],[],[]]; //Maximo de 10 niveles
   var usedQuestions = [];
-  var questionFilter = $("#questionFilter");
+  var webStructure = $("#webStructure");
+  var weblevels = $("#weblevels ul");
+  var addNewLi = $(".addLevel");
+  
 
+  function addLevel(){
+    if(nextLevel > maxLevels) return;
+    var li = "<li class='level"+nextLevel
+            +"' onclick='changeLevel("+nextLevel
+            +")'> <h5>Nivel "+nextLevel+"</h5> <span id='ql"+nextLevel+"'> Vacio</span></li>";
+    addNewLi.before(li);
+    nextLevel++;
+  }
 
   function changeLevel(level){
-    questionFilter.removeClass("level1");
-    questionFilter.removeClass("level2");
-    questionFilter.removeClass("level3");
+    var i;
+    for(var i=1; i<=maxLevels; i++){
+      var l = "level"+i;
+      webStructure.removeClass(l);
+    }
 
-    questionFilter.addClass("level"+level);
+    webStructure.addClass("level"+level);
     currentLevel = level;
   }
 
