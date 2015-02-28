@@ -307,8 +307,36 @@ table td{
   width: 100%;
 }
 
-.questionFilter .results{
-  margin-top: 20px;
+
+#questionsForLevel{
+
+}
+
+#questionsForLevel ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#questionsForLevel ul li{
+  background: none repeat scroll 0 0 #fff;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 1px 1px 2px #987;
+  width: 40px;
+  margin-bottom:2px; 
+}
+
+#questionsForLevel ul li a.delete{
+  color: #ff5400;
+  display: inline;
+  font-size: 11px;
+  padding-right: 10px;
+}
+
+#questionsForLevel ul li a.number{
+  color: #222;
+  display: inline;
+  font-size: 15px;
 }
 
 .searchResults{
@@ -317,5 +345,18 @@ table td{
   padding: 25px;
   width: 790px;
   margin: 5px;
+  min-height: 500px;
 }
 
+.searchResults .results{
+  margin-top: 20px;
+  display: none;
+}
+
+.searchResults .noQuestions{
+  border-radius: 5px;
+  border: 1px dashed #555;
+  padding: 30px;
+  text-align: center;
+  background: #F1F1F1;
+}

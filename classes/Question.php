@@ -23,7 +23,7 @@ class Question {
 
 	public function getFilteredQuestions($topic, $difficulty){
 		
-		$sql = "SELECT * FROM question WHERE topic =  ? AND difficulty = ?";
+		$sql = "SELECT id, LEFT(text, 80) as text FROM question WHERE topic =  ? AND difficulty = ?";
 		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
 			if($this->_db->count()) {
 				//echo "aqui";

@@ -35,10 +35,10 @@ $teacherId = $user->data()->id;
 
             <div id="weblevels" class="weblevels">
               <ul class="">
-                <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> <span id="ql1"> Vacio</span></li>
-                <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> <span id="ql2"> Vacio</span></li>
-                <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> <span id="ql3"> Vacio</span></li>
-                <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> <span> Nuevo</span> </li>
+                <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> </li>
+                <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> </li>
+                <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> </li>
+                <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> </li>
               </ul>
             </div>
 
@@ -67,17 +67,21 @@ $teacherId = $user->data()->id;
                 </div>
 
                 <div id="questionsForLevel">
-                  <ul>
-                    <li> 
-                      <a class="delete" onclick="deleteQuestion()"> X </a>
-                      <a href=""></a>
-                    </li>
-                  </ul>
+                  <div>
+                    <h6>Preguntas seleccionadas para el nivel 1</h6>
+                    <ul>
+                    </ul>
+                  </div>
                 </div>
 
               </div>
 
               <div id="searchResults" class="searchResults">
+
+                <div id="noQuestions" class="noQuestions">
+                  No has buscado ninguna pregunta
+                </div>
+
                 <table class="results"> 
                   <thead> 
                     <tr> 
@@ -88,108 +92,160 @@ $teacherId = $user->data()->id;
                   <tbody> 
                   </tbody>
                 </table>
+
+
+                <div id="questionModal" class="reveal-modal small" data-reveal>
+                  <h4>Pregunta</h4>
+                  <p>Texto...</p>
+                  <p>Respuestas</p>
+                  <a class="close-reveal-modal">&#215;</a>
+                </div>
+
+              </div>
+
+              <div style="clear: both;"></div>
             </div>
-
-            <div style="clear: both;"></div>
           </div>
-        </div>
 
-      </form>
+        </form>
 
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
 
-<?php include 'includes/templates/footer.php' ?>
+  <?php include 'includes/templates/footer.php' ?>
 
-<script src="js/vendor/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
+  <script src="js/vendor/jquery.js"></script>
+  <script src="js/foundation.min.js"></script>
 
-<script>
-  $(document).foundation();
+  <script>
+    $(document).foundation();
 
-  var currentLevel = 1;
-  var maxLevels = 10;
-  var nextLevel = 4;
-  var questionsForLevel = [[],[],[],[],[],[],[],[],[],[]]; //Maximo de 10 niveles
-  var usedQuestions = [];
-  var webStructure = $("#webStructure");
-  var weblevels = $("#weblevels ul");
-  var addNewLi = $(".addLevel");
-  
+    var currentLevel = 1;
+    var maxLevels = 10;
+    var nextLevel = 4;
+    var questionsForLevel = [[],[],[],[],[],[],[],[],[],[]]; //Maximo de 10 niveles
+    var usedQuestions = [];
+    var webStructure = $("#webStructure");
+    var weblevels = $("#weblevels ul");
+    var addNewLi = $(".addLevel");
+    var noQustions = $(".noQuestions");
+    var resultsTable = $("table.results");
+    var questionsForLevelUl = $("#questionsForLevel ul");
+    var questionLiTemplate = "<li> <a class='delete' onclick='deleteQuestion($id)'> X </a> <a class='number' onclick='showQuestion($id)'>$number</a></li>";
 
-  function addLevel(){
-    if(nextLevel > maxLevels) return;
-    var li = "<li class='level"+nextLevel
-            +"' onclick='changeLevel("+nextLevel
-            +")'> <h5>Nivel "+nextLevel+"</h5> <span id='ql"+nextLevel+"'> Vacio</span></li>";
-    addNewLi.before(li);
-    nextLevel++;
-  }
-
-  function changeLevel(level){
-    var i;
-    for(var i=1; i<=maxLevels; i++){
-      var l = "level"+i;
-      webStructure.removeClass(l);
+    function addLevel(){
+      if(nextLevel > maxLevels) return;
+      var li = "<li class='level"+nextLevel
+      +"' onclick='changeLevel("+nextLevel+")'> <h5>Nivel "+nextLevel+"</h5></li>";
+      addNewLi.before(li);
+      nextLevel++;
     }
 
-    webStructure.addClass("level"+level);
-    currentLevel = level;
-  }
+    function changeLevel(level){
+      var i;
+      for(var i=1; i<=maxLevels; i++){
+        var l = "level"+i;
+        webStructure.removeClass(l);
+      }
 
-  function addQuestion(id){
-    //if($.inArray(id, usedQuestions) == -1){
-      questionsForLevel[currentLevel-1].push(id);
-      usedQuestions.push(id);  
-    //}
-    refreshLi();
-  }
+      webStructure.addClass("level"+level);
+      currentLevel = level;
+      refreshLis();
+    }
 
-  function refreshLi(){
-    var t = "";
+    function addQuestion(id){
+      if($.inArray(id, usedQuestions) == -1){
+        //console.log(id);
+        questionsForLevel[currentLevel-1].push(id);
+        usedQuestions.push(id);  
+        addQuestionLi(id);
+      }
+    }
 
-    t = questionsForLevel[0].join(",");
-    t = t == "" ? "Vacio" : t;
-    $("#ql1").text(t);    
-    
-    t = questionsForLevel[1].join(",");
-    t = t == "" ? "Vacio" : t;
-    $("#ql2").text(t);
+    function addQuestionLi(id){
+      var t = questionLiTemplate;
+      var li = t.replace('$id', id);
+      li = li.replace('$id', id);
+      li = li.replace("$number", questionsForLevel[currentLevel-1].length);
+      questionsForLevelUl.append(li);
 
-    t = questionsForLevel[2].join(",");
-    t = t == "" ? "Vacio" : t;
-    $("#ql3").text(t);
+    }
 
-  }
+    function refreshLis(){
+      var t = questionLiTemplate;
+      var len = questionsForLevel[currentLevel-1].length;
+      console.log("len" + len);
+      questionsForLevelUl.empty();
 
+      for(var i=0; i<len; i++){
+        console.log(i);
+        var id = questionsForLevel[currentLevel-1][i];
+        var li = t.replace('$id', id);
+        li = li.replace('$id', id);
+        li = li.replace("$number", i+1);
+        questionsForLevelUl.append(li);
 
-  function filterQuestions(){
+      }
+    }
 
-    var topic  = $("#topic").val();
-    var difficulty  = $("#difficulty").val();
-    var template =  "<tr id='id'> <td> $text </td><td> <a onclick='addQuestion($id);' class='tiny button secondary'>Agregar</a> </td> </tr>";
+    function showQuestion(id){
+      console.log("showQuestion"+id);
+      $('#questionModal').foundation('reveal', 'open');
+    }
 
-    $.post( "controls/doAction.php", {  action: "filterQuestions", 
-      topic: topic,
-      difficulty: difficulty})
+    function deleteQuestion(id){
+      console.log("deleteQuestion"+id);
+      var arr = questionsForLevel[currentLevel-1];
+      //Le quita al arreglo el id de la pregunta que queremos eliminar
+      arr = $.grep(arr, function(value) {
+        return value != id;
+      });
 
-    .done(function( data ) {
-      console.log(data);
+      questionsForLevel[currentLevel-1] = arr;
+
+      //Eliminarla tambien de la lista de preguntas usadas
+      usedQuestions = $.grep(usedQuestions, function(value){
+        return value != id;
+      });
+
+      console.log(arr);
+      console.log(questionsForLevel[currentLevel-1]);
+
+      refreshLis();
+    }
+
+    function filterQuestions(){
+
+      var topic  = $("#topic").val();
+      var difficulty  = $("#difficulty").val();
+      var template =  "<tr id='id'> <td> $text </td><td> <a onclick='addQuestion($id);' class='tiny button secondary'>Agregar</a> </td> </tr>";
+
+      $.post( "controls/doAction.php", {  action: "filterQuestions", 
+        topic: topic,
+        difficulty: difficulty})
+
+      .done(function( data ) {
+      //console.log(data);
 
       data = JSON.parse(data);
       if(data.message == 'error'){
         alert("Error: \n\n" + data.message);
       }else{
         //Llenar el contenedor con las preguntas
-        console.log(data);
+        //console.log(data);
+
+        noQustions.hide();
+        resultsTable.show();
+
         var i;
-        var tbody = $("table tbody");
+        var tbody = $("table.results tbody");
+        tbody.empty();
         for(i=0; i<data.length; i++){
           var t = template;
-          console.log(t);
+          //console.log(t);
           t = t.replace("$text", data[i].text);
           t = t.replace("$id", data[i].id);
           tbody.append(t);
@@ -198,8 +254,8 @@ $teacherId = $user->data()->id;
       }
 
     });
-  }
+    }
 
-</script>
+  </script>
 </body>
 </html>
