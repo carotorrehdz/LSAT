@@ -246,45 +246,45 @@ if(Input::exists()) {
 		try{
 
 			$name = Input::get('name');
-		$questionsForLevel = Input::get('questionsForLevel');
+			$questionsForLevel = Input::get('questionsForLevel');
 
-		$web = new Web();
-		$web->create(array(
-			'professor' => intval($teacherId),
-			'name' => $name
-			));
-		$db = DB::getInstance();
-		$webId = intval($db->lastInsertId());
+			$web = new Web();
+			$web->create(array(
+				'professor' => intval($teacherId),
+				'name' => $name
+				));
+			$db = DB::getInstance();
+			$webId = intval($db->lastInsertId());
 
-		/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y 
-			El segundo arreglo son las preguntas
-			 0 => 
-			    array
-			      0 => string '5' (length=1)
-			      1 => string '6' (length=1)
-			  1 => 
-			    array
-			      0 => string '7' (length=1)
-		*/
+			/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y 
+				El segundo arreglo son las preguntas
+				 0 => 
+				    array
+				      0 => string '5' (length=1)
+				      1 => string '6' (length=1)
+				  1 => 
+				    array
+				      0 => string '7' (length=1)
+			*/
 
-	    $currentLevel = 1;
-	    foreach ($questionsForLevel as $key => $value) {
-	    	//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
-	      	//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
-	      	//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
-	      	foreach ($value as $key => $questionId) {
-	      		$web->addQuestionInWeb($questionId, $webId, $currentLevel);
-	      	}
-	      	
-	      	$currentLevel += 1;
-	      }
+		    $currentLevel = 1;
+		    foreach ($questionsForLevel as $key => $value) {
+		    	//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
+		      	//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
+		      	//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
+		      	foreach ($value as $key => $questionId) {
+		      		$web->addQuestionInWeb($questionId, $webId, $currentLevel);
+		      	}
+		      	
+		      	$currentLevel += 1;
+		      }
 
-		}catch(Exception $e) {
-			$response = array( "message" => "Error:006 ".$e->getMessage());
-			die(json_encode($response));
-		}
-		$response = array( "message" => "success");
-		echo json_encode($response);
+			}catch(Exception $e) {
+				$response = array( "message" => "Error:006 ".$e->getMessage());
+				die(json_encode($response));
+			}
+			$response = array( "message" => "success");
+			echo json_encode($response);
 
 		
 		break;

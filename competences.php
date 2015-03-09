@@ -5,16 +5,16 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('teacher');
 $teacherId = $user->data()->id;
-$groups = new Groups();
-$teacherGroups = $groups->getGroupsForTeacher($teacherId);
-//var_dump($teacherGroups);
+$competence = new Competence();
+$teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
+//var_dump($teacherCompetences);
 
 ?>
 
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Groups</title>
+  <title>LSAT | Competencias</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -27,27 +27,25 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
     <div class="row">
     <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
-        <h3>Grupos</h3>
-        <h4 class="subheader">Administracion de grupos</h4>
+        <h3>Competencias</h3>
+        <h4 class="subheader">Administracion de competencias</h4>
         <hr>  
 
         <table> 
          <thead> 
            <tr> 
-             <th width="300">Grupo</th> 
-             <th width="200">Periodo</th> 
+             <th width="300">Nombre</th> 
              <th width="300">Editar</th> 
            </tr> 
          </thead>
 
          <tbody> 
            <?php
-           foreach ($teacherGroups as $group) {
+           foreach ($teacherCompetences as $competence) {
 
-              echo "<tr id='$group->id'> 
-                    <td> $group->name </td>
-                    <td> $group->term </td>
-                    <td> <a onclick=\"editGroup($group->id);\" class='tiny button secondary'>Editar</a> </td> 
+              echo "<tr id='$competence->id'> 
+                    <td> $competence->name </td>
+                    <td> <a onclick=\"editGroup($competence->id);\" class='tiny button secondary'>Editar</a> </td> 
                     </tr>";
          }
 
