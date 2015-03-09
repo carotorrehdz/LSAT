@@ -46,10 +46,9 @@ $teacherWebs = $web->getWebsForTeacher($teacherId);
 
               echo "<tr id='$web->id'> 
                     <td> $web->name </td>
-                    <td> $web->term </td>
                     <td> <a onclick=\"editWeb($web->id);\" class='tiny button secondary'>Editar</a> </td> 
                     </tr>";
-         }
+            }
 
          ?>
 
