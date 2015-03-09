@@ -21,16 +21,16 @@ $teacherId = $user->data()->id;
   <section class="scroll-container" role="main">
 
     <div class="row">
-      <?php include 'includes/templates/teacherSidebar.php' ?>  
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <br/>
         <h3>Nueva red</h3>
         <h4 class="subheader">Crear una nueva red de aprendizaje</h4>
-        <hr>  
+        <hr>
 
-        <form id="newWeb"> 
+        <form id="newWeb">
 
-          <div class="row"> 
+          <div class="row">
             <label>Nombre de la red <input type="text" name="name"/></label>
 
             <div id="weblevels" class="weblevels">
@@ -49,18 +49,18 @@ $teacherId = $user->data()->id;
                 <div id="filter">
                   <div class="component">
                     Tema
-                    <select id="topic" name="topic"> 
-                      <option value="1">1</option> 
-                      <option value="2">2</option> 
-                    </select> 
+                    <select id="topic" name="topic">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
                   </div>
 
                   <div class="component">
                     Dificultad
-                    <select id="difficulty" name="difficulty"> 
-                      <option value="1">1</option> 
-                      <option value="2">2</option> 
-                    </select> 
+                    <select id="difficulty" name="difficulty">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                    </select>
                   </div>
 
                   <a href="#" onclick="filterQuestions()" class="button tiny btn">Get</a>
@@ -82,14 +82,14 @@ $teacherId = $user->data()->id;
                   No has buscado ninguna pregunta
                 </div>
 
-                <table class="results"> 
-                  <thead> 
-                    <tr> 
-                      <th width="700">Texto Pregunta</th> 
-                      <th width="80">Agregar</th> 
-                    </tr> 
+                <table class="results">
+                  <thead>
+                    <tr>
+                      <th width="700">Texto Pregunta</th>
+                      <th width="80">Agregar</th>
+                    </tr>
                   </thead>
-                  <tbody> 
+                  <tbody>
                   </tbody>
                 </table>
 
@@ -137,7 +137,7 @@ $teacherId = $user->data()->id;
     var resultsTable = $("table.results");
     var questionsForLevelUl = $("#questionsForLevel ul");
     var questionLiTemplate = "<li> <a class='delete' onclick='deleteQuestion($id)'> X </a> <a class='number' onclick='showQuestion($id)'>$number</a></li>";
-    
+
     var questionModal = $("#questionModal");
     var qtitle = $("#questionModal #title");
     var qtext = $("#questionModal #text");
@@ -167,7 +167,7 @@ $teacherId = $user->data()->id;
       if($.inArray(id, usedQuestions) == -1){
         //console.log(id);
         questionsForLevel[currentLevel-1].push(id);
-        usedQuestions.push(id);  
+        usedQuestions.push(id);
         addQuestionLi(id);
       }
       else{
@@ -209,18 +209,18 @@ $teacherId = $user->data()->id;
           alert("Error: \n\n" + data.message);
         }else{
         //Llenar el contenedor con los datos de la pregunta
-        console.log(data);
-        qtext.html(data[0].text);
+        qtext.html(data[0]);
         var answers = [];
-        answers[0] = data[0].optionA;
-        answers[1] = data[0].optionB;
-        answers[2] = data[0].optionC;
-        answers[3] = data[0].optionD;
+        answers[0] = data[1].text;
+        answers[1] = data[2].text;
+        answers[2] = data[3].text;
+        answers[3] = data[4].text;
 
         qanswers.html(answers.join(","));
         $('#questionModal').foundation('reveal', 'open');
-      }
-    });
+
+        }
+      });
     }
 
     function createWeb(){
@@ -267,7 +267,7 @@ $teacherId = $user->data()->id;
       var difficulty  = $("#difficulty").val();
       var template =  "<tr id='id'> <td> $text </td><td> <a onclick='addQuestion($id);' class='tiny button secondary'>Agregar</a> </td> </tr>";
 
-      $.post( "controls/doAction.php", {  action: "filterQuestions", 
+      $.post( "controls/doAction.php", {  action: "filterQuestions",
         topic: topic,
         difficulty: difficulty})
 
