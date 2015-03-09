@@ -35,6 +35,20 @@ class Question {
 		return array();
 	}
 
+	public function getQuestion($id){
+		
+		$sql = "SELECT * FROM question WHERE id = ?";
+		if(!$this->_db->query($sql, array($id))->error()) {
+			if($this->_db->count()) {
+				//echo "aqui";
+				//var_dump($this->_db->results());
+				return $this->_db->results();
+			}
+		}
+		//echo "aca";
+		return array();
+	}
+
 	public function data() {
 		return $this->_data;
 	}

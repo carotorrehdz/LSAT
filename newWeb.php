@@ -36,8 +36,8 @@ $teacherId = $user->data()->id;
             <div id="weblevels" class="weblevels">
               <ul class="">
                 <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> </li>
-                <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> </li>
-                <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> </li>
+                <li class="level2" onclick="changeLevel(2)"> <h5>2</h5> </li>
+                <li class="level3" onclick="changeLevel(3)"> <h5>3</h5> </li>
                 <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> </li>
               </ul>
             </div>
@@ -68,7 +68,7 @@ $teacherId = $user->data()->id;
 
                 <div id="questionsForLevel">
                   <div>
-                    <h6>Preguntas seleccionadas para el nivel 1</h6>
+                    <h6>Preguntas seleccionadas</h6>
                     <ul>
                     </ul>
                   </div>
@@ -95,9 +95,9 @@ $teacherId = $user->data()->id;
 
 
                 <div id="questionModal" class="reveal-modal small" data-reveal>
-                  <h4>Pregunta</h4>
-                  <p>Texto...</p>
-                  <p>Respuestas</p>
+                  <h4 id="title">Pregunta</h4>
+                  <p id="text">Texto...</p>
+                  <p id="answers">Respuestas</p>
                   <a class="close-reveal-modal">&#215;</a>
                 </div>
 
@@ -108,6 +108,8 @@ $teacherId = $user->data()->id;
           </div>
 
         </form>
+
+        <a href="#" onclick="createWeb()" class="button round small right">Crear</a>
 
       </div>
     </div>
@@ -135,6 +137,11 @@ $teacherId = $user->data()->id;
     var resultsTable = $("table.results");
     var questionsForLevelUl = $("#questionsForLevel ul");
     var questionLiTemplate = "<li> <a class='delete' onclick='deleteQuestion($id)'> X </a> <a class='number' onclick='showQuestion($id)'>$number</a></li>";
+    
+    var questionModal = $("#questionModal");
+    var qtitle = $("#questionModal #title");
+    var qtext = $("#questionModal #text");
+    var qanswers = $("#questionModal #answers");
 
     function addLevel(){
       if(nextLevel > maxLevels) return;
@@ -163,6 +170,9 @@ $teacherId = $user->data()->id;
         usedQuestions.push(id);  
         addQuestionLi(id);
       }
+      else{
+        alert("La pregunta ya fue usada en otro nivel");
+      }
     }
 
     function addQuestionLi(id){
@@ -171,7 +181,6 @@ $teacherId = $user->data()->id;
       li = li.replace('$id', id);
       li = li.replace("$number", questionsForLevel[currentLevel-1].length);
       questionsForLevelUl.append(li);
-
     }
 
     function refreshLis(){
@@ -192,8 +201,43 @@ $teacherId = $user->data()->id;
     }
 
     function showQuestion(id){
-      console.log("showQuestion"+id);
-      $('#questionModal').foundation('reveal', 'open');
+      $.post( "controls/doAction.php", {  action: "getQuestion", id: id})
+      .done(function( data ) {
+
+        data = JSON.parse(data);
+        if(data.message == 'error'){
+          alert("Error: \n\n" + data.message);
+        }else{
+        //Llenar el contenedor con los datos de la pregunta
+        console.log(data);
+        qtext.html(data[0].text);
+        var answers = [];
+        answers[0] = data[0].optionA;
+        answers[1] = data[0].optionB;
+        answers[2] = data[0].optionC;
+        answers[3] = data[0].optionD;
+
+        qanswers.html(answers.join(","));
+        $('#questionModal').foundation('reveal', 'open');
+      }
+    });
+    }
+
+    function createWeb(){
+      var name = $("input#name").val();
+
+      $.post( "controls/doAction.php", {  action: "createWeb", name: name, questionsForLevel:questionsForLevel})
+      .done(function( data ) {
+
+        data = JSON.parse(data);
+        if(data.message == 'error'){
+          alert("Error: \n\n" + data.message);
+        }else{
+          //Llenar el contenedor con los datos de la pregunta
+          console.log(data);
+      }
+    });
+
     }
 
     function deleteQuestion(id){

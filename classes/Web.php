@@ -31,6 +31,19 @@ class Web {
 		return $this->_data;
 	}
 
+	public function addQuestionInWeb($questionId, $webId, $level){
+		
+		$values = array("questionId" => $questionId,
+						"webId" => $webId,
+						"level" => $level);
+
+		if($this->_db->insert('questionsinweb', $values)) {
+			return true;
+		}
+
+		return false;
+	}
+
 }
 
 ?>
