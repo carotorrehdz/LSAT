@@ -174,11 +174,11 @@ if(Input::exists()) {
 				//Crear la respuesta
 				$ans->create(array(
 					'text' => $data['ans'.$i],
-					'urlImage' => $data['feed'.$i],
-					'textFeedback' => $data['urla'.$i],
+					'textFeedback' => $data['feed'.$i],
+					'urlImage' => $data['urla'.$i],
 					'imageFeedback' => $data['urlf'.$i],
-    				'correct' => ($i==1)? true : false,  //La primera respuesta siempre sera la correcta
-    				));
+    			'correct' => ($i==1)? true : false,  //La primera respuesta siempre sera la correcta
+    		));
 
     			//Obtener el id de la respuesta
 				$answerId = intval($db->lastInsertId());
