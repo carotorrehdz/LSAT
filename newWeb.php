@@ -93,11 +93,24 @@ $teacherId = $user->data()->id;
                   </tbody>
                 </table>
 
-
                 <div id="questionModal" class="reveal-modal small" data-reveal>
-                  <h4 id="title">Pregunta</h4>
-                  <p id="text">Texto...</p>
-                  <p id="answers">Respuestas</p>
+                  <div id="questionDetail" class="panel">
+                    <!-- Default panel contents -->
+                    <h4 id="text"></h4>
+
+                    <!-- Table -->
+                    <table class="questionDetails">
+                      <thead>
+                        <tr>
+                          <th width="250">Respuesta</th>
+                          <th width="250">Feedback</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+
+                  </div>
                   <a class="close-reveal-modal">&#215;</a>
                 </div>
 
@@ -139,9 +152,7 @@ $teacherId = $user->data()->id;
     var questionLiTemplate = "<li> <a class='delete' onclick='deleteQuestion($id)'> X </a> <a class='number' onclick='showQuestion($id)'>$number</a></li>";
 
     var questionModal = $("#questionModal");
-    var qtitle = $("#questionModal #title");
-    var qtext = $("#questionModal #text");
-    var qanswers = $("#questionModal #answers");
+    var qtitle = $("#questionModal #text");
 
     function addLevel(){
       if(nextLevel > maxLevels) return;
@@ -201,6 +212,7 @@ $teacherId = $user->data()->id;
     }
 
     function showQuestion(id){
+      var template =  "<tr> <td> $text </td><td> $feedback </td> </tr>";
       $.post( "controls/doAction.php", {  action: "getQuestion", id: id})
       .done(function( data ) {
 
@@ -209,14 +221,26 @@ $teacherId = $user->data()->id;
           alert("Error: \n\n" + data.message);
         }else{
         //Llenar el contenedor con los datos de la pregunta
-        qtext.html(data[0]);
+        qtitle.html(data[0]);
+
+        var tbody = $("table.questionDetails tbody");
+        tbody.empty();
+
+        for(i=1; i<5; i++){
+          var t = template;
+          t = t.replace("$text", data[i].text);
+          t = t.replace("$feedback", data[i].textFeedback);
+          tbody.append(t);
+        }
+
+        /*qtext.html(data[0]);
         var answers = [];
         answers[0] = data[1].text;
         answers[1] = data[2].text;
         answers[2] = data[3].text;
-        answers[3] = data[4].text;
+        answers[3] = data[4].text;*/
 
-        qanswers.html(answers.join(","));
+        //qanswers.html(answers.join(","));
         $('#questionModal').foundation('reveal', 'open');
 
         }
@@ -235,9 +259,8 @@ $teacherId = $user->data()->id;
         }else{
           //Llenar el contenedor con los datos de la pregunta
           console.log(data);
-      }
-    });
-
+        }
+      });
     }
 
     function deleteQuestion(id){
