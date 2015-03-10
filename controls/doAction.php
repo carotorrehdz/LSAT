@@ -6,7 +6,7 @@ if(Input::exists()) {
 	$action = Input::get('action');
 
 	switch ($action) {
-		
+
 		case "updateSettings":
 		$username = Input::get('username');
 		$mail     = Input::get('mail');
@@ -17,7 +17,7 @@ if(Input::exists()) {
 		try {
 			if(strlen($password) != 0 ){
 				$user->update(array(
-					'username'  => $username, 
+					'username'  => $username,
 					'mail'      => $mail,
 					'password' 	=> Hash::make($password, $salt),
 					'salt'		=> $salt,
@@ -25,7 +25,7 @@ if(Input::exists()) {
 			}
 			else{
 				$user->update(array(
-					'username'  => $username, 
+					'username'  => $username,
 					'mail'      => $mail
 					), $user->data()->id);
 			}
@@ -121,7 +121,7 @@ if(Input::exists()) {
 				}else{
 					$studentId = $student->id;
 				}
-				
+
 				//studentsingroup - groupId studentId
 				$fields = array(
 					'groupId' 	=> intval($groupId),
@@ -130,7 +130,7 @@ if(Input::exists()) {
 				if(!$db->insert('studentsingroup', $fields)) {
 					throw new Exception('There was a problem assigning the student to the group.');
 				}
-				
+
 			}
 
 		} catch(Exception $e) {
@@ -148,7 +148,7 @@ if(Input::exists()) {
 		if($user->data()->role != 'teacher'){
 			return; /*Solo un maestro puede crear preguntas*/
 		}
-		
+
 		//Necesitamos el id del profesor, que es el usuario logueado para ligar las preguntas con el
 		$teacherId = $user->data()->id;
 
@@ -184,7 +184,7 @@ if(Input::exists()) {
 				$answerId = intval($db->lastInsertId());
 				$options[$i-1] = $answerId;
 			}
-			
+
 			// Crear la pregunta
 			$question = new Question();
 			$question->create(array(
@@ -226,11 +226,21 @@ if(Input::exists()) {
 		case "getQuestion":
 
 		$id = Input::get('id');
-
+		$response = array();
 		$question = new Question();
+		$answer = new Answer();
+
 		$q = $question->getQuestion($id);
 
-		echo json_encode($q);
+		$response[] = $q[0]->text;
+		$answersIds = array($q[0]->optionA, $q[0]->optionB, $q[0]->optionC, $q[0]->optionD);
+
+		foreach ($answersIds as $item){
+			$answersText = $answer->getAnswer($item);
+			$response[] = $answersText[0];
+		}
+
+		echo json_encode($response);
 
 		break;
 
@@ -239,7 +249,7 @@ if(Input::exists()) {
 		if($user->data()->role != 'teacher'){
 			return; /*Solo un maestro puede crear preguntas*/
 		}
-		
+
 		//Necesitamos el id del profesor, que es el usuario logueado para ligar las preguntas con el
 		$teacherId = $user->data()->id;
 
@@ -256,13 +266,13 @@ if(Input::exists()) {
 			$db = DB::getInstance();
 			$webId = intval($db->lastInsertId());
 
-			/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y 
+			/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y
 				El segundo arreglo son las preguntas
-				 0 => 
+				 0 =>
 				    array
 				      0 => string '5' (length=1)
 				      1 => string '6' (length=1)
-				  1 => 
+				  1 =>
 				    array
 				      0 => string '7' (length=1)
 			*/
@@ -275,7 +285,7 @@ if(Input::exists()) {
 		      	foreach ($value as $key => $questionId) {
 		      		$web->addQuestionInWeb($questionId, $webId, $currentLevel);
 		      	}
-		      	
+
 		      	$currentLevel += 1;
 		      }
 
@@ -286,7 +296,7 @@ if(Input::exists()) {
 			$response = array( "message" => "success");
 			echo json_encode($response);
 
-		
+
 		break;
 
 		default:
