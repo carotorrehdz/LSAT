@@ -21,6 +21,41 @@ class Competence {
 		return array();
 	}
 
+	public function getCompetencesIdsForGroup($groupId = null){
+		if ($groupId == null) return;
+
+		//$db = $this->_db->get('competenceingroup', array('groupId', '=', $groupId));
+		$sql = "SELECT id FROM competenceingroup WHERE groupId = ?";
+		
+		if(!$this->_db->query($sql, array($groupId))->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+
+		// if($db && $db->count()) {
+		// 	return $db->results();
+		// }
+
+		return array();
+	}
+
+	public function getCompetencesDetails($competencesIds = null){
+		if ($competencesIds == null) return;
+		
+		$ids = implode(",", $competencesIds);
+		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON 
+		       C.id = WC.competenceId WHERE C.id IN $ids";
+		
+		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+
+		return array();
+	}
+
 	public function create($fields = array()) {
 		if(!$this->_db->insert($this->_tableName, $fields)) {
 			throw new Exception('There was a problem creating the competence.');

@@ -36,8 +36,8 @@ $teacherId = $user->data()->id;
             <div id="weblevels" class="weblevels">
               <ul class="">
                 <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> </li>
-                <li class="level2" onclick="changeLevel(2)"> <h5>2</h5> </li>
-                <li class="level3" onclick="changeLevel(3)"> <h5>3</h5> </li>
+                <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> </li>
+                <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> </li>
                 <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> </li>
               </ul>
             </div>

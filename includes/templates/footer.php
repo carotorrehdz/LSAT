@@ -2,7 +2,7 @@
   <div class="row">
     <div class="small-12 medium-3 large-4 columns">
       <i class="fi-laptop"></i>
-      <p>This system aims to help student providing good feedback.</p>
+      <p>This system aims to help students providing good feedback.</p>
     </div>
     <div class="small-12 medium-3 large-4 columns">
       <i class="fi-html5"></i>
