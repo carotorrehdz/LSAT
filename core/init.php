@@ -34,7 +34,8 @@ $GLOBALS['config'] = array(
 	'roles' => array('admin', 'teacher', 'student')
 );
 
-define( 'ABPATH', 'C:/wamp/www/lsat');
+//define( 'ABPATH', 'C:/wamp/www/lsat');
+define( 'ABPATH', '/Applications/XAMPP/xamppfiles/htdocs/LSAT');
 
 // Autoload classes
 function autoload($class) {
@@ -44,4 +45,3 @@ spl_autoload_register('autoload');
 
 // Include functions
 require_once (ABPATH.'/functions/sanitize.php');
-

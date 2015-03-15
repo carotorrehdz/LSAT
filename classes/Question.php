@@ -22,7 +22,7 @@ class Question {
 	}
 
 	public function getFilteredQuestions($topic, $difficulty){
-		
+
 		$sql = "SELECT id, LEFT(text, 80) as text FROM question WHERE topic =  ? AND difficulty = ?";
 		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
 			if($this->_db->count()) {
@@ -36,7 +36,7 @@ class Question {
 	}
 
 	public function getQuestion($id){
-		
+
 		$sql = "SELECT * FROM question WHERE id = ?";
 		if(!$this->_db->query($sql, array($id))->error()) {
 			if($this->_db->count()) {
@@ -46,6 +46,21 @@ class Question {
 			}
 		}
 		//echo "aca";
+		return array();
+	}
+
+	public function getQuestions($ids = array()){
+		if (count($ids) == 0) return;
+
+		$idList = implode(",", $ids);
+
+		$sql = "SELECT * FROM question WHERE id IN ($idList)";
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+
 		return array();
 	}
 

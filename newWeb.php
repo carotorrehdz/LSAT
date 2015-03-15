@@ -5,6 +5,10 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('teacher');
 $teacherId = $user->data()->id;
+$difficulty = new Difficulty();
+$difficulties = $difficulty->getDifficulties();
+$topic = new Topic();
+$topics = $topic->getTopics();
 ?>
 
 <!doctype html>
@@ -50,17 +54,23 @@ $teacherId = $user->data()->id;
                   <div class="component">
                     Tema
                     <select id="topic" name="topic">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
+                      <?php
+                        foreach ($topics as $item) {
+                          echo "<option value='$item->id'>$item->name</option>";
+                        }
+                      ?>
                     </select>
                   </div>
 
                   <div class="component">
                     Dificultad
                     <select id="difficulty" name="difficulty">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </select>
+                      <?php
+                        foreach ($difficulties as $item) {
+                          echo "<option value='$item->id'>$item->name</option>";
+                        }
+                      ?>
+                   </select>
                   </div>
 
                   <a href="#" onclick="filterQuestions()" class="button tiny btn">Get</a>
@@ -233,14 +243,6 @@ $teacherId = $user->data()->id;
           tbody.append(t);
         }
 
-        /*qtext.html(data[0]);
-        var answers = [];
-        answers[0] = data[1].text;
-        answers[1] = data[2].text;
-        answers[2] = data[3].text;
-        answers[3] = data[4].text;*/
-
-        //qanswers.html(answers.join(","));
         $('#questionModal').foundation('reveal', 'open');
 
         }
@@ -257,8 +259,8 @@ $teacherId = $user->data()->id;
         if(data.message == 'error'){
           alert("Error: \n\n" + data.message);
         }else{
-          //Llenar el contenedor con los datos de la pregunta
-          console.log(data);
+          //Llevar al explorador de la red para mostrar detalle de la red creada
+          window.location = './webExplorer.php?web='+data.message;
         }
       });
     }

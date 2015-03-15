@@ -293,7 +293,7 @@ if(Input::exists()) {
 				$response = array( "message" => "Error:006 ".$e->getMessage());
 				die(json_encode($response));
 			}
-			$response = array( "message" => "success");
+			$response = array( "message" => $webId);
 			echo json_encode($response);
 
 

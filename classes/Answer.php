@@ -34,6 +34,30 @@ class Answer {
 			return array();
 		}
 
+	public function getAnswersForQuestionList($questions = array()) {
+		if (count($questions) == 0) return;
+
+		$data = array();
+		$answers = array();
+
+		foreach ($questions as $q) {
+			$answersIds = array($q->optionA, $q->optionB, $q->optionC, $q->optionD);
+
+			foreach ($answersIds as $item){
+
+				$answer = $this->getAnswer($item);
+				array_push($answers, $answer);
+			}
+			$data[$q->id] = $answers;
+			$answers = array();
+		}
+
+
+
+		return $data;
+
+	}
+
 	public function data() {
 		return $this->_data;
 	}
