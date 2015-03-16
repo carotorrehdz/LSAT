@@ -35,6 +35,7 @@ $GLOBALS['config'] = array(
 );
 
 define( 'ABPATH', 'C:/wamp/www/lsat');
+//define( 'ABPATH', '/Applications/XAMPP/xamppfiles/htdocs/LSAT');
 
 // Autoload classes
 function autoload($class) {
