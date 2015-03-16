@@ -43,23 +43,24 @@ $answers = $answer->getAnswersForQuestionList($questions);
           <?php echo $webName[0]->name; ?>
         </h3>
 
-        <div class="panel panel-info">
+<!-- WAAA-->
+        <div class="">
           <?php
             foreach($levels as $level) {
-              echo "<div class='webExplorerLevel'><div class='panel-heading'><h4 class='panel-title'>Nivel $level</h4></div> <div class='panel-body'><ol>";
+              echo "<div class='webExplorerLevel'><h6 class='panel-title'>Nivel $level</h6> <div class='body'><ol>";
               foreach($questions as $question) {
                 if ($level == $questionsByLevel[$question->id]){
-                  echo "<li>$question->text</li><ul id='answersForQuestion'>";
+                  echo "<li> <span>$question->text</span> <ul id='answersForQuestion'>";
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
                     $text = $a[0]->text;
                     if ($a[0]->correct == 1){
-                      echo "<label class='label'>Correcta</label><li>$text</li>";
+                      echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
                     } else {
-                      echo "<input type='text' /><li>$text</li>";
+                      echo "<li> <input type='text'/> <span>$text </span> </li>";
                     }
                   }
-                  echo "</ul>";
+                  echo "</ul> </li>";
                 }
               }
               echo "</ol></div></div>";

@@ -15,62 +15,58 @@ $studentId = $user->data()->id;
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Dashboard</title>
-  <?php include 'includes/templates/headTags.php' ?>
+	<title>LSAT | Dashboard</title>
+	<?php include 'includes/templates/headTags.php' ?>
 </head>
 
 <body>
 
-  <?php include 'includes/templates/header.php' ?>
+	<?php include 'includes/templates/header.php' ?>
 
-  <section class="scroll-container" role="main">
+	<section class="scroll-container" role="main">
 
-    <div class="row">
-    <?php include 'includes/templates/studentSidebar.php' ?>  
-      <div class="large-9 medium-8 columns">
-        <h3>Grupos</h3>
-        <h4 class="subheader">Administracion de grupos</h4>
-        <hr>  
+		<div class="row">
+			<?php include 'includes/templates/studentSidebar.php' ?>  
+			<div class="large-9 medium-8 columns">
+				<br/>
+				<h3>Dashboard estudiante</h3>
+				<h4 class="subheader"></h4>
+				<hr>  
 
-        <table> 
-         <thead> 
-           <tr> 
-             <th width="300">Grupo</th> 
-             <th width="200">Periodo</th> 
-             <th width="300">Editar</th> 
-           </tr> 
-         </thead>
+				<div id="studentCompetences">
+					<div id="groups">
+						<ul>
+							<li>
+								<span><b>TC01</b></span>
+								<span>Administracion de proyectos</span>
+							</li>
 
-         <tbody> 
-           <?php
-           /*
-           foreach ($teacherGroups as $group) {
-
-              echo "<tr id='$group->id'> 
-                    <td> <a href='group.php?id=$group->id'> $group->name </a> </td>
-                    <td> $group->term </td>
-                    <td> <a onclick=\"editGroup($group->id);\" class='tiny button secondary'>Editar</a> </td> 
-                    </tr>";
-              }
-*/
-         ?>
-
-       </tbody>
-     </table>
-        
-     </div>
-   </div>
- </section>
+							<li>
+								<span><b>TC02</b></span>
+								<span>Estructura de datos</span>
+							</li>
+						</ul>
+					</div>
 
 
-<?php include 'includes/templates/footer.php' ?>
+					<div id="competences">
+						<h3>Algoritmos / <small>Luis Humberto</small></h3>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</section>
 
 
-<script src="js/vendor/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
-<script>
-  $(document).foundation();
+	<?php include 'includes/templates/footer.php' ?>
 
-</script>
+	<script src="js/vendor/jquery.js"></script>
+	<script src="js/foundation.min.js"></script>
+	<script>
+		$(document).foundation();
+
+	</script>
 </body>
 </html>

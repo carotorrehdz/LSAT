@@ -33,10 +33,6 @@ class Competence {
 			}
 		}
 
-		// if($db && $db->count()) {
-		// 	return $db->results();
-		// }
-
 		return array();
 	}
 
@@ -45,7 +41,7 @@ class Competence {
 		
 		$ids = implode(",", $competencesIds);
 		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON 
-		       C.id = WC.competenceId WHERE C.id IN $ids";
+		C.id = WC.competenceId WHERE C.id IN $ids";
 		
 		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
 			if($this->_db->count()) {
@@ -55,6 +51,27 @@ class Competence {
 
 		return array();
 	}
+
+	public function createNewCompetence($name, $professor, $webIds = array()){
+		//Crear el registro de la nueva competencia en la BD
+		$this->create(array("name"=>$name, "professor"=> $professor));
+
+		$competenceId = intval($this->_db->lastInsertId());
+		try{
+			//Agregar todas las redes para la competencia
+			$table = "websincompetence";
+			foreach ($webIds as $key => $value) {
+				$fields = array("order"=> (intval($key)+1), "webId"=>$value, "competenceId"=> $competencesId);
+				if(!$this->_db->insert($table, $fields)) {
+					throw new Exception('There was a problem creating websincompetence.');
+				}
+			}
+			return true;	
+		}
+		catch(PDOException $e){
+			return false;
+		}
+	}	
 
 	public function create($fields = array()) {
 		if(!$this->_db->insert($this->_tableName, $fields)) {

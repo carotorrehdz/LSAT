@@ -28,10 +28,19 @@ $teacherId = $user->data()->id;
         <h4 class="subheader">Crear una nueva competencia reuniendo varias redes de aprendizaje</h4>
         <hr>  
 
-        <form id="newWeb"> 
+        <form id="newCompetence"> 
 
           <div class="row"> 
             <label>Nombre de la competencia<input type="text" name="name"/></label>
+
+            <h5>A continuacion, escribe los ids de las redes que formaran la competencia.</h5>
+			<ol>
+			<li> <input id="web1" type="text"/> </li>
+			<li> <input id="web2" type="text"/> </li>
+			<li> <input id="web3" type="text"/> </li>
+			<li> <input id="web4" type="text"/> </li>
+			<li> <input id="web5" type="text"/> </li>
+			</ol>            
           </div>
 
         </form>
@@ -56,8 +65,14 @@ $teacherId = $user->data()->id;
 
     function createWeb(){
       var name = $("input#name").val();
+      var ids = [];
+      ids[0] = $("input#web1").val();
+      ids[1] = $("input#web2").val();
+      ids[2] = $("input#web3").val();
+      ids[3] = $("input#web4").val();
+      ids[4] = $("input#web5").val();
 
-      $.post( "controls/doAction.php", {  action: "createWeb", name: name, questionsForLevel:questionsForLevel})
+      $.post( "controls/doAction.php", {  action: "createCompetence", name: name, webIds:ids})
       .done(function( data ) {
 
         data = JSON.parse(data);
