@@ -34,8 +34,7 @@ $GLOBALS['config'] = array(
 	'roles' => array('admin', 'teacher', 'student')
 );
 
-//define( 'ABPATH', 'C:/wamp/www/lsat');
-define( 'ABPATH', '/Applications/XAMPP/xamppfiles/htdocs/LSAT');
+define( 'ABPATH', 'C:/wamp/www/lsat');
 
 // Autoload classes
 function autoload($class) {
