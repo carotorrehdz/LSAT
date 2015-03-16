@@ -5,14 +5,14 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('teacher');
 
-$w = new Web();
+$web = new Web();
 $webId =  Input::get("web");
-$web = $w->getWeb($webId);
+$webName = $web->getWeb($webId);
 
-$levels = $w->getLevelsInWeb($webId);
-$questionsByLevel = $w->getQuestionsInWeb($webId);
+$levels = $web->getLevelsInWeb($webId);
+$questionsByLevel = $web->getQuestionsInWeb($webId);
 
-$questionsIds = $w->getQuestionsIds($webId);
+$questionsIds = $web->getQuestionsIds($webId);
 $question = new Question();
 $questions = $question->getQuestions($questionsIds);
 
@@ -40,26 +40,27 @@ $answers = $answer->getAnswersForQuestionList($questions);
       <div class="large-9 medium-8 columns">
 
         <h3>
-          <?php echo $web->name; ?>
+          <?php echo $webName->name; ?>
         </h3>
 
-        <div class="panel panel-info">
+<!-- WAAA-->
+        <div class="">
           <?php
             foreach($levels as $level) {
-              echo "<div class='webExplorerLevel'><div class='panel-heading'><h4 class='panel-title'>Nivel $level</h4></div> <div class='panel-body'><ol>";
+              echo "<div class='webExplorerLevel'><h6 class='panel-title'>Nivel $level</h6> <div class='body'><ol>";
               foreach($questions as $question) {
                 if ($level == $questionsByLevel[$question->id]){
-                  echo "<li>$question->text</li><ul id='answersForQuestion'>";
+                  echo "<li> <span>$question->text</span> <ul id='answersForQuestion'>";
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
                     $text = $a[0]->text;
                     if ($a[0]->correct == 1){
-                      echo "<label class='label'>Correcta</label><li>$text</li>";
+                      echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
                     } else {
-                      echo "<li>$text</li>";
+                      echo "<li> <span>$text </span> </li>";
                     }
                   }
-                  echo "</ul>";
+                  echo "</ul> </li>";
                 }
               }
               echo "</ol></div></div>";

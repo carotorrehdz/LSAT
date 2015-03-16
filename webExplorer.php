@@ -24,7 +24,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Webs</title>
+  <title>LSAT | Redes</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
