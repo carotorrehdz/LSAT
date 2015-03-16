@@ -44,4 +44,3 @@ spl_autoload_register('autoload');
 
 // Include functions
 require_once (ABPATH.'/functions/sanitize.php');
-

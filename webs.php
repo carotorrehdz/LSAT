@@ -25,28 +25,28 @@ $teacherWebs = $web->getWebsForTeacher($teacherId);
   <section class="scroll-container" role="main">
 
     <div class="row">
-    <?php include 'includes/templates/teacherSidebar.php' ?>  
+    <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <h3>Redes</h3>
         <h4 class="subheader">Mis redes de aprendizaje</h4>
-        <hr>  
+        <hr>
 
-        <table> 
-         <thead> 
-           <tr> 
-             <th width="300">Red</th> 
-             <th width="200">Fecha de creacion</th> 
-             <th width="300">Edit</th> 
-           </tr> 
+        <table>
+         <thead>
+           <tr>
+             <th width="300">Red</th>
+             <th width="200">Fecha de creacion</th>
+             <th width="300">Edit</th>
+           </tr>
          </thead>
 
-         <tbody> 
+         <tbody>
            <?php
            foreach ($teacherWebs as $web) {
 
-              echo "<tr id='$web->id'> 
+              echo "<tr id='$web->id'>
                     <td> $web->name </td>
-                    <td> <a onclick=\"editWeb($web->id);\" class='tiny button secondary'>Editar</a> </td> 
+                    <td> <a onclick=\"editWeb($web->id);\" class='tiny button secondary'>Editar</a> </td>
                     </tr>";
             }
 
@@ -54,7 +54,7 @@ $teacherWebs = $web->getWebsForTeacher($teacherId);
 
        </tbody>
      </table>
-        
+
      </div>
    </div>
  </section>

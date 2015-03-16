@@ -48,13 +48,13 @@ class DB {
 				$this->_error = true;
 				//echo "Error :(";
 			}
-			
+
 		}
-		
+
 		return $this;
 	}
 
-	public function get($table, $where) {
+	public function get($table, $where = array()) {
 		return $this->action('SELECT *', $table, $where);
 	}
 
@@ -78,7 +78,7 @@ class DB {
 				}
 
 			}
-			
+
 			return false;
 		}else{
 			$sql = "{$action} FROM {$table}";
@@ -106,7 +106,7 @@ class DB {
 		$sql = "INSERT INTO {$table} (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
 
 		//echo $sql;
-		
+
 		if(!$this->query($sql, $fields)->error()) {
 			return true;
 		}
