@@ -35,43 +35,42 @@ $answers = $answer->getAnswersForQuestionList($questions);
   <section class="scroll-container" role="main">
 
     <div class="row">
+
     <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
+
         <h3>
-          <?php
-            echo $webName[0]->name;
-          ?>
+          <?php echo $webName[0]->name; ?>
         </h3>
 
+        <div class="panel panel-info">
           <?php
             foreach($levels as $level) {
-              echo "<div><h4>Nivel $level</h4>";
+              echo "<div class='webExplorerLevel'><div class='panel-heading'><h4 class='panel-title'>Nivel $level</h4></div> <div class='panel-body'><ol>";
               foreach($questions as $question) {
                 if ($level == $questionsByLevel[$question->id]){
-                  echo "<h5>$question->text</h5>";
+                  echo "<li>$question->text</li><ul id='answersForQuestion'>";
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
+                    $text = $a[0]->text;
                     if ($a[0]->correct == 1){
-                      $text = $a[0]->text;
-                      echo "<label>Correcta $text </label>";
+                      echo "<label class='label'>Correcta</label><li>$text</li>";
                     } else {
-                      $text = $a[0]->text;
-                      echo "<div class='large-4 columns'> $text <input type='text' /></div>";
+                      echo "<input type='text' /><li>$text</li>";
                     }
                   }
+                  echo "</ul>";
                 }
-
-
               }
-              echo "</div>";
+              echo "</ol></div></div>";
             }
 
           ?>
+        </div>
 
      </div>
    </div>
  </section>
-
 
 <?php include 'includes/templates/footer.php' ?>
 
