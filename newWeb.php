@@ -9,6 +9,17 @@ $difficulty = new Difficulty();
 $difficulties = $difficulty->getDifficulties();
 $topic = new Topic();
 $topics = $topic->getTopics();
+$webId = Input::get("web");
+
+if ($webId != ''){
+  $w = new Web();
+  $web = $w->getWebIfValidAndEditable($webId);
+
+  if ($web == false) {
+    Redirect::to('webs.php');
+  }
+}
+
 ?>
 
 <!doctype html>
@@ -28,14 +39,26 @@ $topics = $topic->getTopics();
       <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <br/>
-        <h3>Nueva red</h3>
-        <h4 class="subheader">Crear una nueva red de aprendizaje</h4>
+        <?php
+          if (isset($web)) {
+            echo "<h3>Editar red</h3>";
+          }else{
+            echo "<h3>Nueva red</h3><h4 class='subheader'>Crear una nueva red de aprendizaje</h4>";
+          }
+        ?>
+
         <hr>
 
         <form id="newWeb">
 
           <div class="row">
-            <label>Nombre de la red <input type="text" name="name"/></label>
+            <label>Nombre de la red <input type="text" name="name" id="name" value="<?php
+              if (isset($web)) {
+                echo "$web->name";
+              }else{
+                echo "";
+              }
+            ?>"/></label>
 
             <div id="weblevels" class="weblevels">
               <ul class="">
@@ -132,7 +155,8 @@ $topics = $topic->getTopics();
 
         </form>
 
-        <a href="#" onclick="createWeb()" class="button round small right">Crear</a>
+        <a href="#" onclick="saveWeb()" class="button round small right">Guardar</a>
+        <a href="#" onclick="publishWeb()" class="button round small right alerta">Publicar</a>
 
       </div>
     </div>
@@ -145,8 +169,20 @@ $topics = $topic->getTopics();
   <script src="js/vendor/jquery.js"></script>
   <script src="js/foundation.min.js"></script>
 
+
+
   <script>
     $(document).foundation();
+
+    var webId = <?php
+      if (isset($web)) {
+        echo "$webId";
+      }else{
+        echo "0";
+      }
+    ?>;
+
+    console.log(webId);
 
     var currentLevel = 1;
     var maxLevels = 10;
@@ -163,6 +199,24 @@ $topics = $topic->getTopics();
 
     var questionModal = $("#questionModal");
     var qtitle = $("#questionModal #text");
+
+    if (webId != 0) {
+      //Vamos a editar la red
+      $.post( "controls/doAction.php", {  action: "getWebElementsForEdition", webId: webId})
+      .done(function( data ) {
+        data = JSON.parse(data);
+
+        console.log(data);
+        for (var questionId in data) {
+          if (data.hasOwnProperty(questionId)) {
+            var level = parseInt(data[questionId]);
+            questionsForLevel[level-1].push(parseInt(questionId));
+          }
+        }
+        refreshLis();
+
+      });
+    }
 
     function addLevel(){
       if(nextLevel > maxLevels) return;
@@ -249,10 +303,10 @@ $topics = $topic->getTopics();
       });
     }
 
-    function createWeb(){
+    function createWeb(isPublished){
       var name = $("input#name").val();
 
-      $.post( "controls/doAction.php", {  action: "createWeb", name: name, questionsForLevel:questionsForLevel})
+      $.post( "controls/doAction.php", {  action: "createWeb", webId:webId, name: name, questionsForLevel:questionsForLevel, isPublished: isPublished})
       .done(function( data ) {
 
         data = JSON.parse(data);
@@ -260,9 +314,20 @@ $topics = $topic->getTopics();
           alert("Error: \n\n" + data.message);
         }else{
           //Llevar al explorador de la red para mostrar detalle de la red creada
-          window.location = './webExplorer.php?web='+data.message;
+          window.location.replace('./webs.php');
         }
       });
+    }
+
+    function saveWeb(){
+      createWeb(0);
+    }
+
+    function publishWeb(){
+      var r = confirm("Estas seguro que deseas publicar la red?");
+        if (r == true) {
+          createWeb(1);
+        }
     }
 
     function deleteQuestion(id){

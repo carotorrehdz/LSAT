@@ -255,46 +255,59 @@ if(Input::exists()) {
 
 		try{
 
+			$webId = Input::get('webId');
 			$name = Input::get('name');
 			$questionsForLevel = Input::get('questionsForLevel');
+			$isPublished= Input::get('isPublished');
 
-			$web = new Web();
-			$web->create(array(
+			$w = new Web();
+			$web = $w->getWeb($webId);
+			$data = array(
 				'professor' => intval($teacherId),
-				'name' => $name
-				));
-			$db = DB::getInstance();
-			$webId = intval($db->lastInsertId());
+				'name' => $name,
+				'isPublished' => intval($isPublished)
+			);
+
+			if ($web == null){
+				//Se va a crear nueva red
+				$w->create($data);
+				$db = DB::getInstance();
+				$webId = intval($db->lastInsertId());
+			} else {
+				//Se va a actualizar la red
+				$w->update($webId, $data);
+				$w->deleteAllQuestionsInWeb($webId);
+			}
 
 			/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y
 				El segundo arreglo son las preguntas
-				 0 =>
-				    array
-				      0 => string '5' (length=1)
-				      1 => string '6' (length=1)
-				  1 =>
-				    array
-				      0 => string '7' (length=1)
+				0 =>
+						array
+							0 => string '5' (length=1)
+							1 => string '6' (length=1)
+					1 =>
+						array
+							0 => string '7' (length=1)
 			*/
 
-		    $currentLevel = 1;
-		    foreach ($questionsForLevel as $key => $value) {
-		    	//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
-		      	//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
-		      	//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
-		      	foreach ($value as $key => $questionId) {
-		      		$web->addQuestionInWeb($questionId, $webId, $currentLevel);
-		      	}
+			$currentLevel = 1;
+			foreach ($questionsForLevel as $key => $value) {
+				//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
+				//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
+				//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
+				foreach ($value as $key => $questionId) {
+					$w->addQuestionInWeb($questionId, $webId, $currentLevel);
+				}
+				$currentLevel += 1;
 
-		      	$currentLevel += 1;
-		      }
-
-			}catch(Exception $e) {
-				$response = array( "message" => "Error:006 ".$e->getMessage());
-				die(json_encode($response));
 			}
-			$response = array( "message" => $webId);
-			echo json_encode($response);
+
+		}catch(Exception $e) {
+			$response = array( "message" => "Error:006 ".$e->getMessage());
+			die(json_encode($response));
+		}
+		$response = array( "message" => $webId);
+		echo json_encode($response);
 
 
 		break;
@@ -315,7 +328,7 @@ if(Input::exists()) {
 
 			$competence = new Comptence();
 			$competence->createNewCompetence($name, $teacherId, $webIds);
-			
+
 			$db = DB::getInstance();
 			$webId = intval($db->lastInsertId());
 
@@ -351,6 +364,29 @@ if(Input::exists()) {
 
 
 		break;
+
+		case "getWebElementsForEdition":
+		$user = new User();
+		if($user->data()->role != 'teacher'){
+			return; /*Solo un maestro puede accesar*/
+		}
+
+		try{
+			$webId = Input::get('webId');
+
+			$w = new Web();
+		  $questions = $w->getQuestionsInWeb($webId);
+
+			echo json_encode($questions);
+
+
+			}catch(Exception $e) {
+				$response = array( "message" => "Error:006 ".$e->getMessage());
+				die(json_encode($response));
+			}
+
+		break;
+
 
 		default:
 		echo "Error: 002";

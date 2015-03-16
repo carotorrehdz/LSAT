@@ -36,7 +36,8 @@ $teacherWebs = $web->getWebsForTeacher($teacherId);
            <tr>
              <th width="300">Red</th>
              <th width="200">Fecha de creacion</th>
-             <th width="300">Edit</th>
+             <th width="300">Editar</th>
+             <th width="300">Detalle</th>
            </tr>
          </thead>
 
@@ -46,8 +47,14 @@ $teacherWebs = $web->getWebsForTeacher($teacherId);
 
               echo "<tr id='$web->id'>
                     <td> $web->name </td>
-                    <td> <a onclick=\"editWeb($web->id);\" class='tiny button secondary'>Editar</a> </td>
-                    </tr>";
+                    <td> $web->createdDate </td>";
+                    if($web->isPublished){
+                      echo "<td> Red publicada </td>";
+                    }else {
+                      echo "<td> <a href=\"newWeb.php?web=$web->id\" class='tiny button secondary'>Editar</a> </td>";
+                    }
+
+                    echo "<td> <a href=\"webDetail.php?web=$web->id\" class='tiny button secondary'>Ver detalle</a> </td></tr>";
             }
 
          ?>
