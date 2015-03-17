@@ -66,6 +66,7 @@ $websInCompetence = $c->getWebsInCompetence($competenceId);
 
        </tbody>
      </table>
+     <a href="#" onclick="publishCompetence()" class="button round small right alerta">Publicar</a>
      </div>
    </div>
  </section>
@@ -77,6 +78,10 @@ $websInCompetence = $c->getWebsInCompetence($competenceId);
 <script src="js/foundation.min.js"></script>
 <script>
   $(document).foundation();
+
+  function publishCompetence(){
+    
+  }
 
 </script>
 </body>

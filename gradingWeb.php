@@ -54,10 +54,11 @@ $answers = $answer->getAnswersForQuestionList($questions);
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
                     $text = $a[0]->text;
+                    $answerId = $a[0]->id;
                     if ($a[0]->correct == 1){
                       echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
                     } else {
-                      echo "<li> <input type='text'/> <span>$text </span> </li>";
+                      echo "<li> <input class='answer' name='$question->id-$answerId' type='text'/> <span>$text </span> </li>";
                     }
                   }
                   echo "</ul> </li>";
@@ -69,6 +70,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
           ?>
         </div>
 
+        <a href="#" onclick="gradeWeb()" class="button round small right">Guardar</a>
      </div>
    </div>
  </section>
@@ -80,6 +82,23 @@ $answers = $answer->getAnswersForQuestionList($questions);
 <script src="js/foundation.min.js"></script>
 <script>
   $(document).foundation();
+
+  function gradeWeb() {
+    var answers = $(".answer");
+    var len = answers.length;
+    var data = {};
+
+    for(var i=0; i<len; i++){
+      var item = $(answers[i]);
+      var name = item.attr('name').split('-');
+      var q = name[0];
+      var a = name[1];
+      var p =  item.val();
+      data[q] = [a,p];
+
+    }
+    console.log(data);
+  }
 
 </script>
 </body>

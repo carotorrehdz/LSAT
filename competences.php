@@ -25,27 +25,27 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
   <section class="scroll-container" role="main">
 
     <div class="row">
-    <?php include 'includes/templates/teacherSidebar.php' ?>  
+    <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <h3>Competencias</h3>
         <h4 class="subheader">Administracion de competencias</h4>
-        <hr>  
+        <hr>
 
-        <table> 
-         <thead> 
-           <tr> 
-             <th width="300">Nombre</th> 
-             <th width="300">Editar</th> 
-           </tr> 
+        <table>
+         <thead>
+           <tr>
+             <th width="300">Nombre</th>
+             <th width="300">Editar</th>
+           </tr>
          </thead>
 
-         <tbody> 
+         <tbody>
            <?php
            foreach ($teacherCompetences as $competence) {
 
-              echo "<tr id='$competence->id'> 
+              echo "<tr id='$competence->id'>
                     <td> $competence->name </td>
-                    <td> <a onclick=\"editGroup($competence->id);\" class='tiny button secondary'>Editar</a> </td> 
+                    <td> <a href=\"competenceDetail.php?competence=$competence->id\" class='tiny button secondary'>Editar</a> </td> 
                     </tr>";
          }
 
@@ -53,7 +53,7 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
 
        </tbody>
      </table>
-        
+
      </div>
    </div>
  </section>
