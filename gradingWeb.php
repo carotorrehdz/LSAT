@@ -5,23 +5,14 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('teacher');
 
-$w = new Web();
-$webId = Input::get("web");
+$web = new Web();
+$webId =  Input::get("web");
+$webName = $web->getWeb($webId);
 
-if ($webId != ''){
-  $web = $w->getWeb($webId);
+$levels = $web->getLevelsInWeb($webId);
+$questionsByLevel = $web->getQuestionsInWeb($webId);
 
-  if ($web == null) {
-    Redirect::to('webs.php');
-  }
-}else{
-  Redirect::to('webs.php');
-}
-
-$levels = $w->getLevelsInWeb($webId);
-$questionsByLevel = $w->getQuestionsInWeb($webId);
-
-$questionsIds = $w->getQuestionsIds($webId);
+$questionsIds = $web->getQuestionsIds($webId);
 $question = new Question();
 $questions = $question->getQuestions($questionsIds);
 
@@ -33,7 +24,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Detalle de Red</title>
+  <title>LSAT | Redes</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -49,7 +40,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
       <div class="large-9 medium-8 columns">
 
         <h3>
-          <?php echo $web->name; ?>
+          <?php echo $webName->name; ?>
         </h3>
 
 <!-- WAAA-->
@@ -66,7 +57,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
                     if ($a[0]->correct == 1){
                       echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
                     } else {
-                      echo "<li> <span>$text </span> </li>";
+                      echo "<li> <input type='text'/> <span>$text </span> </li>";
                     }
                   }
                   echo "</ul> </li>";

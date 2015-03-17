@@ -29,7 +29,7 @@ ul#dashboard-actions{
 }
 
 ul#dashboard-actions li{
-	
+
 }
 
 .ajaxWaiting{
@@ -62,11 +62,15 @@ table td{
 }
 
 .rjctd{
-  color: #FF0000;   
+  color: #FF0000;
 }
 
 .white{
   color: #FFF;
+}
+
+.alerta{
+  background: #FFAA00;
 }
 
 .grey{
@@ -323,7 +327,7 @@ table td{
   border-radius: 0 3px 3px 0;
   box-shadow: 1px 1px 2px #987;
   width: 40px;
-  margin-bottom:2px; 
+  margin-bottom:2px;
 }
 
 #questionsForLevel ul li a.delete{
@@ -474,11 +478,11 @@ table td{
 }
 
 #newCompetence ol{
-  
+
 }
 
 #newCompetence ol li{
-  
+
 }
 
 #newCompetence ol li input{

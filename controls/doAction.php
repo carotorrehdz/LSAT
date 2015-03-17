@@ -315,7 +315,7 @@ if(Input::exists()) {
 		case "createCompetence":
 		$user = new User();
 		if($user->data()->role != 'teacher'){
-			return; /*Solo un maestro puede crear preguntas*/
+			return; /*Solo un maestro puede crear competencia*/
 		}
 
 		//Necesitamos el id del profesor, que es el usuario logueado para ligar las preguntas con el
@@ -326,42 +326,16 @@ if(Input::exists()) {
 			$name = Input::get('name');
 			$webIds = Input::get('webIds');
 
-			$competence = new Comptence();
-			$competence->createNewCompetence($name, $teacherId, $webIds);
+			$competence = new Competence();
+			$competenceId = $competence->createNewCompetence($name, $teacherId, $webIds);
 
-			$db = DB::getInstance();
-			$webId = intval($db->lastInsertId());
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:006 ".$e->getMessage());
+			die(json_encode($response));
+		}
 
-			/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y
-				El segundo arreglo son las preguntas
-				 0 =>
-				    array
-				      0 => string '5' (length=1)
-				      1 => string '6' (length=1)
-				  1 =>
-				    array
-				      0 => string '7' (length=1)
-			*/
-
-		    $currentLevel = 1;
-		    foreach ($questionsForLevel as $key => $value) {
-		    	//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
-		      	//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
-		      	//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
-		      	foreach ($value as $key => $questionId) {
-		      		$web->addQuestionInWeb($questionId, $webId, $currentLevel);
-		      	}
-
-		      	$currentLevel += 1;
-		      }
-
-			}catch(Exception $e) {
-				$response = array( "message" => "Error:006 ".$e->getMessage());
-				die(json_encode($response));
-			}
-			$response = array( "message" => $webId);
-			echo json_encode($response);
-
+		$response = array( "message" => $competenceId);
+		echo json_encode($response);
 
 		break;
 
