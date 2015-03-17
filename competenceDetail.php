@@ -4,15 +4,28 @@ require 'core/init.php';
 
 $user = new User();
 $user->checkIsValidUser('teacher');
-$web = new Web();
-$allWebs = $web->getAllPublishedWebs();
+
+$c = new Competence();
+$competenceId =  Input::get("competence");
+
+if ($competenceId != ''){
+  $competence = $c->getCompetence($competenceId);
+
+  if ($competence == null) {
+    Redirect::to('competences.php');
+  }
+}else{
+  Redirect::to('competences.php');
+}
+
+$websInCompetence = $c->getWebsInCompetence($competenceId);
 
 ?>
 
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Webs</title>
+  <title>LSAT | Detalle de Competencia</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -23,42 +36,40 @@ $allWebs = $web->getAllPublishedWebs();
   <section class="scroll-container" role="main">
 
     <div class="row">
+
     <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
-        <h3>Redes</h3>
-        <h4 class="subheader">Mis redes de aprendizaje</h4>
-        <hr>
+
+        <h3>
+          <?php echo $competence->name; ?>
+        </h3>
 
         <table>
          <thead>
            <tr>
-             <th width="50">ID</th>
              <th width="300">Red</th>
-             <th width="200">Fecha de creacion</th>
-             <th width="300">Detalle</th>
+             <th width="300">Ponderar</th>
            </tr>
          </thead>
 
          <tbody>
            <?php
-           foreach ($allWebs as $web) {
+           foreach ($websInCompetence as $web) {
 
               echo "<tr id='$web->id'>
-                    <td> $web->id </td>
                     <td> $web->name </td>
-                    <td> $web->createdDate </td>";
-                    echo "<td> <a href=\"webDetail.php?web=$web->id\" class='tiny button secondary'>Ver detalle</a> </td></tr>";
-            }
+                    <td> <a href=\"gradingWeb.php?web=$web->webId\" class='tiny button secondary'>Ponderar</a> </td>
+                    </tr>";
+         }
 
          ?>
 
        </tbody>
      </table>
-
+     <a href="#" onclick="publishCompetence()" class="button round small right alerta">Publicar</a>
      </div>
    </div>
  </section>
-
 
 <?php include 'includes/templates/footer.php' ?>
 
@@ -67,6 +78,10 @@ $allWebs = $web->getAllPublishedWebs();
 <script src="js/foundation.min.js"></script>
 <script>
   $(document).foundation();
+
+  function publishCompetence(){
+    
+  }
 
 </script>
 </body>

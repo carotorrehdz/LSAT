@@ -8,9 +8,9 @@
         <li><a href="groups.php">Mis grupos </a></li>
         <li><a href="createGroup.php">Crear nuevo grupo</a></li>
         <li><a href="assignCompetences.php">Asignar competencias</a></li>
-        
+
         <li class="divider"></li>
-        
+
         <li class="heading">Preguntas</li>
         <li><a href="createQuestion.php" title="">Crear nueva pregunta</a></li>
 
@@ -23,6 +23,7 @@
         <li class="divider"></li>
 
         <li class="heading">Competencias</li>
+        <li><a href="webExplorer.php">Explorador de redes</a></li>
         <li><a href="competences.php">Mis competencias</a></li>
         <li><a href="newCompetence.php">Crear nueva competencia</a></li>
 

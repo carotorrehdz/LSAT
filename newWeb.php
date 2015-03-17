@@ -182,8 +182,6 @@ if ($webId != ''){
       }
     ?>;
 
-    console.log(webId);
-
     var currentLevel = 1;
     var maxLevels = 10;
     var nextLevel = 4;

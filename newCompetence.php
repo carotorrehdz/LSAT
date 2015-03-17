@@ -21,17 +21,17 @@ $teacherId = $user->data()->id;
   <section class="scroll-container" role="main">
 
     <div class="row">
-      <?php include 'includes/templates/teacherSidebar.php' ?>  
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <br/>
         <h3>Nueva competencia</h3>
         <h4 class="subheader">Crear una nueva competencia reuniendo varias redes de aprendizaje</h4>
-        <hr>  
+        <hr>
 
-        <form id="newCompetence"> 
+        <form id="newCompetence">
 
-          <div class="row"> 
-            <label>Nombre de la competencia<input type="text" name="name"/></label>
+          <div class="row">
+            <label>Nombre de la competencia<input type="text" name="name" id="name"/></label>
 
             <h5>A continuacion, escribe los ids de las redes que formaran la competencia.</h5>
 			<ol>
@@ -40,12 +40,12 @@ $teacherId = $user->data()->id;
 			<li> <input id="web3" type="text"/> </li>
 			<li> <input id="web4" type="text"/> </li>
 			<li> <input id="web5" type="text"/> </li>
-			</ol>            
+			</ol>
           </div>
 
         </form>
 
-        <a href="#" onclick="createCompetence()" class="button round small right">Crear</a>
+        <a onclick="createCompetence()" class="button round small right">Crear</a>
 
       </div>
     </div>
@@ -61,9 +61,9 @@ $teacherId = $user->data()->id;
   <script>
     $(document).foundation();
 
- 
 
-    function createWeb(){
+
+    function createCompetence(){
       var name = $("input#name").val();
       var ids = [];
       ids[0] = $("input#web1").val();
@@ -79,10 +79,11 @@ $teacherId = $user->data()->id;
         if(data.message == 'error'){
           alert("Error: \n\n" + data.message);
         }else{
-          //Llenar el contenedor con los datos de la pregunta
-          console.log(data);
+          //Llevar al explorador de la red para mostrar detalle de la red creada
+          window.location.replace('./competenceDetail.php?competence='+data.message);
       }
     });
+  }
 
   </script>
 </body>

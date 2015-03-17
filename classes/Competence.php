@@ -9,6 +9,33 @@ class Competence {
 		$this->_db = DB::getInstance();
 	}
 
+	public function getCompetence($competenceId = null) {
+		if ($competenceId == null) return;
+
+		$db = $this->_db->get($this->_tableName, array('id', '=', $competenceId));
+
+		if($db && $db->count()) {
+			return $db->first();
+		}
+
+		return null;
+
+	}
+
+	public function getWebsInCompetence($competenceId = null){
+		if ($competenceId == null) return;
+
+		$sql = "SELECT * FROM web W JOIN websincompetence WC ON
+		W.id = WC.webId WHERE WC.competenceId = $competenceId";
+
+		if(!$this->_db->query($sql)->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+
+	}
+
 	public function getCompetencesForTeacher($teacherId = null){
 		if ($teacherId == null) return;
 
@@ -26,7 +53,7 @@ class Competence {
 
 		//$db = $this->_db->get('competenceingroup', array('groupId', '=', $groupId));
 		$sql = "SELECT id FROM competenceingroup WHERE groupId = ?";
-		
+
 		if(!$this->_db->query($sql, array($groupId))->error()) {
 			if($this->_db->count()) {
 				return $this->_db->results();
@@ -38,11 +65,11 @@ class Competence {
 
 	public function getCompetencesDetails($competencesIds = null){
 		if ($competencesIds == null) return;
-		
+
 		$ids = implode(",", $competencesIds);
-		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON 
+		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON
 		C.id = WC.competenceId WHERE C.id IN $ids";
-		
+
 		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
 			if($this->_db->count()) {
 				return $this->_db->results();
@@ -61,17 +88,17 @@ class Competence {
 			//Agregar todas las redes para la competencia
 			$table = "websincompetence";
 			foreach ($webIds as $key => $value) {
-				$fields = array("order"=> (intval($key)+1), "webId"=>$value, "competenceId"=> $competencesId);
+				$fields = array("order"=> (intval($key)+1), "webId"=>$value, "competenceId"=> $competenceId);
 				if(!$this->_db->insert($table, $fields)) {
 					throw new Exception('There was a problem creating websincompetence.');
 				}
 			}
-			return true;	
+			return $competenceId;
 		}
 		catch(PDOException $e){
 			return false;
 		}
-	}	
+	}
 
 	public function create($fields = array()) {
 		if(!$this->_db->insert($this->_tableName, $fields)) {

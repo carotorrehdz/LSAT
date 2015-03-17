@@ -22,6 +22,17 @@ class Web {
 
 	}
 
+	public function getAllPublishedWebs() {
+		$db = $this->_db->get($this->_tableName, array('isPublished', '=', 1));
+
+		if($db && $db->count()) {
+			return $db->results();
+		}
+
+		return null;
+
+	}
+
 	public function getWebsForTeacher($teacherId = null) {
 		if ($teacherId == null) return;
 

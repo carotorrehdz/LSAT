@@ -5,23 +5,14 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('teacher');
 
-$w = new Web();
-$webId = Input::get("web");
+$web = new Web();
+$webId =  Input::get("web");
+$webName = $web->getWeb($webId);
 
-if ($webId != ''){
-  $web = $w->getWeb($webId);
+$levels = $web->getLevelsInWeb($webId);
+$questionsByLevel = $web->getQuestionsInWeb($webId);
 
-  if ($web == null) {
-    Redirect::to('webs.php');
-  }
-}else{
-  Redirect::to('webs.php');
-}
-
-$levels = $w->getLevelsInWeb($webId);
-$questionsByLevel = $w->getQuestionsInWeb($webId);
-
-$questionsIds = $w->getQuestionsIds($webId);
+$questionsIds = $web->getQuestionsIds($webId);
 $question = new Question();
 $questions = $question->getQuestions($questionsIds);
 
@@ -33,7 +24,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Detalle de Red</title>
+  <title>LSAT | Redes</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -49,7 +40,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
       <div class="large-9 medium-8 columns">
 
         <h3>
-          <?php echo $web->name; ?>
+          <?php echo $webName->name; ?>
         </h3>
 
 <!-- WAAA-->
@@ -63,10 +54,11 @@ $answers = $answer->getAnswersForQuestionList($questions);
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
                     $text = $a[0]->text;
+                    $answerId = $a[0]->id;
                     if ($a[0]->correct == 1){
                       echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
                     } else {
-                      echo "<li> <span>$text </span> </li>";
+                      echo "<li> <input class='answer' name='$question->id-$answerId' type='text'/> <span>$text </span> </li>";
                     }
                   }
                   echo "</ul> </li>";
@@ -78,6 +70,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
           ?>
         </div>
 
+        <a href="#" onclick="gradeWeb()" class="button round small right">Guardar</a>
      </div>
    </div>
  </section>
@@ -89,6 +82,23 @@ $answers = $answer->getAnswersForQuestionList($questions);
 <script src="js/foundation.min.js"></script>
 <script>
   $(document).foundation();
+
+  function gradeWeb() {
+    var answers = $(".answer");
+    var len = answers.length;
+    var data = {};
+
+    for(var i=0; i<len; i++){
+      var item = $(answers[i]);
+      var name = item.attr('name').split('-');
+      var q = name[0];
+      var a = name[1];
+      var p =  item.val();
+      data[q] = [a,p];
+
+    }
+    console.log(data);
+  }
 
 </script>
 </body>
