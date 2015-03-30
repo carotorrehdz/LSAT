@@ -25,9 +25,9 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
   <section class="scroll-container" role="main">
 
     <div class="row">
-    <?php include 'includes/templates/teacherSidebar.php' ?>
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
-        <h3>Competencias</h3>
+        <h3>Mis competencias</h3>
         <h4 class="subheader">Administracion de competencias</h4>
         <hr>
 
@@ -41,22 +41,38 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
 
          <tbody>
            <?php
-           foreach ($teacherCompetences as $competence) {
+
+           if($teacherCompetences != null){
+
+            foreach ($teacherCompetences as $competence) {
 
               echo "<tr id='$competence->id'>
-                    <td> $competence->name </td>
-                    <td> <a href=\"competenceDetail.php?competence=$competence->id\" class='tiny button secondary'>Editar</a> </td> 
-                    </tr>";
-         }
+              <td> $competence->name </td>";
 
-         ?>
 
-       </tbody>
-     </table>
+              if($competence->isPublished){
+                echo "<td> Competencia publicada </td>";
+              }else{
+                echo "<td> <a href=\"competenceDetail.php?competence=$competence->id\" class='tiny button secondary'>Editar</a> </td>";
+              }
 
-     </div>
-   </div>
- </section>
+              echo  "</tr>";
+          }
+        }else{
+          echo "<tr> <td> No hay competencias </td> </tr>";
+        }
+
+
+
+
+        ?>
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+</section>
 
 
 <?php include 'includes/templates/footer.php' ?>

@@ -22,6 +22,17 @@ class Web {
 
 	}
 
+	public function isWebReadyToUseInCompetence($webId = null) {
+		
+		$web = $this->getWeb($webId);
+		
+		if( $web!= null && $web->isPublished){
+			return true;
+		}
+
+		return false;
+	}
+
 	public function getAllPublishedWebs() {
 		$db = $this->_db->get($this->_tableName, array('isPublished', '=', 1));
 
@@ -158,6 +169,22 @@ class Web {
 		if(!$this->_db->delete("questionsinweb", array("webId" , "=" , $webId))) {
 			throw new Exception('There was a problem deleting all questions from the web.');
 		}
+
+	}
+
+
+	public function getWebsInCompetenceId($webId = null, $competenceId = null) {
+		if ($webId == null || $competenceId == null) return;
+
+		$sql = "SELECT * FROM websincompetence WHERE competenceId = $competenceId AND webId = $webId";
+
+		if(!$this->_db->query($sql)->error()) {
+			if($this->_db->count()) {
+				return $this->_db->first();
+			}
+		}
+
+		return null;
 
 	}
 

@@ -7,7 +7,6 @@ $user->checkIsValidUser('teacher');
 $teacherId = $user->data()->id;
 $web = new Web();
 $teacherWebs = $web->getWebsForTeacher($teacherId);
-//var_dump($teacherGroups);
 
 ?>
 
@@ -34,10 +33,10 @@ $teacherWebs = $web->getWebsForTeacher($teacherId);
         <table>
          <thead>
            <tr>
-             <th width="300">Red</th>
+             <th width="300">Nombre de la red</th>
              <th width="200">Fecha de creacion</th>
              <th width="300">Editar</th>
-             <th width="300">Detalle</th>
+             <th width="300">Detalle <small> Ver las preguntas que componen la red </small> </th>
            </tr>
          </thead>
 

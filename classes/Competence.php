@@ -39,10 +39,12 @@ class Competence {
 	public function getCompetencesForTeacher($teacherId = null){
 		if ($teacherId == null) return;
 
-		$db = $this->_db->get($this->_tableName, array('professor', '=', $teacherId));
+		$sql = "SELECT * FROM competence WHERE professor = ? and isPublished = ?";
 
-		if($db && $db->count()) {
-			return $db->results();
+		if(!$this->_db->query($sql, array($teacherId, true))->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
 		}
 
 		return array();
@@ -106,8 +108,8 @@ class Competence {
 		}
 	}
 
-	public function update($questionId, $fields = array()) {
-		if(!$this->_db->update($this->_tableName, $questionId, $fields)) {
+	public function update($competenceId, $fields = array()) {
+		if(!$this->_db->update($this->_tableName, $competenceId, $fields)) {
 			throw new Exception('There was a problem updating.');
 		}
 	}

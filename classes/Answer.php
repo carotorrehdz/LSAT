@@ -25,14 +25,13 @@ class Answer {
 			$sql = "SELECT * FROM answer WHERE id = ?";
 			if(!$this->_db->query($sql, array($id))->error()) {
 				if($this->_db->count()) {
-					//echo "aqui";
-					//var_dump($this->_db->results());
 					return $this->_db->results();
 				}
 			}
-			//echo "aca";
 			return array();
 		}
+
+	
 
 	public function getAnswersForQuestionList($questions = array()) {
 		if (count($questions) == 0) return;
@@ -52,10 +51,7 @@ class Answer {
 			$answers = array();
 		}
 
-
-
 		return $data;
-
 	}
 
 	public function data() {

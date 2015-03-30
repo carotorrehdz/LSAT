@@ -37,6 +37,7 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
         <?php
         foreach ($teacherGroups as $group) {
          echo "
+         <div class='assignCompetence'>
          <div class='row grey1'> 
           <div class='large-12 columns'>
             <h5>Grupo $group->name</h5>
@@ -44,7 +45,7 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
             foreach ($teacherCompetences as $competence) {
               echo "<label>$competence->name <input type='checkbox'> </label>";
             }
-            echo "</div></div>";
+            echo "</div></div></div>";
           }
           ?>
           <br/>

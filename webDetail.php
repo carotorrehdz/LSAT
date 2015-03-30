@@ -55,6 +55,11 @@ $answers = $answer->getAnswersForQuestionList($questions);
 <!-- WAAA-->
         <div class="">
           <?php
+
+            if(is_array($levels) && count($levels) == 0){
+              echo " <p>Esta red aun no tiene preguntas. <a href='newWeb.php?web=$webId'>Continuar editando</a></p> ";
+            }else{
+
             foreach($levels as $level) {
               echo "<div class='webExplorerLevel'><h6 class='panel-title'>Nivel $level</h6> <div class='body'><ol>";
               foreach($questions as $question) {
@@ -73,6 +78,8 @@ $answers = $answer->getAnswersForQuestionList($questions);
                 }
               }
               echo "</ol></div></div>";
+            }
+
             }
 
           ?>

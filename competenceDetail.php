@@ -19,7 +19,7 @@ if ($competenceId != ''){
 }
 
 $websInCompetence = $c->getWebsInCompetence($competenceId);
-
+//var_dump($websInCompetence);
 ?>
 
 <!doctype html>
@@ -37,7 +37,7 @@ $websInCompetence = $c->getWebsInCompetence($competenceId);
 
     <div class="row">
 
-    <?php include 'includes/templates/teacherSidebar.php' ?>
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
 
         <h3>
@@ -56,20 +56,26 @@ $websInCompetence = $c->getWebsInCompetence($competenceId);
            <?php
            foreach ($websInCompetence as $web) {
 
-              echo "<tr id='$web->id'>
-                    <td> $web->name </td>
-                    <td> <a href=\"gradingWeb.php?web=$web->webId\" class='tiny button secondary'>Ponderar</a> </td>
-                    </tr>";
-         }
+            echo "<tr id='$web->id'>
+            <td> $web->name </td>";
 
-         ?>
+            if($web->isGraded){
+              echo "<td> La red ya fue ponderada </td>";
+            }else{
+              echo "<td> <a href=\"gradingWeb.php?web=$web->webId&c=$competenceId\" class='tiny button secondary'>Ponderar</a> </td>";
+            }
 
-       </tbody>
-     </table>
-     <a href="#" onclick="publishCompetence()" class="button round small right alerta">Publicar</a>
-     </div>
-   </div>
- </section>
+            echo  "</tr>";
+          }
+
+          ?>
+
+        </tbody>
+      </table>
+      <a href="#" onclick="publishCompetence()" class="button round small right alerta">Publicar</a>
+    </div>
+  </div>
+</section>
 
 <?php include 'includes/templates/footer.php' ?>
 
@@ -79,8 +85,44 @@ $websInCompetence = $c->getWebsInCompetence($competenceId);
 <script>
   $(document).foundation();
 
+  var cId = <?php
+    if (isset($competenceId)) {
+      echo "$competenceId";
+    }else{
+      echo "0";
+    }
+    ?>;
+
   function publishCompetence(){
-    
+
+    $.post( "controls/doAction.php", { action:"webIsGraded", cId: cId})
+    .done(function( data ) {
+
+      data = JSON.parse(data);
+      if(data.message == 'success'){
+        console.log(data);
+        if(data.isGraded){
+
+
+          $.post( "controls/doAction.php", { action:"publishCompetence", cId: cId})
+          .done(function( data ) {
+            data = JSON.parse(data);
+            if(data.message == 'success'){
+              window.location.replace('./competences.php');
+            }else{
+              alert("Error" + data.message);
+            }
+          });
+
+
+        }else{
+          alert("No puedes publicar una competencia \nhasta que todas las redes hayan sido ponderadas.");
+        }
+
+      }else{
+        alert("Error: \n\n" + data.message);
+      }
+    });
   }
 
 </script>

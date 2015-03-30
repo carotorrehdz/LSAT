@@ -488,3 +488,10 @@ table td{
 #newCompetence ol li input{
   width: 200px;
 }
+
+
+/*Asignar competencias*/
+
+.assignCompetence{
+  margin: 10px;
+}

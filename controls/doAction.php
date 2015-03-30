@@ -178,7 +178,7 @@ if(Input::exists()) {
 					'urlImage' => $data['urla'.$i],
 					'imageFeedback' => $data['urlf'.$i],
     			'correct' => ($i==1)? true : false,  //La primera respuesta siempre sera la correcta
-    		));
+    			));
 
     			//Obtener el id de la respuesta
 				$answerId = intval($db->lastInsertId());
@@ -266,7 +266,7 @@ if(Input::exists()) {
 				'professor' => intval($teacherId),
 				'name' => $name,
 				'isPublished' => intval($isPublished)
-			);
+				);
 
 			if ($web == null){
 				//Se va a crear nueva red
@@ -279,28 +279,30 @@ if(Input::exists()) {
 				$w->deleteAllQuestionsInWeb($webId);
 			}
 
-			/* Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y
-				El segundo arreglo son las preguntas
-				0 =>
-						array
-							0 => string '5' (length=1)
-							1 => string '6' (length=1)
-					1 =>
-						array
-							0 => string '7' (length=1)
-			*/
+			//Este es el formato en el que nos llegan las preguntas por nivel, el primer indice corresponde al nivel y
+			//	El segundo arreglo son las preguntas
+			//	0 =>
+			//			array
+			//				0 => string '5' (length=1)
+			//				1 => string '6' (length=1)
+			//		1 =>
+			//			array
+			//				0 => string '7' (length=1)
+			
 
 			$currentLevel = 1;
-			foreach ($questionsForLevel as $key => $value) {
-				//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
-				//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
-				//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
-				foreach ($value as $key => $questionId) {
-					$w->addQuestionInWeb($questionId, $webId, $currentLevel);
+			if(is_array($questionsForLevel) && count($questionsForLevel) > 0){
+				foreach ($questionsForLevel as $key => $value) {
+					//$key es el nivel - 1, debido a que los indices empiezan desde 0, *genius*
+					//Ahora hay que meter todos estas relaciones de nivel con pregunta a la BD
+					//var_dump($value);  //Value es el arreglo que contiene las preguntas de ese nivel
+					foreach ($value as $key => $questionId) {
+						$w->addQuestionInWeb($questionId, $webId, $currentLevel);
+					}
+					$currentLevel += 1;
 				}
-				$currentLevel += 1;
+			} 
 
-			}
 
 		}catch(Exception $e) {
 			$response = array( "message" => "Error:006 ".$e->getMessage());
@@ -318,16 +320,25 @@ if(Input::exists()) {
 			return; /*Solo un maestro puede crear competencia*/
 		}
 
-		//Necesitamos el id del profesor, que es el usuario logueado para ligar las preguntas con el
-		$teacherId = $user->data()->id;
-
 		try{
 
 			$name = Input::get('name');
+			$name = $name == "" ? "Nueva competencia" : $name;
+			
 			$webIds = Input::get('webIds');
+			$webIds = array_filter(array_unique($webIds));
+			$cleanWebIds = array();
+
+			//Ver que cada webId existe en la BD y qeu puede ser usado para una competencia
+			$w = new Web();
+			foreach ($webIds as $key => $id) {
+				if( $w->isWebReadyToUseInCompetence($id)){
+					array_push($cleanWebIds, $id);
+				}
+			}
 
 			$competence = new Competence();
-			$competenceId = $competence->createNewCompetence($name, $teacherId, $webIds);
+			$competenceId = $competence->createNewCompetence($name, $teacherId, $cleanWebIds);
 
 		} catch(Exception $e) {
 			$response = array( "message" => "Error:006 ".$e->getMessage());
@@ -349,16 +360,125 @@ if(Input::exists()) {
 			$webId = Input::get('webId');
 
 			$w = new Web();
-		  $questions = $w->getQuestionsInWeb($webId);
+			$questions = $w->getQuestionsInWeb($webId);
 
 			echo json_encode($questions);
 
 
-			}catch(Exception $e) {
-				$response = array( "message" => "Error:006 ".$e->getMessage());
-				die(json_encode($response));
+		}catch(Exception $e) {
+			$response = array( "message" => "Error:006 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+		break;
+
+
+		case "gradeWeb":
+		$user = new User();
+		if($user->data()->role != 'teacher'){
+			return; /*Solo un maestro puede asignar valores a la red*/
+		}
+
+		//Necesitamos el id del profesor, que es el usuario logueado 
+		$teacherId = $user->data()->id;
+
+		try{
+
+			$data = Input::get('data');
+			$webId = Input::get('webId');
+			$competenceId = Input::get('cId');
+
+			$w = new Web();
+			$websInCompetenceId = $w->getWebsInCompetenceId($webId, $competenceId);
+
+			$db = DB::getInstance();
+
+			//Guardar la ponderacion de cada pregunta para esa combinacion de red y competencia especifica
+			foreach ($data as $key => $p) {
+				$splitKey = explode('-', $key);
+
+				$grade = intval($p); //$p es la ponderacion en un string
+				$questionId = $splitKey[0];
+				$answerId = $splitKey[1];
+
+				$db->insert("answersinwebsincompetence", 
+					array("answerId"=>$answerId,
+						"grade"=>$grade,
+						"webInCompetence" => $websInCompetenceId->id));
+				
 			}
 
+			//Una vez que se le asigno una ponderacion a cada pregunta 
+			//hay que decir que esa combinacion de red y competencia ya fue ponderada en su totalidad
+
+			$db->update("websincompetence", $websInCompetenceId->id, array("isGraded" => true));
+			
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:006 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+
+		break;
+
+		case "publishCompetence":
+		$user = new User();
+		if($user->data()->role != 'teacher'){
+			return; /*Solo un maestro puede hacerlo*/
+		}
+
+		try{
+			$competenceId = Input::get('cId');
+			$c = new Competence();
+			$c->update($competenceId, array("isPublished" => true));
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:010 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+
+		break;
+
+		case "webIsGraded":
+		
+		$user = new User();
+		/*Solo un maestro puede hacerlo*/
+		if($user->data()->role != 'teacher'){ return; }
+
+		try{
+
+			$competenceId = Input::get('cId');
+			$db = DB::getInstance();
+			$sql = "SELECT * FROM websincompetence WHERE competenceId = $competenceId";
+
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					
+					$everythingIsGraded = true;
+					$returned = $db->results();
+					foreach ($returned as $key => $webInCompetence) {
+						if($webInCompetence->isGraded == false){
+							$everythingIsGraded = false;
+							break;
+						}
+					}
+
+					$response = array( "message" => "success", "isGraded" => false);
+					if($everythingIsGraded) $response["isGraded"] = true;
+					echo json_encode($response);
+
+				}
+			}
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:006 ".$e->getMessage());
+			die(json_encode($response));
+		}
 		break;
 
 
