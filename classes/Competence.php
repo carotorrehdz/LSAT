@@ -65,28 +65,36 @@ class Competence {
 		return array();
 	}
 
+	//Regresa un arreglo con los ids de todas las competencias del grupo
 	public function getCompetencesIdsForGroup($groupId = null){
 		if ($groupId == null) return;
 
 		//$db = $this->_db->get('competenceingroup', array('groupId', '=', $groupId));
-		$sql = "SELECT id FROM competenceingroup WHERE groupId = ?";
+		$sql = "SELECT * FROM competenceingroup WHERE groupId = ?";
 
 		if(!$this->_db->query($sql, array($groupId))->error()) {
 			if($this->_db->count()) {
-				return $this->_db->results();
+				$results = $this->_db->results();
+				$ids = array();
+
+				foreach ($results as $key => $value) {
+					array_push($ids, $value->competenceId);
+				}
+
+				return $ids;
 			}
 		}
 
 		return array();
 	}
 
+	//Le llega un arreglo de ids de competencias y regresa sus detalles
 	public function getCompetencesDetails($competencesIds = null){
 		if ($competencesIds == null) return;
 
-		var_dump($competencesIds);
 		$ids = implode(",", $competencesIds);
 		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON
-		C.id = WC.competenceId WHERE C.id IN $ids";
+		C.id = WC.competenceId WHERE C.id IN ($ids)";
 
 		if(!$this->_db->query($sql, array())->error()) {
 			if($this->_db->count()) {

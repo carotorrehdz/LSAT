@@ -18,7 +18,7 @@ if(!$isOwner){
 $group = $groups->getGroupById($groupId);
 //Las competencias asignadas a este grupo
 $competences = $groups->getCompetencesForGroup($groupId);
-var_dump($competences);
+//var_dump($competences);
 ?>
 
 <!doctype html>
@@ -35,25 +35,32 @@ var_dump($competences);
   <section class="scroll-container" role="main">
 
     <div class="row">
-    <?php include 'includes/templates/teacherSidebar.php' ?>  
+      <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
         <h3>Detalle de grupo <?php echo $group->name ?></h3>
         <h4 class="subheader">Administracion de grupos</h4>
         <hr>  
+        <ul>
+          <?php
+          foreach ($competences as $competence) {
+            echo "<li>$competence->name </li>";
+          }
+          ?>
+        </ul>
         
-     </div>
-   </div>
- </section>
+      </div>
+    </div>
+  </section>
 
 
-<?php include 'includes/templates/footer.php' ?>
+  <?php include 'includes/templates/footer.php' ?>
 
 
-<script src="js/vendor/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
-<script>
-  $(document).foundation();
+  <script src="js/vendor/jquery.js"></script>
+  <script src="js/foundation.min.js"></script>
+  <script>
+    $(document).foundation();
 
-</script>
+  </script>
 </body>
 </html>
