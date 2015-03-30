@@ -50,6 +50,21 @@ class Competence {
 		return array();
 	}
 
+	public function getCompetencesByGroupOfTeacher($teacherId = null){
+		if ($teacherId == null) return;
+
+		$sql = "SELECT * FROM competence C JOIN competenceingroup CG ON
+		C.id = CG.competenceId WHERE C.professor = $teacherId";
+
+		if(!$this->_db->query($sql, array($teacherId, true))->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+
+		return array();
+	}
+
 	public function getCompetencesIdsForGroup($groupId = null){
 		if ($groupId == null) return;
 
@@ -68,11 +83,12 @@ class Competence {
 	public function getCompetencesDetails($competencesIds = null){
 		if ($competencesIds == null) return;
 
+		var_dump($competencesIds);
 		$ids = implode(",", $competencesIds);
 		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON
 		C.id = WC.competenceId WHERE C.id IN $ids";
 
-		if(!$this->_db->query($sql, array($topic, $difficulty))->error()) {
+		if(!$this->_db->query($sql, array())->error()) {
 			if($this->_db->count()) {
 				return $this->_db->results();
 			}

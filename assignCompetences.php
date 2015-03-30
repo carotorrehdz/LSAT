@@ -10,6 +10,7 @@ $groups = new Groups();
 $teacherGroups = $groups->getGroupsForTeacher($teacherId);
 $competence = new Competence();
 $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
+$groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
 
 ?>
 
@@ -27,29 +28,41 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
   <section class="scroll-container" role="main">
 
     <div class="row">
-      <?php include 'includes/templates/teacherSidebar.php' ?>  
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <h3>Asignar competencias</h3>
         <h4 class="subheader">Asignar competencias a los grupos</h4>
-        <hr>  
+        <hr>
 
 
         <?php
         foreach ($teacherGroups as $group) {
-         echo "
-         <div class='assignCompetence'>
-         <div class='row grey1'> 
-          <div class='large-12 columns'>
-            <h5>Grupo $group->name</h5>
-            <p>Competencias activas para el grupo</p>";
-            foreach ($teacherCompetences as $competence) {
-              echo "<label>$competence->name <input type='checkbox'> </label>";
+          echo "<div class='assignCompetence'><h6 class='panel-title'>Grupo $group->name</h6> <div class='body'><ul>";
+            foreach ($groupCompetences as $competence) {
+              if ($competence->groupId == $group->id){
+                echo "<li>$competence->name <input type='checkbox'> </li>";
+              }
+
             }
-            echo "</div></div></div>";
+            echo "</ul><a href='#' onclick='showAvailableCompetences($group->id)'>+</a></div></div>";
           }
           ?>
+
+
+          <div  class="availableCompetences reveal-modal small" id="acModal" style="display: none" data-reveal>
+            <h3>Competencias disponibles</h3>
+            <ul>
+              <?php
+                foreach ($teacherCompetences as $competence) {
+                  echo "<li>$competence->name <a href='#' onclick='addCompetence($competence->id)'>+</a> </li>";
+                }
+              ?>
+            </ul>
+          </div>
+
           <br/>
           <a href="#" onclick="save()" class="button round small right">Guardar cambios</a>
+
 
 
         </div>
@@ -64,6 +77,28 @@ $teacherCompetences = $competence->getCompetencesForTeacher($teacherId);
     <script src="js/foundation.min.js"></script>
     <script>
       $(document).foundation();
+
+      var currentGroup = 0;
+
+      function showAvailableCompetences(groupId) {
+        currentGroup = groupId;
+
+        $('#acModal').foundation('reveal', 'open');
+        //WAA Filtrar lis de competencias ya usadas
+      }
+
+      function addCompetence(competenceId){
+        $.post( "controls/doAction.php", {  action: "addCompetenceToGroup", competenceId: competenceId, groupId: currentGroup})
+        .done(function( data ) {
+          data = JSON.parse(data);
+          if(data.message == 'error'){
+            alert("Error: \n\n" + data.message);
+          }else{
+            window.location.reload();
+          }
+
+        });
+      }
 
     </script>
   </body>

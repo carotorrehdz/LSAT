@@ -493,5 +493,36 @@ table td{
 /*Asignar competencias*/
 
 .assignCompetence{
-  margin: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.assignCompetence h6{
+  background: #B1E5ED;
+  margin:0;
+  padding-left:20px;
+}
+
+.assignCompetence div.body{
+  padding: 5px;
+}
+
+.availableCompetences{
+
+}
+
+.availableCompetences h3{
+
+}
+
+.availableCompetences ul{
+
+}
+
+.availableCompetences ul li {
+
+}
+
+.availableCompetences ul li a{
+
 }

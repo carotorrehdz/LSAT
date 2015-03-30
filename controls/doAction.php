@@ -288,7 +288,7 @@ if(Input::exists()) {
 			//		1 =>
 			//			array
 			//				0 => string '7' (length=1)
-			
+
 
 			$currentLevel = 1;
 			if(is_array($questionsForLevel) && count($questionsForLevel) > 0){
@@ -301,7 +301,7 @@ if(Input::exists()) {
 					}
 					$currentLevel += 1;
 				}
-			} 
+			}
 
 
 		}catch(Exception $e) {
@@ -324,7 +324,7 @@ if(Input::exists()) {
 
 			$name = Input::get('name');
 			$name = $name == "" ? "Nueva competencia" : $name;
-			
+
 			$webIds = Input::get('webIds');
 			$webIds = array_filter(array_unique($webIds));
 			$cleanWebIds = array();
@@ -379,7 +379,7 @@ if(Input::exists()) {
 			return; /*Solo un maestro puede asignar valores a la red*/
 		}
 
-		//Necesitamos el id del profesor, que es el usuario logueado 
+		//Necesitamos el id del profesor, que es el usuario logueado
 		$teacherId = $user->data()->id;
 
 		try{
@@ -401,18 +401,18 @@ if(Input::exists()) {
 				$questionId = $splitKey[0];
 				$answerId = $splitKey[1];
 
-				$db->insert("answersinwebsincompetence", 
+				$db->insert("answersinwebsincompetence",
 					array("answerId"=>$answerId,
 						"grade"=>$grade,
 						"webInCompetence" => $websInCompetenceId->id));
-				
+
 			}
 
-			//Una vez que se le asigno una ponderacion a cada pregunta 
+			//Una vez que se le asigno una ponderacion a cada pregunta
 			//hay que decir que esa combinacion de red y competencia ya fue ponderada en su totalidad
 
 			$db->update("websincompetence", $websInCompetenceId->id, array("isGraded" => true));
-			
+
 
 		} catch(Exception $e) {
 			$response = array( "message" => "Error:006 ".$e->getMessage());
@@ -445,7 +445,7 @@ if(Input::exists()) {
 		break;
 
 		case "webIsGraded":
-		
+
 		$user = new User();
 		/*Solo un maestro puede hacerlo*/
 		if($user->data()->role != 'teacher'){ return; }
@@ -458,7 +458,7 @@ if(Input::exists()) {
 
 			if(!$db->query($sql)->error()) {
 				if($db->count()) {
-					
+
 					$everythingIsGraded = true;
 					$returned = $db->results();
 					foreach ($returned as $key => $webInCompetence) {
@@ -481,6 +481,33 @@ if(Input::exists()) {
 		}
 		break;
 
+		case "addCompetenceToGroup":
+
+		$user = new User();
+		/*Solo un maestro puede hacerlo*/
+		if($user->data()->role != 'teacher'){ return; }
+
+		try{
+
+			$competenceId = Input::get('competenceId');
+			$groupId = Input::get('groupId');
+
+			$db = DB::getInstance();
+
+			$fields = array(
+				'competenceId' 	=> intval($competenceId),
+				'groupId' => intval($groupId));
+			if(!$db->insert('competenceingroup', $fields)) {
+				throw new Exception('There was a problem assigning the student to the group.');
+			}
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:011 ".$e->getMessage());
+			die(json_encode($response));
+		}
+		$response = array( "message" => "success");
+		echo json_encode($response);
+		break;
 
 		default:
 		echo "Error: 002";

@@ -57,7 +57,7 @@ class Groups {
 		if ($groupId == null) return;
 
 		$competences = new Competence();
-		$competencesIds = $competences->getCompetencesIdsForGroup($groupId);
+		$competencesIds = $competences->getCompetencesIdsForGroup($groupId)[0];
 		var_dump($competencesIds);
 		$details = $competences->getCompetencesDetails($competencesIds);
 
