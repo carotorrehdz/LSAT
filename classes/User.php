@@ -100,6 +100,22 @@ class User {
 
 	}
 
+	public function getInformationForStudent($studentId = null) {
+		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competenceName,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competenceId  FROM 
+`studentsingroup` SG JOIN `groups` G ON  SG.groupId = G.id
+JOIN `competenceingroup` CG ON G.id = CG.groupId
+JOIN `competence` C ON CG.competenceId = C.id
+JOIN `user` U ON U.id = G.professor
+WHERE SG.studentId = $studentId 
+GROUP BY groupId";
+
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+	}
+
 	public function update($fields = array(), $id = null) {
 		if(!$id && $this->isLoggedIn()) {
 			$id = $this->data()->id;

@@ -5,10 +5,7 @@ require 'core/init.php';
 $user = new User();
 $user->checkIsValidUser('student');
 $studentId = $user->data()->id;
-
-//$groups = new Groups();
-//$teacherGroups = $groups->getGroupsForTeacher($teacherId);
-//var_dump($teacherGroups);
+$information = $user->getInformationForStudent($studentId);
 
 ?>
 
@@ -36,23 +33,20 @@ $studentId = $user->data()->id;
 				<div id="studentCompetences">
 					<div id="groups">
 						<ul>
-							<li>
-								<span><b>TC01</b></span>
-								<span>Administracion de proyectos</span>
-							</li>
-
-							<li>
-								<span><b>TC02</b></span>
-								<span>Estructura de datos</span>
-							</li>
+							<?php
+							foreach ($information as $key => $competence) {
+								//Desplegar descripcion del curso
+								echo "<li><a href='#' onclick='showCompetence($competence->groupId)'><span><b>$competence->groupName</b></span><span>$competence->professorName</span></a></li>";
+							}
+							?>
 						</ul>
 					</div>
-
-
-					<div id="competences">
-						<h3>Algoritmos / <small>Luis Humberto</small></h3>
-					</div>
-
+					<?php
+					foreach ($information as $key => $competence) {
+								//Desplegar descripcion del curso
+						echo "<div id=$competence->groupId class='competences' style='display: none'><h3>$competence->groupName / <small>$competence->professorName</small></h3></div>";
+					}
+					?>
 				</div>
 
 			</div>
@@ -66,6 +60,11 @@ $studentId = $user->data()->id;
 	<script src="js/foundation.min.js"></script>
 	<script>
 		$(document).foundation();
+
+		function showCompetence(groupId) {
+			var group = "#"+groupId;
+			$(group).show();
+		}
 
 	</script>
 </body>

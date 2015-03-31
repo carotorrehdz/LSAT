@@ -401,7 +401,7 @@ table td{
   display: block;
 }
 
-#studentCompetences #competences{
+#studentCompetences .competences{
   background: none repeat scroll 0 0 #1C758A;
   float: left;
   min-height: 500px;
@@ -409,12 +409,12 @@ table td{
   width: 600px;
 }
 
-#studentCompetences #competences h3{
+#studentCompetences .competences h3{
   color: #FFF;
   border-bottom: 1px solid #FFF;
 }
 
-#studentCompetences #competences h3 small{
+#studentCompetences .competences h3 small{
   color: #FFF;
 }
 
