@@ -320,6 +320,8 @@ if(Input::exists()) {
 			return; /*Solo un maestro puede crear competencia*/
 		}
 
+		$teacherId = $user->data()->id;
+
 		try{
 
 			$name = Input::get('name');

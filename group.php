@@ -42,9 +42,16 @@ $competences = $groups->getCompetencesForGroup($groupId);
         <hr>  
         <ul>
           <?php
-          foreach ($competences as $competence) {
-            echo "<li>$competence->name </li>";
+          if($competences != null){
+
+            foreach ($competences as $competence) {
+              echo "<li>$competence->name </li>";
+            }
+
+          }else{
+            echo "<tr> <td> Este grupo aun no tiene competencias. </td> </tr>";
           }
+          
           ?>
         </ul>
         

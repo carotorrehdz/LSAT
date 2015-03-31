@@ -6,6 +6,7 @@ $user = new User();
 $user->checkIsValidUser('student');
 $studentId = $user->data()->id;
 $information = $user->getInformationForStudent($studentId);
+var_dump($information);
 
 ?>
 
@@ -34,17 +35,36 @@ $information = $user->getInformationForStudent($studentId);
 					<div id="groups">
 						<ul>
 							<?php
-							foreach ($information as $key => $competence) {
+							foreach ($information as $key => $group) {
 								//Desplegar descripcion del curso
-								echo "<li><a href='#' onclick='showCompetence($competence->groupId)'><span><b>$competence->groupName</b></span><span>$competence->professorName</span></a></li>";
+								echo "<li><a href='#' onclick='showCompetence($group->groupId)'><span><b>$group->groupName</b></span><span>$group->professorName</span></a></li>";
 							}
 							?>
 						</ul>
 					</div>
 					<?php
-					foreach ($information as $key => $competence) {
-								//Desplegar descripcion del curso
-						echo "<div id=$competence->groupId class='competences' style='display: none'><h3>$competence->groupName / <small>$competence->professorName</small></h3></div>";
+
+					//La informacion viene por grupos
+					//Cada grupo tiene un campo llamado "competences" donde vienen todas sus competencias separadas por comas
+					//Las guardaremos en un arreglo para iterarlas facilmente
+
+					foreach ($information as $key => $group) {
+						$competencesString = $group->competences;
+						$competencesIdsString = $group->competencesIds;
+
+						$competencesArray = explode(',', $competencesString);
+						$competencesIdsArray = explode(',', $competencesIdsString);
+
+					    //Desplegar descripcion del curso
+						echo "<div id=$group->groupId class='competences' style='display: none'>
+						<h3>$group->groupName / <small>$group->professorName</small></h3>
+						<ul>";
+						foreach ($competencesIdsArray as $key => $id) {
+							$competenceName = $competencesArray[$key];
+							echo "<li><a href='answer.php?c=$id&g=$group->groupId'><span>$competenceName</span></a></li>";
+						}
+
+						echo "</ul></div>";
 					}
 					?>
 				</div>

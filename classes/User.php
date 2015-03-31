@@ -101,7 +101,7 @@ class User {
 	}
 
 	public function getInformationForStudent($studentId = null) {
-		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competenceName,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competenceId  FROM 
+		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competences,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competencesIds  FROM 
 `studentsingroup` SG JOIN `groups` G ON  SG.groupId = G.id
 JOIN `competenceingroup` CG ON G.id = CG.groupId
 JOIN `competence` C ON CG.competenceId = C.id
@@ -194,4 +194,21 @@ GROUP BY groupId";
 		return $users;
 
 	}
+
+
+
+
+
+	public function studentBelongInGroup($studentId = null, $groupId = null) {
+
+		$sql = "SELECT * FROM studentsingroup WHERE studentId = $studentId AND groupId = $groupId";
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count() && $this->_db->count() == 1) {
+				return true;
+			}
+		}else{
+			return false;
+		}
+	}
+
 }
