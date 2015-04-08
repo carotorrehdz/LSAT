@@ -6,8 +6,7 @@ $user = new User();
 $user->checkIsValidUser('student');
 $studentId = $user->data()->id;
 $information = $user->getInformationForStudent($studentId);
-var_dump($information);
-
+//var_dump($information);
 ?>
 
 <!doctype html>
@@ -27,8 +26,8 @@ var_dump($information);
 			<?php include 'includes/templates/studentSidebar.php' ?>  
 			<div class="large-9 medium-8 columns">
 				<br/>
-				<h3>Dashboard estudiante</h3>
-				<h4 class="subheader"></h4>
+				<h3>Bienvenido <?php echo $user->data()->username ?> </h3>
+				<h4 class="subheader">Aqui puedes encontrar una lista de tus grupos y las actividades que debes contestar</h4>
 				<hr>  
 
 				<div id="studentCompetences">
@@ -61,7 +60,9 @@ var_dump($information);
 						<ul>";
 						foreach ($competencesIdsArray as $key => $id) {
 							$competenceName = $competencesArray[$key];
-							echo "<li><a href='answer.php?c=$id&g=$group->groupId'><span>$competenceName</span></a></li>";
+							$status = "(No empezado)";
+							$statusClasses = array("started", "notStarted", "finished");
+							echo "<li><a href='answer.php?c=$id&g=$group->groupId'>$competenceName</a> <span> $status </span></li>";
 						}
 
 						echo "</ul></div>";
@@ -85,6 +86,8 @@ var_dump($information);
 			var group = "#"+groupId;
 			$(group).show();
 		}
+
+		$("div.competences").first().show();
 
 	</script>
 </body>

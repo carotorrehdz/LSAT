@@ -176,14 +176,20 @@ class Competence {
 	}
 
 	public function isCompetenceStarted($studentId, $groupId, $competenceId) {
-		$sql = "SELECT * FROM  `studentrecord` WHERE studentId = $studentId AND groupId = $groupId AND competenceId = $competenceId";
+		//Si la competencia ya fue inicializada para ese alumno entonces
+		//La tabla de studentrecord debe de tener al menos un registro
+		//ya uqe guarda uno por cada red de la competencia
 
+		$sql = "SELECT * FROM  studentrecord WHERE studentId = $studentId AND groupId = $groupId AND competenceId = $competenceId";
 		if(!$this->_db->query($sql, array())->error()) {
-			if($this->_db->count() && $this->_db->count() == 1) {
+			if($this->_db->count() && $this->_db->count() > 0) {
+				//var_dump($this->_db->count());
 				return true;
 			}
 		}
-
+		// var_dump($this->_db->error());
+		// var_dump($this->_db->count());
+		// var_dump($this->_db->results());
 		return false;
 	}
 
@@ -202,7 +208,14 @@ class Competence {
 	public function startCompetence($studentId, $groupId, $competenceId) {
 		$w = new Web();
 
-		//Llenar registros para tabla 'questionsforstudent'
+		//Hay que llenar tres tablas
+		//1) Student record - 1 registro por cada web de la competencia
+		//2) Student progress - 1 registro por cada web, mantiene tambien el rango de preguntas disponibles y la ultima pregunta contestada
+		//3) Questionsforstudent - Muchos registros, 1 por cada pregunta de la red
+
+
+		//Para llenar registros para tabla 'questionsforstudent' hay que crear una secuancia unica de preguntas para este estudiante
+		
 		//1. Traer redes de competencia
 		$websInCompetence = $this->getWebsInCompetence($competenceId);
 		//2. Traer preguntas de red
@@ -215,65 +228,68 @@ class Competence {
 			asort($questionsInWeb);
 			$questionsInWebs[$web->webId] = $questionsInWeb;
 		}
-		var_dump($websInCompetence);
-		var_dump($questionsInWebs);
-		
-		
 
-		//LLenar student progress que mantiene la informacion del progreso
+		// echo"websInCompetence";
+		// var_dump($websInCompetence);
+		// echo"questionsInWebs";
+		// var_dump($questionsInWebs);
+
+		//Llenar student progress que mantiene la informacion del progreso
 		//del alumno en las redes de esa competencia
 		foreach ($questionsInWebs as $webId => $questions) {
 			
 			$firstQuestion = 0;
 			$lastQuestion = 0;
-
 			$i=0;
-			foreach ($questions as $questionId => $level) {
-				//Llenar registros en questionsforstudent. 
-				//Lista random unica para cada estudiante con su combinacion de preguntas por red
+			try{
+
+				foreach ($questions as $questionId => $level) {
+					//Llenar registros en questionsforstudent. 
+					//Lista random unica para cada estudiante con su combinacion de preguntas por red
+
+					$fields = array('level' => intval($level), 'questionId' => intval($questionId));
+					if(!$this->_db->insert('questionsforstudent', $fields)) {
+						throw new Exception('There was a problem creating this student record.');
+					}
+
+					if($i==0){ $firstQuestion = intval($this->_db->lastInsertId()); }
+
+					$i++;
+				}
+
+				$lastQuestion = intval($this->_db->lastInsertId());
 
 				$fields = array(
-					'level' 	=> intval($level),
-					'questionId' => intval($questionId));
-
-				if(!$this->_db->insert('questionsforstudent', $fields)) {
-					throw new Exception('There was a problem creating this student record.');
-				}
-
-				if($i==0){
-					$firstQuestion = intval($db->lastInsertId());
-				}
-
-				$i++;
-			}
-			$lastQuestion = intval($db->lastInsertId());
-
-			$fields = array(
 					'webId' => intval($webId),
 					'lastAnsweredQuestion' => intval($firstQuestion),
 					'firstQuestion' => intval($firstQuestion),
 					'lastQuestion' => intval($lastQuestion)
 					);
 
-			if(!$this->_db->insert('studentprogress', $fields)) {
-				throw new Exception('There was a problem inserting into studentprogress.');
+				if(!$this->_db->insert('studentprogress', $fields)) {
+					throw new Exception('There was a problem inserting into studentprogress.');
+				}
+
+				$studentProgressId = intval($this->_db->lastInsertId());
+
+				//StudentRecord tiene las estadisticas del avance por Red,
+				//Entoncesva a haber un regisro en la base de datos por cada una de las redes en studentprogress
+				$fields = array(
+					'studentId' => intval($studentId),
+					'groupId' => intval($groupId),
+					'competenceId' => intval($competenceId),
+					'studentProgressId' => intval($studentProgressId)
+					);
+
+				if(!$this->_db->insert('studentrecord', $fields)) {
+					throw new Exception('There was a problem inserting into studentrecord.');
+				}
+
+			}catch(PDOExeption $e) {
+				die($e->getMessage());
 			}
 
-
-
 		}
-		
-
-		/*Llenar registro para tabla 'studentrecord'
-		$fields = array(
-			'groupId' 	=> intval($groupId),
-			'studentId' => intval($studentId),
-			'competenceId' => intval($competenceId));
-		if(!$db->insert('studentrecord', $fields)) {
-			throw new Exception('There was a problem creating this student record.');
-		}
-		*/
-
 	}
 
 }

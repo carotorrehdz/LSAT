@@ -191,6 +191,7 @@ table td{
 .sidebar {
   background: #fafafa;
   padding: 32px 20px;
+  min-height: 500px;
 }
 
 .correctAns{
@@ -387,13 +388,13 @@ table td{
   margin: 0;
   padding: 0;
   background:#f7f7f7;
-  box-shadow: 0px 0px 2px #AAA;
+  box-shadow: 0px 0px 1px #555;
   padding-left:5px;
   font-size: 14px;
 }
 
 #studentCompetences #groups li:hover{
-  background:#eee;
+  background:#e5e5e5;
   cursor:pointer;
 }
 
@@ -407,6 +408,7 @@ table td{
   min-height: 500px;
   padding: 20px;
   width: 600px;
+  box-shadow: 0px 0px 1px #222;
 }
 
 #studentCompetences .competences h3{
@@ -417,6 +419,25 @@ table td{
 #studentCompetences .competences h3 small{
   color: #FFF;
 }
+
+#studentCompetences .competences ul{
+  list-style: none;
+  margin: 0;
+}
+
+#studentCompetences .competences ul li a{
+  color: #FFF;
+}
+
+#studentCompetences .competences ul li a:hover{
+  text-decoration: underline;
+}
+
+#studentCompetences .competences ul li span{
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+}
+
 
 .webExplorerLevel{
   border: 1px solid #ccc;

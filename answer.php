@@ -29,13 +29,24 @@ $competenceStarted = $c->isCompetenceStarted($studentId, $groupId, $competenceId
 if (!$competenceStarted) {
 	//Llenar todas las tablas para comenzar esa competencia
 	$c->startCompetence($studentId, $groupId, $competenceId);
+}else{
+	//Competencia esta empezada
+
+
+	//Competencia fue terminada
+	//Redirigir a una nueva pagina que muestre
+	//un mensaje de que la competencia fue termianda y tal vez mostrar su puntaje, dar link para navegar de regreso al dashboard
 }
+
+$competence = $c->getCompetence($competenceId);
+
+
 ?>
 
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-	<title>LSAT | Dashboard</title>
+	<title>LSAT | Contestar competencia</title>
 	<?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -49,8 +60,8 @@ if (!$competenceStarted) {
 			<?php include 'includes/templates/studentSidebar.php' ?>  
 			<div class="large-9 medium-8 columns">
 				<br/>
-				<h3>Contestar competencia </h3>
-				<h4 class="subheader"></h4>
+				<h3><?php echo "$competence->name"?> </h3>
+				<h4 class="subheader">Contestar competencia</h4>
 				<hr>  
 
 			
