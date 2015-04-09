@@ -261,7 +261,7 @@ class Competence {
 
 				$fields = array(
 					'webId' => intval($webId),
-					'lastAnsweredQuestion' => intval($firstQuestion),
+					'lastAnsweredQuestion' => -1,
 					'firstQuestion' => intval($firstQuestion),
 					'lastQuestion' => intval($lastQuestion)
 					);

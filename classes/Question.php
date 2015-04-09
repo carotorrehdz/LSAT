@@ -57,117 +57,164 @@ class Question {
 		return array();
 	}
 
-	public function getNextQuestion($studentId, $groupId, $competenceId, $grade){
-		
-		//Traer los registros de studentrecord que cumplan con los tres ids
-		$studentrecord = array();
-		$sql = "SELECT * FROM studentrecord WHERE studentId = ? AND groupId = ? AND competenceId = ? 
-		GROUP_CONCAT(CONVERT(studentProgressId, CHAR(8)) SEPARATOR ', ') as studentProgressIds";
+	public function getNextQuestionId($studentId, $groupId, $competenceId, $grade = 1){
+		try{
 
-		if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
-			if($this->_db->count()) {
-				$studentrecord = $this->_db->results();
-			}
-		}
+			//Traer los registros de studentrecord que cumplan con los tres ids
+			$studentrecord = array();
+			$sql = "SELECT id, GROUP_CONCAT(CONVERT(studentProgressId, CHAR(8)) SEPARATOR ', ') as studentProgressIds  FROM studentrecord WHERE studentId = ? AND groupId = ? AND competenceId = ?";
 
-		$studentProgressIds = $studentrecord->studentProgressIds;
-		echo "studentProgressIds";
-		var_dump($studentProgressIds);
-		//Despues traer de studentProgress todos los que cumplan con studentProgressId 
-
-		$studentprogress = array();
-		$sql = "SELECT * FROM studentprogress WHERE id IN (?)";
-
-		if(!$this->_db->query($sql, array($studentProgressIds))->error()) {
-			if($this->_db->count()) {
-				$studentprogress = $this->_db->results();
-			}
-		}
-		echo "studentprogress";
-		var_dump($studentprogress);
-		
-		// Si todos los de student progress tienen seteado un finished date 
-		// quiere decir que la competencia fue terminada
-		$websTerminadas = array();
-		$competenciaTerminada = true;
-		foreach ($studentprogress as $key => $sp) {
-			var_dump($sp);
-			if(!isset($sp->finishedDate){
-				$competenciaTerminada = false;
+			if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
+				if($this->_db->count()) {
+					$studentrecord = $this->_db->first();
+					//var_dump($studentrecord);
+				}
 			}
 
-			$websTerminadas[$sp->webId] = isset($sp->finishedDate);
-		}
+			//echo "studentrecord";
+			//var_dump($studentrecord);
 
-		echo "studentprogress";
-		var_dump($studentprogress);
+			$studentProgressIds = $studentrecord->studentProgressIds;
+			//echo "studentProgressIds";
+			//var_dump($studentProgressIds);
+			
+			//Despues traer de studentProgress todos los que cumplan con studentProgressId 
 
-		echo "competenciaTerminada";
-		var_dump($competenciaTerminada);
+			$studentprogress = array();
+			$sql = "SELECT * FROM studentprogress WHERE id IN (?)";
 
-
-		//Si la competencia no esta termianda tenemos que saber el orden de las redes, para saber cual sigue
-		//Obtenemos “websincompetence” con el competenceId
-		$websincompetence = array();
-		$sql = "SELECT * FROM  websincompetence where competenceId = ? ORDER BY order";
-		if(!$this->_db->query($sql, array($competenceId))->error()) {
-			if($this->_db->count()) {
-				$websincompetence = $this->_db->results();
+			if(!$this->_db->query($sql, array($studentProgressIds))->error()) {
+				if($this->_db->count()) {
+					$studentprogress = $this->_db->results();
+				}
 			}
-		}
-		
-		//Cada elemento del arreglo resultante es una red, ordenadas de menor a mayor según el orden
-		//iteramos el arreglo vamos viendo los ids de las webs uno por uno
-		$webAContestar = 0;
-		foreach ($websincompetence as $key => $web) {
+			//echo "studentprogress";
+			//var_dump($studentprogress);
+
+
+			// Si todos los de student progress tienen seteado un finished date 
+			// quiere decir que la competencia fue terminada
+			$websTerminadas = array();
+			$competenciaTerminada = true;
+			foreach ($studentprogress as $key => $sp) {
+				//var_dump($sp);
+				if(!isset($sp->finishedDate)){
+					$competenciaTerminada = false;
+				}
+
+				$websTerminadas[$sp->webId] = isset($sp->finishedDate);
+			}
+
+			//echo "websTerminadas";
+			//var_dump($websTerminadas);
+
+			//echo "competenciaTerminada";
+			//var_dump($competenciaTerminada);
+
+
+			//Si la competencia no esta termianda tenemos que saber el orden de las redes, para saber cual sigue
+			//Obtenemos “websincompetence” con el competenceId
+			$websincompetence = array();
+			$sql = "SELECT * FROM  websincompetence WHERE competenceId = $competenceId ORDER BY 'order'";
+			//Las comillas en 'order' son importantes porque es una palabra reservada
+			//var_dump($sql);
+			if(!$this->_db->query($sql, array($competenceId))->error()) {
+				if($this->_db->count()) {
+					$websincompetence = $this->_db->results();
+				}
+			}
+
+			//echo "websincompetence";
+			//var_dump($websincompetence);
+
+
+			//Cada elemento del arreglo resultante es una red, ordenadas de menor a mayor según el orden
+			//iteramos el arreglo vamos viendo los ids de las webs uno por uno
+			$webAContestar = 0;
+			foreach ($websincompetence as $key => $web) {
 			//Si ese webid ya fue terminado, nos pasamos a la siguiente	
-			$webId = $web->id;
-			if($websTerminadas[$webId] == false){
+				$webId = $web->webId;
+				if($websTerminadas[$webId] == false){
 				// a la primera ocurrencia de web no terminada
 				//sabemos que esa es la que tiene que seguir contestando
-				$webAContestar = $webId;
-				break;
+					$webAContestar = $webId;
+					break;
+				}
 			}
-		}
 
-		$lastAnsweredQuestionId = -1;
-		$firstQ = -1;
-		$lastQ = -1;
-		//Vamos a last answeredQuestionId dentro de studentprogress
-		foreach ($studentprogress as $key => $sp) {
-			if($sp->webId == $webAContestar){
-				$lastAnsweredQuestion = $sp->lastQuestion;
-				$firstQ = $sp->firstQuestion;
-				$lastQ = $sp->lastQuestion;
-			}
-		}
-		
-		//Vamos a questionsforstudent y buscamos el nivel en el que se encuentra esa pregunta.
-		$lastAnsweredQuestion = array();
-		$sql = "SELECT * FROM  questionsforstudent where id = ?";
-		if(!$this->_db->query($sql, array($lastAnsweredQuestionId))->error()) {
-			if($this->_db->count()) {
-				$lastAnsweredQuestion = $this->_db->first();
-			}
-		}
+			//echo "webAContestar";
+			//var_dump($webAContestar);
 
-		$level = intval($lastAnsweredQuestion->level);
-		$nextLevel = $level+1;
-		
 
-		//Buscamos ahí también la primerpregunta con “answered”=false del siguiente nivel
-		$sql = "SELECT * FROM  questionsforstudent where level = ? AND id BETWEEN ? AND ? AND answered = false";
-		if(!$this->_db->query($sql, array($nextLevel, $firstQ, $lastQ))->error()) {
-			if($this->_db->count()) {
-				$lastAnsweredQuestion = $this->_db->first();
+			$lastAnsweredQuestionId = -1;
+			$firstQ = -1;
+			$lastQ = -1;
+			// //Vamos a last answeredQuestionId dentro de studentprogress
+			foreach ($studentprogress as $key => $sp) {
+				if($sp->webId == $webAContestar){
+					$lastAnsweredQuestionId = $sp->lastAnsweredQuestion;
+					$firstQ = $sp->firstQuestion;
+					$lastQ = $sp->lastQuestion;
+				}
 			}
-		}
+
+			// echo "lastAnsweredQuestionId";
+			// var_dump($lastAnsweredQuestionId);
+			// var_dump($firstQ);
+			// var_dump($lastQ);
+
+		    //Si el ID de la ultima pregunta contestada es -1 quere decirque aun no ha contestado nada
+			if($lastAnsweredQuestionId == '-1'){
+				//La funcion debe regresar la primer pregunta
+				$nextQuestion = null;
+				$sql = "SELECT * FROM  questionsforstudent where id = ?";
+				if(!$this->_db->query($sql, array($firstQ))->error()) {
+					if($this->_db->count()) {
+						$nextQuestion = $this->_db->first();
+					}
+				}
+
+				return $nextQuestion->questionId;
+			}		
+
+			//Vamos a questionsforstudent y buscamos el nivel en el que se encuentra esa pregunta.
+			$lastAnsweredQuestion = array();
+			$sql = "SELECT * FROM  questionsforstudent where id = ?";
+			if(!$this->_db->query($sql, array($lastAnsweredQuestionId))->error()) {
+				if($this->_db->count()) {
+					$lastAnsweredQuestion = $this->_db->first();
+				}
+			}
+
+			$level = intval($lastAnsweredQuestion->level);
+			// echo "level";
+			// var_dump($level);
+			//Depende del grado que le manden como parametro
+			//El grado es la ponderacion asignada a la respuesta para esa pregunta en esa combinacion de red-competencia
+			$nextLevel = $level+$grade;
+			// echo "nextLevel";
+			// var_dump($nextLevel);
+
+			//Buscamos ahí también la primerpregunta con “answered”=false del siguiente nivel
+			$sql = "SELECT * FROM  questionsforstudent where level = ? AND id BETWEEN ? AND ? AND answered = false";
+			if(!$this->_db->query($sql, array($nextLevel, $firstQ, $lastQ))->error()) {
+				if($this->_db->count()) {
+					$nextQuestion = $this->_db->first();
+				}
+			}
+
+			// echo "nextQuestion";
+			// var_dump($nextQuestion);
+
+			return $nextQuestion->questionId;
 
 		//Si ya no hay otro nivel ¿
-		
+
 		//Si ya no hay preguntas libres del nivel que sigue?
-			}
+		}catch(PDOException $e){
+			die($e->getMessage());
+		}
 
 	}
-	
+
 }
