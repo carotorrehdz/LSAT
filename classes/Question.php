@@ -57,7 +57,7 @@ class Question {
 		return array();
 	}
 
-	public function getNextQuestion($studentId, $groupId, $competenceId){
+	public function getNextQuestion($studentId, $groupId, $competenceId, $grade){
 		
 		//Traer los registros de studentrecord que cumplan con los tres ids
 		$studentrecord = array();
@@ -109,7 +109,7 @@ class Question {
 		//Si la competencia no esta termianda tenemos que saber el orden de las redes, para saber cual sigue
 		//Obtenemos “websincompetence” con el competenceId
 		$websincompetence = array();
-		$sql = "Select * from  websincompetence where competenceId = ? ORDER BY order";
+		$sql = "SELECT * FROM  websincompetence where competenceId = ? ORDER BY order";
 		if(!$this->_db->query($sql, array($competenceId))->error()) {
 			if($this->_db->count()) {
 				$websincompetence = $this->_db->results();
@@ -130,7 +130,7 @@ class Question {
 			}
 		}
 
-		$lastAnsweredQuestion = -1;
+		$lastAnsweredQuestionId = -1;
 		$firstQ = -1;
 		$lastQ = -1;
 		//Vamos a last answeredQuestionId dentro de studentprogress
@@ -142,12 +142,27 @@ class Question {
 			}
 		}
 		
+		//Vamos a questionsforstudent y buscamos el nivel en el que se encuentra esa pregunta.
+		$lastAnsweredQuestion = array();
+		$sql = "SELECT * FROM  questionsforstudent where id = ?";
+		if(!$this->_db->query($sql, array($lastAnsweredQuestionId))->error()) {
+			if($this->_db->count()) {
+				$lastAnsweredQuestion = $this->_db->first();
+			}
+		}
+
+		$level = intval($lastAnsweredQuestion->level);
+		$nextLevel = $level+1;
 		
 
-		//Vamos a questionsforstudent y buscamos el nivel en el que se encuentra esa pregunta.
-		
 		//Buscamos ahí también la primerpregunta con “answered”=false del siguiente nivel
-		
+		$sql = "SELECT * FROM  questionsforstudent where level = ? AND id BETWEEN ? AND ? AND answered = false";
+		if(!$this->_db->query($sql, array($nextLevel, $firstQ, $lastQ))->error()) {
+			if($this->_db->count()) {
+				$lastAnsweredQuestion = $this->_db->first();
+			}
+		}
+
 		//Si ya no hay otro nivel ¿
 		
 		//Si ya no hay preguntas libres del nivel que sigue?
