@@ -39,12 +39,34 @@ if (!$competenceStarted) {
 
 $competence = $c->getCompetence($competenceId);
 $q = new Question();
-$nextQuestionId = $q->getNextQuestionId($studentId, $groupId, $competenceId);
-var_dump("Id de la siguiente pregunta");
-var_dump($nextQuestionId);
+$nextQuestionForStudentResponse = $q->getNextQuestion($studentId, $groupId, $competenceId);
 
-$nextQuestion = $q->getQuestion($nextQuestionId);
-var_dump($nextQuestion);
+$competenceId = $nextQuestionForStudentResponse['competenceId'];
+$webId = $nextQuestionForStudentResponse['webId'];
+
+$nextQuestionForStudent = $nextQuestionForStudentResponse['nextQuestion'];
+
+$questionForStudentId = $nextQuestionForStudent->id;
+$questionId = $nextQuestionForStudent->questionId;
+
+$nextQuestionId = $nextQuestionForStudent->questionId;
+//var_dump("Id de la siguiente pregunta");
+//var_dump($nextQuestionId);
+
+$nextQuestion = $q->getQuestion($nextQuestionId)[0];
+//var_dump("Info Pregunta");
+//var_dump($nextQuestion);
+
+$a = new Answer();
+$answersIds = array($nextQuestion->optionA, $nextQuestion->optionB, $nextQuestion->optionC, $nextQuestion->optionD);
+shuffle($answersIds);
+$answersInfo = array();
+foreach ($answersIds as $answerId){
+	$answersText = $a->getAnswer($answerId);
+	array_push($answersInfo, $answersText);
+}
+//var_dump("Info Respuesta");
+//var_dump($answersInfo);
 
 ?>
 
@@ -62,12 +84,33 @@ var_dump($nextQuestion);
 	<section class="scroll-container" role="main">
 
 		<div class="row">
-			<?php include 'includes/templates/studentSidebar.php' ?>  
+			<?php include 'includes/templates/studentSidebar.php' ?>
 			<div class="large-9 medium-8 columns">
 				<br/>
 				<h3><?php echo "$competence->name"?> </h3>
 				<h4 class="subheader">Contestar competencia</h4>
-				<hr>  
+				<hr>
+
+				<div id="questionDetail" class="panel">
+					<!-- Default panel contents -->
+					<h4 id="text">
+						<?php
+							echo "$nextQuestion->text"
+						?>
+					</h4>
+
+					<ul style='list-style:none'>
+						<?php
+							foreach($answersInfo as $a){
+								$text = $a[0]->text;
+								$answerId = $a[0]->id;
+								echo "<li><input id=$answerId type='radio' name='answer'> <span> $text </span> </input></li>";
+							}
+						?>
+					</ul>
+
+				</div>
+				<a href="#" onclick="answerQuestion()" class="button round small right">Siguiente</a>
 
 
 			</div>
@@ -83,23 +126,43 @@ var_dump($nextQuestion);
 		$(document).foundation();
 
 
-		function x(){
-			var username  = $("#username").val();
-			var mail      = $("#mail").val();
-			var idnumber  = $("#idnumber").val();
-
-			$.post( "controls/doAction.php", { action:"getNextQuestion", sId: $studentId, cId: $competenceId, gId: $groupId })
+		function answerQuestion(){
+			var c = <?php
+				if (isset($competenceId)) {
+					echo "$competenceId";
+				}else{
+					echo "0";
+				}
+			?>;
+			var qfs = <?php
+				if (isset($questionForStudentId)) {
+					echo "$questionForStudentId";
+				}else{
+					echo "0";
+				}
+			?>;
+			var w = <?php
+				if (isset($webId)) {
+					echo "$webId";
+				}else{
+					echo "0";
+				}
+			?>;
+			var a = $("input[name=answer]:checked").attr("id");
+			console.log(a);
+			/*
+			$.post( "controls/doAction.php", { action:"answerQuestion", c:c, qfs:qfs , w:w , a:a  })
 			.done(function( data ) {
 				console.log(data);
 				data = JSON.parse(data);
 				if(data.message == 'success'){
-					alert("The teacher was registered");
-					window.location.reload();
+
 				}else{
 					alert("There was an error: " + data.message);
 				}
 
 			});
+			*/
 		}
 
 	</script>

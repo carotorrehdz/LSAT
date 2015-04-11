@@ -57,7 +57,7 @@ class Question {
 		return array();
 	}
 
-	public function getNextQuestionId($studentId, $groupId, $competenceId, $grade = 1){
+	public function getNextQuestion($studentId, $groupId, $competenceId, $grade = 1){
 		try{
 
 			//Traer los registros de studentrecord que cumplan con los tres ids
@@ -77,8 +77,8 @@ class Question {
 			$studentProgressIds = $studentrecord->studentProgressIds;
 			//echo "studentProgressIds";
 			//var_dump($studentProgressIds);
-			
-			//Despues traer de studentProgress todos los que cumplan con studentProgressId 
+
+			//Despues traer de studentProgress todos los que cumplan con studentProgressId
 
 			$studentprogress = array();
 			$sql = "SELECT * FROM studentprogress WHERE id IN (?)";
@@ -92,7 +92,7 @@ class Question {
 			//var_dump($studentprogress);
 
 
-			// Si todos los de student progress tienen seteado un finished date 
+			// Si todos los de student progress tienen seteado un finished date
 			// quiere decir que la competencia fue terminada
 			$websTerminadas = array();
 			$competenciaTerminada = true;
@@ -132,7 +132,7 @@ class Question {
 			//iteramos el arreglo vamos viendo los ids de las webs uno por uno
 			$webAContestar = 0;
 			foreach ($websincompetence as $key => $web) {
-			//Si ese webid ya fue terminado, nos pasamos a la siguiente	
+			//Si ese webid ya fue terminado, nos pasamos a la siguiente
 				$webId = $web->webId;
 				if($websTerminadas[$webId] == false){
 				// a la primera ocurrencia de web no terminada
@@ -175,7 +175,7 @@ class Question {
 				}
 
 				return $nextQuestion->questionId;
-			}		
+			}
 
 			//Vamos a questionsforstudent y buscamos el nivel en el que se encuentra esa pregunta.
 			$lastAnsweredQuestion = array();
@@ -203,10 +203,20 @@ class Question {
 				}
 			}
 
+			//Enviar answersinwebincompetenceId para esta
 			// echo "nextQuestion";
 			// var_dump($nextQuestion);
 
-			return $nextQuestion->questionId;
+			//Buscar el studentProgressId para la red que estoy contestando
+
+
+			$response = array();
+			$response['competenceId'] = $competenceId;
+			$response['studentProgressId'] = 0;
+			$response['webId'] = $webAContestar;
+			$response['nextQuestion'] = $nextQuestion;
+
+			return $response;
 
 		//Si ya no hay otro nivel ¿
 
