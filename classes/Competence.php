@@ -292,4 +292,48 @@ class Competence {
 		}
 	}
 
+	public function isCompetenceCompleted($studentprogress = array()){
+		$isCompleted = true;
+
+		// Si todos los de student progress tienen seteado un finished date quiere decir que la competencia fue terminada
+		foreach ($studentprogress as $key => $sp) {
+			if(!isset($sp->finishedDate)){
+				$isCompleted = false;
+				return $isCompleted;
+			}
+		}
+
+		return $isCompleted;
+	}
+
+	public function blockCompetence($studentId, $groupId, $competenceId){
+
+		$sql = "UPDATE studentrecord SET isBlocked = 1 WHERE studentId = ? AND groupId = ? AND competenceId = ?";
+		//var_dump($sql);
+		if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function isCompetenceBlocked($studentId, $groupId, $competenceId){
+		$isBlocked = false;
+		$sql = "SELECT * FROM studentrecord WHERE studentId = ? AND groupId = ? AND competenceId = ? AND isBlocked = 1";
+
+		if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
+			//var_dump("count de blocked");
+			//var_dump($this->_db->count());
+			if($this->_db->count()) {
+				$isBlocked = true;
+			}
+		}
+
+		//var_dump("isCompetenceBlocked");
+		//var_dump($isBlocked);
+
+		return $isBlocked;
+	}
+
+
 }

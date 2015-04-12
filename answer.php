@@ -3,6 +3,7 @@
 require 'core/init.php';
 
 $user = new User();
+$c = new Competence();
 $user->checkIsValidUser('student');
 
 //Id estudiante
@@ -14,58 +15,51 @@ $competenceId = Input::get("c");
 //Id del grupo
 $groupId = Input::get("g");
 
-$c = new Competence();
 $canAnswer = $c->validateStudentCanAnswer($studentId, $groupId, $competenceId);
-
 if(!$canAnswer){
 	Redirect::to('sdashboard.php');
 }
 
 //Ver el estado de esta competencia para este alumno
-//   -No comenzado, -medio  terminado
+//   -No comenzado
+//   -Empezado
+//   -Terminado
+//   -Bloqueado
 
-//No ha comenzado
 $competenceStarted = $c->isCompetenceStarted($studentId, $groupId, $competenceId);
 if (!$competenceStarted) {
-	//Llenar todas las tablas para comenzar esa competencia
+	// -No ha comenzado
+	//  Llenar todas las tablas para comenzar esa competencia
 	$c->startCompetence($studentId, $groupId, $competenceId);
-}else{
-	//Competencia esta empezada
-
-	//Competencia fue terminada
-	//Redirigir a una nueva pagina que muestre
-	//un mensaje de que la competencia fue termianda y tal vez mostrar su puntaje, dar link para navegar de regreso al dashboard
 }
 
-$competence = $c->getCompetence($competenceId);
 $q = new Question();
-
+$competence = $c->getCompetence($competenceId);
 $nextQuestionForStudentResponse = $q->getNextQuestion($studentId, $groupId, $competenceId);
-
 $nextQuestionForStudent = $nextQuestionForStudentResponse['nextQuestion'];
 
+//  -Terminada / redirigir a dashboard de estudiante
 if ($nextQuestionForStudent == 'completed') {
 	Redirect::to('sdashboard.php');
 	die();
 }
+
+// -Bloqueada
+$isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
+if($isBlocked){
+	Redirect::to('sdashboard.php');
+}
+
+// -Empezada
 $competenceId = $nextQuestionForStudentResponse['competenceId'];
 $webId = $nextQuestionForStudentResponse['webId'];
 $sp = $nextQuestionForStudentResponse['studentProgressId'];
 
-
-var_dump($nextQuestionForStudentResponse);
-
 $questionForStudentId = $nextQuestionForStudent->id;
-$questionId = $nextQuestionForStudent->questionId;
-
-$nextQuestionId = $nextQuestionForStudent->questionId;
-//var_dump("Id de la siguiente pregunta");
-//var_dump($nextQuestionId);
-
+$questionId           = $nextQuestionForStudent->questionId;
+$nextQuestionId       = $nextQuestionForStudent->questionId;
 $nextQuestion = $q->getQuestion($nextQuestionId);
 $nextQuestion = $nextQuestion[0];
-//var_dump("Info Pregunta");
-//var_dump($nextQuestion);
 
 $a = new Answer();
 $answersIds = array($nextQuestion->optionA, $nextQuestion->optionB, $nextQuestion->optionC, $nextQuestion->optionD);
@@ -75,8 +69,6 @@ foreach ($answersIds as $answerId){
 	$answersText = $a->getAnswer($answerId);
 	array_push($answersInfo, $answersText);
 }
-//var_dump("Info Respuesta");
-//var_dump($answersInfo);
 
 ?>
 
@@ -168,28 +160,22 @@ foreach ($answersIds as $answerId){
 			?>;
 
 			var a = $("input[name=answer]:checked").attr("id");
-			console.log(a);
 
 			if(a == undefined){
 				alert("Selecciona una respuesta");
 			}else{
 				$.post( "controls/doAction.php", { action:"answerQuestion", c:c, qfs:qfs , w:w , a:a, sp:sp  })
 				.done(function( data ) {
-					console.log(data);
+					//console.log(data);
 					data = JSON.parse(data);
 					if(data.message == 'success'){
-						console.log(data);
-					  window.location.reload();
+						window.location.reload();
+					}else{
+						alert("There was an error: " + data.message);
+					}
 
-				}else{
-					alert("There was an error: " + data.message);
-				}
-
-			});
+				});
 			}
-
-
-
 		}
 
 	</script>

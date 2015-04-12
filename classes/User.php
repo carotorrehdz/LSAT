@@ -49,7 +49,7 @@ class User {
 	public function getByIdNumber($idNumber){
 		$db = $this->_db->get($this->_userTableName, array('idNumber', '=', $idNumber));
 		if($db->count()) {
-				return $db->first();
+			return $db->first();
 		}
 		return false;
 	}
@@ -86,28 +86,28 @@ class User {
 
 	public function redirectToDefault(){
 		$page = "index.php";
-		  if($this->data()->role == "admin"){
-		    $page = 'registerTeacher.php';
-		  }
-		  else if($this->data()->role == "teacher"){
-		    $page = 'groups.php';
-		  }
-		  else if($this->data()->role == "student"){
-		    $page = 'sdashboard.php';
-		  }
+		if($this->data()->role == "admin"){
+			$page = 'registerTeacher.php';
+		}
+		else if($this->data()->role == "teacher"){
+			$page = 'groups.php';
+		}
+		else if($this->data()->role == "student"){
+			$page = 'sdashboard.php';
+		}
 
-		  Redirect::to($page);
+		Redirect::to($page);
 
 	}
 
 	public function getInformationForStudent($studentId = null) {
 		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competences,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competencesIds  FROM 
-`studentsingroup` SG JOIN `groups` G ON  SG.groupId = G.id
-JOIN `competenceingroup` CG ON G.id = CG.groupId
-JOIN `competence` C ON CG.competenceId = C.id
-JOIN `user` U ON U.id = G.professor
-WHERE SG.studentId = $studentId 
-GROUP BY groupId";
+		`studentsingroup` SG JOIN `groups` G ON  SG.groupId = G.id
+		JOIN `competenceingroup` CG ON G.id = CG.groupId
+		JOIN `competence` C ON CG.competenceId = C.id
+		JOIN `user` U ON U.id = G.professor
+		WHERE SG.studentId = $studentId 
+		GROUP BY groupId";
 
 		if(!$this->_db->query($sql, array())->error()) {
 			if($this->_db->count()) {
@@ -181,22 +181,34 @@ GROUP BY groupId";
 		$roles = Config::get('roles');
 		$error = "";
 		if (! in_array($role, $roles)) {
-		    $error = "Invalid role";
+			$error = "Invalid role";
 		}
 
 		$users = array();
 
 		$db = $this->_db->get($this->_userTableName, array('role', '=', $role));
 		if($db->count()) {
-				$users = $db->results();
-			}
+			$users = $db->results();
+		}
 
 		return $users;
 
 	}
 
 
+	public function getStudentProgress($studentId, $groupId, $competenceId){
+		
+		//Traer los registros de studentrecord y studentprogress que cumplan con los tres ids
+		$studentprogress = array();
+		$sql = "SELECT * FROM studentrecord sr JOIN studentprogress sp ON sr.studentProgressId = sp.id WHERE studentId = ? AND groupId = ? AND competenceId = ?";
 
+		if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
+			if($this->_db->count()) {
+				$studentprogress  = $this->_db->results();
+			}
+		}
+		return $studentprogress;
+	}
 
 
 	public function studentBelongInGroup($studentId = null, $groupId = null) {
