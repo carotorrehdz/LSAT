@@ -374,7 +374,7 @@ table td{
 }
 
 #studentCompetences #groups{
-  width:250px;
+  width:200px;
   float:left;
 }
 
@@ -403,12 +403,13 @@ table td{
 }
 
 #studentCompetences .competences{
-  background: none repeat scroll 0 0 #1C758A;
+  background: none repeat scroll 0 0 #2F3B4C;
   float: left;
   min-height: 500px;
   padding: 20px;
-  width: 600px;
+  width: 700px;
   box-shadow: 0px 0px 1px #222;
+  margin-bottom: 20px;
 }
 
 #studentCompetences .competences h3{
@@ -426,16 +427,43 @@ table td{
 }
 
 #studentCompetences .competences ul li a{
-  color: #FFF;
+  color: #222;
+  border-radius: 3px;
+  height: 20px;
+  display: inline-block;
+  width: 100px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 20px;
 }
 
-#studentCompetences .competences ul li a:hover{
-  text-decoration: underline;
+a.notStarted{
+  background: #6EBA1D;
+}
+a.notStarted:hover{
+  color: #FFF !important;
+  box-shadow: -1px 2px 2px #091321;
+}
+
+a.started{
+  background: #4CB7FF;
+}
+a.started:hover{
+  color: #FFF !important;
+  box-shadow: -1px 2px 2px #091321;
+}
+
+
+
+a.blocked{
+  background: #FF802B;
+}
+a.finished{
+  background: #C4D1FC;
 }
 
 #studentCompetences .competences ul li span{
-  color: rgba(255,255,255,0.6);
-  font-size: 12px;
+  color: #FFF;
 }
 
 

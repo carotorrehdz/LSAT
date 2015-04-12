@@ -85,8 +85,12 @@ $c = new Competence();
 									}
 								}
 							}
-
-							echo "<li><span> $competenceName </span><a href='answer.php?c=$competenceId&g=$groupId' class='$statusClass'>$status</a></li>";
+							if($statusClass == "finished" || $statusClass == "blocked"){
+								echo "<li><a class='$statusClass'>$status</a> <span> $competenceName </span> </li>";
+							}else{
+								echo "<li><a href='answer.php?c=$competenceId&g=$groupId' class='$statusClass'>$status</a> <span> $competenceName </span> </li>";
+							}
+							
 						}
 
 						echo "</ul></div>";
