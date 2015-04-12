@@ -10,7 +10,7 @@ class User {
 
 	public function __construct($user = null) {
 		$this->_db = DB::getInstance();
-		
+
 		$this->_sessionName = Config::get('session/session_name');
 		$this->_cookieName = Config::get('remember/cookie_name');
 
@@ -62,7 +62,7 @@ class User {
 
 	public function checkIsLoggedIn(){
 		//el usuario no esta logeado
-		if(!$this->isLoggedIn()) {  
+		if(!$this->isLoggedIn()) {
 			Redirect::to('index.php');
 			exit();
 		}
@@ -72,7 +72,7 @@ class User {
 
 	public function checkIsValidUser($role = ""){
 		//Si no existe usuario para ese mail o el usuario si existe pero no esta logeado redirigimos a index
-		if(!$this->exists() || !$this->isLoggedIn()) {  
+		if(!$this->exists() || !$this->isLoggedIn()) {
 			Redirect::to('index.php');
 			exit();
 		}
@@ -101,12 +101,12 @@ class User {
 	}
 
 	public function getInformationForStudent($studentId = null) {
-		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competences,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competencesIds  FROM 
+		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competences,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competencesIds  FROM
 		`studentsingroup` SG JOIN `groups` G ON  SG.groupId = G.id
 		JOIN `competenceingroup` CG ON G.id = CG.groupId
 		JOIN `competence` C ON CG.competenceId = C.id
 		JOIN `user` U ON U.id = G.professor
-		WHERE SG.studentId = $studentId 
+		WHERE SG.studentId = $studentId
 		GROUP BY groupId";
 
 		if(!$this->_db->query($sql, array())->error()) {
@@ -197,7 +197,7 @@ class User {
 
 
 	public function getStudentProgress($studentId, $groupId, $competenceId){
-		
+
 		//Traer los registros de studentrecord y studentprogress que cumplan con los tres ids
 		$studentprogress = array();
 		$sql = "SELECT * FROM studentrecord sr JOIN studentprogress sp ON sr.studentProgressId = sp.id WHERE studentId = ? AND groupId = ? AND competenceId = ?";

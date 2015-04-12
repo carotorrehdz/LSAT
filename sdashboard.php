@@ -7,6 +7,7 @@ $user->checkIsValidUser('student');
 $studentId = $user->data()->id;
 $information = $user->getInformationForStudent($studentId);
 //var_dump($information);
+$c = new Competence();
 ?>
 
 <!doctype html>
@@ -48,6 +49,7 @@ $information = $user->getInformationForStudent($studentId);
 					//Las guardaremos en un arreglo para iterarlas facilmente
 
 					foreach ($information as $key => $group) {
+						$groupId = $group->groupId;
 						$competencesString = $group->competences;
 						$competencesIdsString = $group->competencesIds;
 
@@ -58,11 +60,33 @@ $information = $user->getInformationForStudent($studentId);
 						echo "<div id=$group->groupId class='competences' style='display: none'>
 						<h3>$group->groupName / <small>$group->professorName</small></h3>
 						<ul>";
-						foreach ($competencesIdsArray as $key => $id) {
+						foreach ($competencesIdsArray as $key => $competenceId) {
 							$competenceName = $competencesArray[$key];
-							$status = "(No empezado)";
-							$statusClasses = array("started", "notStarted", "finished");
-							echo "<li><a href='answer.php?c=$id&g=$group->groupId'>$competenceName</a> <span>  </span></li>";
+
+							$studentProgress = $user->getStudentProgress($studentId, $groupId, $competenceId);
+
+							//Checar el status de esta competencia
+							if(count($studentProgress) == 0) {
+								$status = "Empezar";
+								$statusClass = "notStarted";
+							} else {
+								$isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
+								if($isBlocked == true) {
+									$status = "Bloqueado";
+									$statusClass = "blocked";
+								} else {
+									$isCompleted = $c->isCompetenceCompleted($studentProgress);
+									if($isCompleted == true) {
+										$status = "Completado";
+										$statusClass = "finished";
+									} else {
+										$status = "Continuar";
+										$statusClass = "started";
+									}
+								}
+							}
+
+							echo "<li><span> $competenceName </span><a href='answer.php?c=$competenceId&g=$groupId' class='$statusClass'>$status</a></li>";
 						}
 
 						echo "</ul></div>";
