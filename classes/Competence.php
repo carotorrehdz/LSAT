@@ -39,9 +39,9 @@ class Competence {
 	public function getCompetencesForTeacher($teacherId = null){
 		if ($teacherId == null) return;
 
-		$sql = "SELECT * FROM competence WHERE professor = ? and isPublished = ?";
+		$sql = "SELECT * FROM competence WHERE professor = ?";
 
-		if(!$this->_db->query($sql, array($teacherId, true))->error()) {
+		if(!$this->_db->query($sql, array($teacherId))->error()) {
 			if($this->_db->count()) {
 				return $this->_db->results();
 			}

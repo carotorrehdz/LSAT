@@ -39,12 +39,15 @@ if (!$competenceStarted) {
 
 $competence = $c->getCompetence($competenceId);
 $q = new Question();
+
 $nextQuestionForStudentResponse = $q->getNextQuestion($studentId, $groupId, $competenceId);
 
 $competenceId = $nextQuestionForStudentResponse['competenceId'];
 $webId = $nextQuestionForStudentResponse['webId'];
-
+$sp = $nextQuestionForStudentResponse['studentProgressId'];
 $nextQuestionForStudent = $nextQuestionForStudentResponse['nextQuestion'];
+
+var_dump($nextQuestionForStudentResponse);
 
 $questionForStudentId = $nextQuestionForStudent->id;
 $questionId = $nextQuestionForStudent->questionId;
@@ -53,7 +56,8 @@ $nextQuestionId = $nextQuestionForStudent->questionId;
 //var_dump("Id de la siguiente pregunta");
 //var_dump($nextQuestionId);
 
-$nextQuestion = $q->getQuestion($nextQuestionId)[0];
+$nextQuestion = $q->getQuestion($nextQuestionId);
+$nextQuestion = $nextQuestion[0];
 //var_dump("Info Pregunta");
 //var_dump($nextQuestion);
 
@@ -95,17 +99,17 @@ foreach ($answersIds as $answerId){
 					<!-- Default panel contents -->
 					<h4 id="text">
 						<?php
-							echo "$nextQuestion->text"
+						echo "$nextQuestion->text"
 						?>
 					</h4>
 
 					<ul style='list-style:none'>
 						<?php
-							foreach($answersInfo as $a){
-								$text = $a[0]->text;
-								$answerId = $a[0]->id;
-								echo "<li><input id=$answerId type='radio' name='answer'> <span> $text </span> </input></li>";
-							}
+						foreach($answersInfo as $a){
+							$text = $a[0]->text;
+							$answerId = $a[0]->id;
+							echo "<li><input id=$answerId type='radio' name='answer'> <span> $text </span> </input></li>";
+						}
 						?>
 					</ul>
 
@@ -128,41 +132,58 @@ foreach ($answersIds as $answerId){
 
 		function answerQuestion(){
 			var c = <?php
-				if (isset($competenceId)) {
-					echo "$competenceId";
-				}else{
-					echo "0";
-				}
+			if (isset($competenceId)) {
+				echo "$competenceId";
+			}else{
+				echo "-1";
+			}
 			?>;
 			var qfs = <?php
-				if (isset($questionForStudentId)) {
-					echo "$questionForStudentId";
-				}else{
-					echo "0";
-				}
+			if (isset($questionForStudentId)) {
+				echo "$questionForStudentId";
+			}else{
+				echo "-1";
+			}
 			?>;
 			var w = <?php
-				if (isset($webId)) {
-					echo "$webId";
-				}else{
-					echo "0";
-				}
+			if (isset($webId)) {
+				echo "$webId";
+			}else{
+				echo "-1";
+			}
 			?>;
+
+			var sp = <?php
+			if (isset($sp)) {
+				echo "$sp";
+			}else{
+				echo "-1";
+			}
+			?>;
+
 			var a = $("input[name=answer]:checked").attr("id");
 			console.log(a);
-			/*
-			$.post( "controls/doAction.php", { action:"answerQuestion", c:c, qfs:qfs , w:w , a:a  })
-			.done(function( data ) {
-				console.log(data);
-				data = JSON.parse(data);
-				if(data.message == 'success'){
+
+			if(a == undefined){
+				alert("Selecciona una respuesta");
+			}else{
+				$.post( "controls/doAction.php", { action:"answerQuestion", c:c, qfs:qfs , w:w , a:a, sp:sp  })
+				.done(function( data ) {
+					console.log(data);
+					data = JSON.parse(data);
+					if(data.message == 'success'){
+						console.log(data);
+					//window.location.reload();
 
 				}else{
 					alert("There was an error: " + data.message);
 				}
 
 			});
-			*/
+			}
+			
+			
+			
 		}
 
 	</script>

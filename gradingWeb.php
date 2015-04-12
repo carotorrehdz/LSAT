@@ -61,7 +61,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
 									$text = $a[0]->text;
 									$answerId = $a[0]->id;
 									if ($a[0]->correct == 1){
-										echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
+										echo "<li> <label class='label answer' name='$question->id-$answerId'>Correcta</label> <span> $text </span> </li>";
 									} else {
 										echo "<li> <input class='answer' name='$question->id-$answerId' type='text'/> <span>$text </span> </li>";
 									}
@@ -115,6 +115,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
 			    var q = name[0];      //id pregunta
 			    var a = name[1];      //respuesta
 			    var p =  item.val();  //ponderacion
+			    if(p==""){ p = "1"}
 			    var index = q+"-"+a;
 			    data[index] = p;
 			}
