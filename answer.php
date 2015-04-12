@@ -17,7 +17,7 @@ $groupId = Input::get("g");
 
 $canAnswer = $c->validateStudentCanAnswer($studentId, $groupId, $competenceId);
 if(!$canAnswer){
-	Redirect::to('sdashboard.php');
+	Redirect::to('dashboard.php');
 }
 
 //Ver el estado de esta competencia para este alumno
@@ -34,26 +34,29 @@ if (!$competenceStarted) {
 }
 
 $q = new Question();
+$w = new Web();
 $competence = $c->getCompetence($competenceId);
 $nextQuestionForStudentResponse = $q->getNextQuestion($studentId, $groupId, $competenceId);
 $nextQuestionForStudent = $nextQuestionForStudentResponse['nextQuestion'];
 
 //  -Terminada / redirigir a dashboard de estudiante
 if ($nextQuestionForStudent == 'completed') {
-	Redirect::to('sdashboard.php');
+	Redirect::to('dashboard.php');
 	die();
 }
 
 // -Bloqueada
 $isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
 if($isBlocked){
-	Redirect::to('sdashboard.php');
+	Redirect::to('dashboard.php');
 }
 
 // -Empezada
 $competenceId = $nextQuestionForStudentResponse['competenceId'];
 $webId = $nextQuestionForStudentResponse['webId'];
 $sp = $nextQuestionForStudentResponse['studentProgressId'];
+
+$web = $w->getWeb($webId);
 
 $questionForStudentId = $nextQuestionForStudent->id;
 $questionId           = $nextQuestionForStudent->questionId;
@@ -90,7 +93,7 @@ foreach ($answersIds as $answerId){
 			<div class="large-9 medium-8 columns">
 				<br/>
 				<h3><?php echo "$competence->name"?> </h3>
-				<h4 class="subheader">Contestar competencia</h4>
+				<h4 class="subheader"><?php echo "$web->name - Nivel: $nextQuestionForStudent->level"?></h4>
 				<hr>
 
 				<div id="questionDetail" class="panel">
@@ -113,7 +116,7 @@ foreach ($answersIds as $answerId){
 
 				</div>
 				<a href="#" onclick="answerQuestion()" class="button round small right">Siguiente</a>
-
+				<a href="#" onclick="saveAnswer()" class="button round small right">Guardar</a>
 
 			</div>
 		</div>
@@ -178,6 +181,9 @@ foreach ($answersIds as $answerId){
 			}
 		}
 
+		function saveAnswer(){
+			window.location.replace('./dashboard.php')
+		}
 	</script>
 </body>
 </html>

@@ -93,7 +93,7 @@ class User {
 			$page = 'groups.php';
 		}
 		else if($this->data()->role == "student"){
-			$page = 'sdashboard.php';
+			$page = 'dashboard.php';
 		}
 
 		Redirect::to($page);

@@ -19,7 +19,7 @@ if(Input::exists()) {
 			$page = 'groups.php';
 		}
 		else if($user->data()->role == "student"){
-			$page = 'sdashboard.php';
+			$page = 'dashboard.php';
 		}
 
 		$response = array( "message" => "success", "page" => $page);

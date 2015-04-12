@@ -13,7 +13,7 @@
         $page = 'groups.php';
       }
       else if($user->data()->role == "student"){
-        $page = 'sdashboard.php';
+        $page = 'dashboard.php';
       }
       echo "<a href='$page'>LSAT</a>";
       ?>

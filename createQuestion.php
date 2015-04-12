@@ -21,56 +21,56 @@ $user->checkIsValidUser('teacher');
   <section class="scroll-container" role="main">
 
     <div class="row">
-      <?php include 'includes/templates/teacherSidebar.php' ?>  
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <h3>Pregunta</h3>
         <h4 class="subheader">Crear nueva pregunta</h4>
-        <hr>  
+        <hr>
 
-        <form id="newQuestion"> 
+        <form id="newQuestion">
 
-          <div class="row"> 
+          <div class="row">
             <div class="large-12 columns">
-              <label>Texto de la pregunta 
-                <textarea  id="qtext" name="text"></textarea> 
+              <label>Texto de la pregunta
+                <textarea  id="qtext" name="text"></textarea>
               </label>
             </div>
           </div>
 
-          <div class="row"> 
-            <div class="large-12 columns"> 
+          <div class="row">
+            <div class="large-12 columns">
               <label>Url media
-                <input type="text" id="qurl" name="url" placeholder="URL de una imagen o video que ayude a explicar la pregunta" /> 
-              </label> 
-            </div> 
-          </div> 
+                <input type="text" id="qurl" name="url" placeholder="URL de una imagen o video que ayude a explicar la pregunta" />
+              </label>
+            </div>
+          </div>
 
-          <div class="row"> 
-            <div class="large-6 columns"> 
+          <div class="row">
+            <div class="large-6 columns">
               <label>Dificultad
-                <select id="qgrade" name="grade"> 
-                  <option value="1">Baja</option> 
-                  <option value="2">Media</option> 
-                  <option value="3">Alta</option> 
-                </select> 
+                <select id="qgrade" name="grade">
+                  <option value="1">Baja</option>
+                  <option value="2">Media</option>
+                  <option value="3">Alta</option>
+                </select>
               </label>
             </div>
 
-            <div class="large-6 columns"> 
+            <div class="large-6 columns">
               <label>Tema
-                <select id="qtopic" name="topic"> 
-                  <option value="1">1</option> 
-                  <option value="2">2</option> 
-                </select> 
+                <select id="qtopic" name="topic">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
               </label>
             </div>
-          </div> 
+          </div>
 
-          <hr>  
+          <hr>
 
           <h4>Respuestas</h4>
 
-          <div class="row correctAns"> 
+          <div class="row correctAns">
             <div class="large-6 columns">
               <label>Respuesta 1 - CORRECTA <textarea  name="ans1"></textarea> </label>
             </div>
@@ -89,7 +89,7 @@ $user->checkIsValidUser('teacher');
 
           </div>
 
-          <div class="row grey1"> 
+          <div class="row grey1">
             <div class="large-6 columns">
               <label>Respuesta 2 <textarea  name="ans2"></textarea> </label>
             </div>
@@ -109,7 +109,7 @@ $user->checkIsValidUser('teacher');
           </div>
 
 
-          <div class="row grey2"> 
+          <div class="row grey2">
             <div class="large-6 columns">
               <label>Respuesta 3 <textarea  name="ans3"></textarea> </label>
             </div>
@@ -128,7 +128,7 @@ $user->checkIsValidUser('teacher');
 
           </div>
 
-          <div class="row grey1"> 
+          <div class="row grey1">
             <div class="large-6 columns">
               <label>Respuesta 4 <textarea  name="ans4"></textarea> </label>
             </div>
@@ -170,7 +170,7 @@ $user->checkIsValidUser('teacher');
 
       var fields = $("#newQuestion").serializeArray();
       console.log(fields);
-      
+
 
       var topic  = $("#qtopic").val();
       var grade  = $("#qgrade").val();
@@ -183,17 +183,18 @@ $user->checkIsValidUser('teacher');
       for (i=0; i<len; i++) {
         dataObj[fields[i].name] = fields[i].value;
       }
-      
+
       var data = JSON.stringify(dataObj);
       console.log(data);
 
-      $.post( "controls/doAction.php", {  action: "createQuestion", 
+      $.post( "controls/doAction.php", {  action: "createQuestion",
         data: data})
       .done(function( data ) {
 
         data = JSON.parse(data);
         if(data.message == 'success'){
           alert("La pregunta fue creada");
+          window.location.reload();
         }else{
           alert("Error: \n\n" + data.message);
         }
