@@ -57,13 +57,19 @@ $answers = $answer->getAnswersForQuestionList($questions);
 							if ($level == $questionsByLevel[$question->id]){
 								echo "<li> <span>$question->text</span> <ul id='answersForQuestion'>";
 								$answersForQuestion = $answers[$question->id];
+								$maxLevel = count($levels);
+								$options = "";
+								for ($i=1-$level; $i <=$maxLevel-$level; $i++) { 
+									$options .= "<option value='$i'>$i</option>";
+								}
 								foreach($answersForQuestion as $a){
 									$text = $a[0]->text;
 									$answerId = $a[0]->id;
+
 									if ($a[0]->correct == 1){
 										echo "<li> <label class='label answer' name='$question->id-$answerId'>Correcta</label> <span> $text </span> </li>";
 									} else {
-										echo "<li> <input class='answer' name='$question->id-$answerId' type='text'/> <span>$text </span> </li>";
+										echo "<li> <select class='answer' name='$question->id-$answerId'> $options </select><span>$text </span> </li>";
 									}
 								}
 								echo "</ul> </li>";
@@ -125,7 +131,6 @@ $answers = $answer->getAnswersForQuestionList($questions);
 
 				data = JSON.parse(data);
 				if(data.message == 'success'){
-					alert("La red fue ponderada correctamente");
 					window.location.replace('./competenceDetail.php?competence='+cId);
 				}else{
 					alert("Error: \n\n" + data.message);

@@ -60,11 +60,6 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
             </ul>
           </div>
 
-          <br/>
-          <a href="#" onclick="save()" class="button round small right">Guardar cambios</a>
-
-
-
         </div>
       </div>
     </section>
