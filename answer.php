@@ -116,7 +116,6 @@ foreach ($answersIds as $answerId){
 
 				</div>
 				<a href="#" onclick="answerQuestion()" class="button round small right">Siguiente</a>
-				<a href="#" onclick="saveAnswer()" class="button round small right">Guardar</a>
 
 			</div>
 		</div>
@@ -181,9 +180,6 @@ foreach ($answersIds as $answerId){
 			}
 		}
 
-		function saveAnswer(){
-			window.location.replace('./dashboard.php')
-		}
 	</script>
 </body>
 </html>
