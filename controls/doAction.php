@@ -511,6 +511,113 @@ if(Input::exists()) {
 		echo json_encode($response);
 		break;
 
+
+		case "answerQuestion":
+
+		$user = new User();
+		
+		/*Solo un alumno puede hacerlo*/
+		if($user->data()->role != 'student'){ return; }
+
+		try{
+			
+			$q = new Question();
+			$db = DB::getInstance();
+			$questionForStudentId = Input::get('qfs');
+			$competenceId = Input::get('c');
+			$webId = intval(Input::get('w'));
+			$answerId = intval(Input::get('a'));
+			$spid = intval(Input::get('sp'));
+
+			//Marcar la pregunta dentro de questionsForStudent como contestada
+			$fields = array("answered" => true);
+			if(!$db->update('questionsForStudent', $questionForStudentId, $fields)) {
+				throw new Exception('There was a problem updating QuestionsForStudent.');
+			}
+
+			//Con el id de la respuesta obtenemos su ponderacion 
+			$wic = null;
+			$sql = "SELECT * FROM websincompetence WHERE competenceId = $competenceId and webId = $webId";
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					$wic = $db->first();
+				}
+			}
+
+			$aiwic = null;
+			$sql = "SELECT * FROM answersinwebsincompetence WHERE webInCompetence = $wic->id and answerId = $answerId";
+			//var_dump($sql);
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					$aiwic = $db->first();
+				}
+			}
+			//var_dump($aiwic);
+
+			$grade = $aiwic->grade;
+
+			//Con la informacion sobre ponderacion
+			//Actualizar la ultima pregunta contestada dentro de studentProgress
+			$fields = array("lastAnsweredQuestion" => $questionForStudentId, "lastAnswerGrade" => $grade);
+			if(!$db->update('studentprogress', $spid, $fields)) {
+				throw new Exception('There was a problem updating StudentProgress.');
+			}
+			//si la pregunta fue contestada correctamnte y ya no hay otro nivel en la red, 
+			// se le asigna una fecha de terminado
+
+			//Nivel actual
+			$level = -1;
+			$sql = "SELECT * FROM questionsforstudent WHERE id = $questionForStudentId";
+			//var_dump($sql);
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					$r = $db->first();
+					$level = $r->level;
+				}
+			}
+
+			$lastLevel = -1;
+			$lastQuestionId = -1;
+
+			$sql = "SELECT * FROM studentprogress WHERE id = $spid";
+			//var_dump($sql);
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					$r = $db->first();
+					$lastQuestionId = $r->lastQuestion;
+				}
+			}
+
+			$sql = "SELECT * FROM questionsforstudent WHERE id = $lastQuestionId";
+			//var_dump($sql);
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					$r = $db->first();
+					$lastLevel = $r->level;
+				}
+			}
+
+			var_dump($level);
+			var_dump($lastLevel);
+
+
+			if($level == $lastLevel){
+				$date = date('Y-m-d H:i:s');
+				$fields = array( "finishedDate"=>"$date");
+				if(!$db->update('studentprogress', $spid, $fields)) {
+					throw new Exception('There was a problem updating StudentProgress.');
+				}
+			}
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:012 ".$e->getMessage());
+			die(json_encode($response));
+		}
+		$response = array( "message" => "success");
+		echo json_encode($response);
+		break;
+
+
 		default:
 		echo "Error: 002";
 		break;
