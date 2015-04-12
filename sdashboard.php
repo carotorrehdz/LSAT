@@ -23,12 +23,12 @@ $information = $user->getInformationForStudent($studentId);
 	<section class="scroll-container" role="main">
 
 		<div class="row">
-			<?php include 'includes/templates/studentSidebar.php' ?>  
+			<?php include 'includes/templates/studentSidebar.php' ?>
 			<div class="large-9 medium-8 columns">
 				<br/>
 				<h3>Bienvenido <?php echo $user->data()->username ?> </h3>
 				<h4 class="subheader">Aqui puedes encontrar una lista de tus grupos y las actividades que debes contestar</h4>
-				<hr>  
+				<hr>
 
 				<div id="studentCompetences">
 					<div id="groups">
@@ -62,7 +62,7 @@ $information = $user->getInformationForStudent($studentId);
 							$competenceName = $competencesArray[$key];
 							$status = "(No empezado)";
 							$statusClasses = array("started", "notStarted", "finished");
-							echo "<li><a href='answer.php?c=$id&g=$group->groupId'>$competenceName</a> <span> $status </span></li>";
+							echo "<li><a href='answer.php?c=$id&g=$group->groupId'>$competenceName</a> <span>  </span></li>";
 						}
 
 						echo "</ul></div>";

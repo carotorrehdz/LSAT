@@ -42,10 +42,16 @@ $q = new Question();
 
 $nextQuestionForStudentResponse = $q->getNextQuestion($studentId, $groupId, $competenceId);
 
+$nextQuestionForStudent = $nextQuestionForStudentResponse['nextQuestion'];
+
+if ($nextQuestionForStudent == 'completed') {
+	Redirect::to('sdashboard.php');
+	die();
+}
 $competenceId = $nextQuestionForStudentResponse['competenceId'];
 $webId = $nextQuestionForStudentResponse['webId'];
 $sp = $nextQuestionForStudentResponse['studentProgressId'];
-$nextQuestionForStudent = $nextQuestionForStudentResponse['nextQuestion'];
+
 
 var_dump($nextQuestionForStudentResponse);
 
@@ -173,7 +179,7 @@ foreach ($answersIds as $answerId){
 					data = JSON.parse(data);
 					if(data.message == 'success'){
 						console.log(data);
-					//window.location.reload();
+					  window.location.reload();
 
 				}else{
 					alert("There was an error: " + data.message);
@@ -181,9 +187,9 @@ foreach ($answersIds as $answerId){
 
 			});
 			}
-			
-			
-			
+
+
+
 		}
 
 	</script>

@@ -515,12 +515,12 @@ if(Input::exists()) {
 		case "answerQuestion":
 
 		$user = new User();
-		
+
 		/*Solo un alumno puede hacerlo*/
 		if($user->data()->role != 'student'){ return; }
 
 		try{
-			
+
 			$q = new Question();
 			$db = DB::getInstance();
 			$questionForStudentId = Input::get('qfs');
@@ -535,7 +535,7 @@ if(Input::exists()) {
 				throw new Exception('There was a problem updating QuestionsForStudent.');
 			}
 
-			//Con el id de la respuesta obtenemos su ponderacion 
+			//Con el id de la respuesta obtenemos su ponderacion
 			$wic = null;
 			$sql = "SELECT * FROM websincompetence WHERE competenceId = $competenceId and webId = $webId";
 			if(!$db->query($sql)->error()) {
@@ -562,7 +562,7 @@ if(Input::exists()) {
 			if(!$db->update('studentprogress', $spid, $fields)) {
 				throw new Exception('There was a problem updating StudentProgress.');
 			}
-			//si la pregunta fue contestada correctamnte y ya no hay otro nivel en la red, 
+			//si la pregunta fue contestada correctamnte y ya no hay otro nivel en la red,
 			// se le asigna una fecha de terminado
 
 			//Nivel actual
@@ -597,11 +597,11 @@ if(Input::exists()) {
 				}
 			}
 
-			var_dump($level);
-			var_dump($lastLevel);
+			//var_dump($level);
+			//var_dump($lastLevel);
 
-
-			if($level == $lastLevel){
+			//Si contesto bien y es el ultimo nivel de la red
+			if($level == $lastLevel && $grade > 0){
 				$date = date('Y-m-d H:i:s');
 				$fields = array( "finishedDate"=>"$date");
 				if(!$db->update('studentprogress', $spid, $fields)) {

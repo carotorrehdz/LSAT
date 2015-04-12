@@ -96,21 +96,29 @@ class Question {
 			// Si todos los de student progress tienen seteado un finished date
 			// quiere decir que la competencia fue terminada
 			$websTerminadas = array();
+			$webTerminada = true;
 			$competenciaTerminada = true;
 			foreach ($studentprogress as $key => $sp) {
 				//var_dump($sp);
 				if(!isset($sp->finishedDate)){
+					$webTerminada = false;
 					$competenciaTerminada = false;
 				}
 
-				$websTerminadas[$sp->webId] = $competenciaTerminada;
+				$websTerminadas[$sp->webId] = $webTerminada;
 			}
 
 			//echo "websTerminadas";
 			var_dump($websTerminadas);
 
-			//echo "competenciaTerminada";
-			//var_dump($competenciaTerminada);
+			if ($competenciaTerminada) {
+				$response['nextQuestion'] = "completed";
+
+				return $response;
+			}
+
+			//echo "webTerminada";
+			//var_dump($webTerminada);
 
 
 			//Si la competencia no esta termianda tenemos que saber el orden de las redes, para saber cual sigue
