@@ -4,7 +4,10 @@ require 'core/init.php';
 
 $user = new User();
 $user->checkIsValidUser('teacher');
-
+$difficulty = new Difficulty();
+$difficulties = $difficulty->getDifficulties();
+$topic = new Topic();
+$topics = $topic->getTopics();
 ?>
 
 <!doctype html>
@@ -49,9 +52,11 @@ $user->checkIsValidUser('teacher');
             <div class="large-6 columns">
               <label>Dificultad
                 <select id="qgrade" name="grade">
-                  <option value="1">Baja</option>
-                  <option value="2">Media</option>
-                  <option value="3">Alta</option>
+                  <?php
+                    foreach ($difficulties as $item) {
+                      echo "<option value='$item->id'>$item->name</option>";
+                    }
+                  ?>
                 </select>
               </label>
             </div>
@@ -59,8 +64,11 @@ $user->checkIsValidUser('teacher');
             <div class="large-6 columns">
               <label>Tema
                 <select id="qtopic" name="topic">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  <?php
+                    foreach ($topics as $item) {
+                      echo "<option value='$item->id'>$item->name</option>";
+                    }
+                  ?>
                 </select>
               </label>
             </div>
