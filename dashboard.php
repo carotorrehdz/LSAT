@@ -35,65 +35,71 @@ $c = new Competence();
 					<div id="groups">
 						<ul>
 							<?php
-							foreach ($information as $key => $group) {
-								//Desplegar descripcion del curso
-								echo "<li><a href='#' onclick='showCompetence($group->groupId)'><span><b>$group->groupName</b></span><span>$group->professorName</span></a></li>";
+							if (isset($information)) {
+								foreach ($information as $key => $group) {
+									//Desplegar descripcion del curso
+									echo "<li><a href='#' onclick='showCompetence($group->groupId)'><span><b>$group->groupName</b></span><span>$group->professorName</span></a></li>";
+								}
+							} else {
+								echo "<span>Aun no tienes competencias asignadas</span>";
 							}
 							?>
 						</ul>
 					</div>
 					<?php
 
-					//La informacion viene por grupos
-					//Cada grupo tiene un campo llamado "competences" donde vienen todas sus competencias separadas por comas
-					//Las guardaremos en un arreglo para iterarlas facilmente
+					if (isset($information)){
+						//La informacion viene por grupos
+						//Cada grupo tiene un campo llamado "competences" donde vienen todas sus competencias separadas por comas
+						//Las guardaremos en un arreglo para iterarlas facilmente
 
-					foreach ($information as $key => $group) {
-						$groupId = $group->groupId;
-						$competencesString = $group->competences;
-						$competencesIdsString = $group->competencesIds;
+						foreach ($information as $key => $group) {
+							$groupId = $group->groupId;
+							$competencesString = $group->competences;
+							$competencesIdsString = $group->competencesIds;
 
-						$competencesArray = explode(',', $competencesString);
-						$competencesIdsArray = explode(',', $competencesIdsString);
+							$competencesArray = explode(',', $competencesString);
+							$competencesIdsArray = explode(',', $competencesIdsString);
 
-					    //Desplegar descripcion del curso
-						echo "<div id=$group->groupId class='competences' style='display: none'>
-						<h3>$group->groupName / <small>$group->professorName</small></h3>
-						<ul>";
-						foreach ($competencesIdsArray as $key => $competenceId) {
-							$competenceName = $competencesArray[$key];
+						    //Desplegar descripcion del curso
+							echo "<div id=$group->groupId class='competences' style='display: none'>
+							<h3>$group->groupName / <small>$group->professorName</small></h3>
+							<ul>";
+							foreach ($competencesIdsArray as $key => $competenceId) {
+								$competenceName = $competencesArray[$key];
 
-							$studentProgress = $user->getStudentProgress($studentId, $groupId, $competenceId);
+								$studentProgress = $user->getStudentProgress($studentId, $groupId, $competenceId);
 
-							//Checar el status de esta competencia
-							if(count($studentProgress) == 0) {
-								$status = "Empezar";
-								$statusClass = "notStarted";
-							} else {
-								$isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
-								if($isBlocked == true) {
-									$status = "Bloqueado";
-									$statusClass = "blocked";
+								//Checar el status de esta competencia
+								if(count($studentProgress) == 0) {
+									$status = "Empezar";
+									$statusClass = "notStarted";
 								} else {
-									$isCompleted = $c->isCompetenceCompleted($studentProgress);
-									if($isCompleted == true) {
-										$status = "Completado";
-										$statusClass = "finished";
+									$isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
+									if($isBlocked == true) {
+										$status = "Bloqueado";
+										$statusClass = "blocked";
 									} else {
-										$status = "Continuar";
-										$statusClass = "started";
+										$isCompleted = $c->isCompetenceCompleted($studentProgress);
+										if($isCompleted == true) {
+											$status = "Completado";
+											$statusClass = "finished";
+										} else {
+											$status = "Continuar";
+											$statusClass = "started";
+										}
 									}
 								}
-							}
-							if($statusClass == "finished" || $statusClass == "blocked"){
-								echo "<li><a class='$statusClass'>$status</a> <span> $competenceName </span> </li>";
-							}else{
-								echo "<li><a href='answer.php?c=$competenceId&g=$groupId' class='$statusClass'>$status</a> <span> $competenceName </span> </li>";
-							}
-							
-						}
+								if($statusClass == "finished" || $statusClass == "blocked"){
+									echo "<li><a class='$statusClass'>$status</a> <span> $competenceName </span> </li>";
+								}else{
+									echo "<li><a href='answer.php?c=$competenceId&g=$groupId' class='$statusClass'>$status</a> <span> $competenceName </span> </li>";
+								}
 
-						echo "</ul></div>";
+							}
+
+							echo "</ul></div>";
+						}
 					}
 					?>
 				</div>
