@@ -20,7 +20,7 @@ class Competence {
 
 		return null;
 
-	}	
+	}
 
 	public function getWebsInCompetence($competenceId = null){
 		if ($competenceId == null) return;
@@ -145,7 +145,7 @@ class Competence {
 
 	/* Metodos para estudiantes*/
 	public function validateStudentCanAnswer($studentId, $groupId, $competenceId){
-		
+
 		//Ver que el estudiante si este en ese grupo
 		$u = new User();
 
@@ -193,17 +193,17 @@ class Competence {
 		return false;
 	}
 
-	function shuffle_assoc($list) { 
-		if (!is_array($list)) return $list; 
+	function shuffle_assoc($list) {
+		if (!is_array($list)) return $list;
 
-		$keys = array_keys($list); 
-		shuffle($keys); 
-		$random = array(); 
-		foreach ($keys as $key) { 
-			$random[$key] = $list[$key]; 
+		$keys = array_keys($list);
+		shuffle($keys);
+		$random = array();
+		foreach ($keys as $key) {
+			$random[$key] = $list[$key];
 		}
-		return $random; 
-	} 
+		return $random;
+	}
 
 	public function startCompetence($studentId, $groupId, $competenceId) {
 		$w = new Web();
@@ -215,7 +215,7 @@ class Competence {
 
 
 		//Para llenar registros para tabla 'questionsforstudent' hay que crear una secuancia unica de preguntas para este estudiante
-		
+
 		//1. Traer redes de competencia
 		$websInCompetence = $this->getWebsInCompetence($competenceId);
 		//2. Traer preguntas de red
@@ -237,14 +237,14 @@ class Competence {
 		//Llenar student progress que mantiene la informacion del progreso
 		//del alumno en las redes de esa competencia
 		foreach ($questionsInWebs as $webId => $questions) {
-			
+
 			$firstQuestion = 0;
 			$lastQuestion = 0;
 			$i=0;
 			try{
 
 				foreach ($questions as $questionId => $level) {
-					//Llenar registros en questionsforstudent. 
+					//Llenar registros en questionsforstudent.
 					//Lista random unica para cada estudiante con su combinacion de preguntas por red
 
 					$fields = array('level' => intval($level), 'questionId' => intval($questionId));
@@ -329,5 +329,7 @@ class Competence {
 		return $isBlocked;
 	}
 
-
+	public function unlockCompetence($studentId, $groupId, $competenceId) {
+		
+	}
 }

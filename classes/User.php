@@ -223,4 +223,17 @@ class User {
 		}
 	}
 
+	public function getBlockedStudents($groupsIds = null) {
+		$idList = implode(",", $groupsIds);
+
+		$sql = "SELECT * FROM studentrecord SR JOIN user U ON U.id = SR.studentId WHERE groupId IN ($idList) AND isBlocked=1 GROUP BY studentId";
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}
+
+		return array();
+	}
+
 }

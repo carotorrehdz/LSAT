@@ -4,10 +4,11 @@
 
     <nav>
       <ul class="side-nav">
-        <li class="heading">Groups</li>
+        <li class="heading">Grupos</li>
         <li><a href="groups.php">Mis grupos </a></li>
         <li><a href="createGroup.php">Crear nuevo grupo</a></li>
         <li><a href="assignCompetences.php">Asignar competencias</a></li>
+        <li><a href="unlockStudent.php">Desbloquear alumno</a></li>
 
         <li class="divider"></li>
 
