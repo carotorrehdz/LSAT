@@ -653,7 +653,7 @@ if(Input::exists()) {
 			$groupId = Input::get('g');
 			$name = Input::get('name');
 
-			$g = new Group();
+			$g = new Groups();
 			$g->update($groupId, array("name" => $name));
 
 		} catch(Exception $e) {

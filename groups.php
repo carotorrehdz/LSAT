@@ -14,7 +14,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Groups</title>
+  <title>LSAT | Grupos</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -35,12 +35,9 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
          <thead> 
            <tr> 
              <th width="300">Grupo</th> 
-             <th width="200">Periodo</th> 
              <th width="300">Editar</th> 
            </tr> 
          </thead>
-
-          
 
          <tbody> 
            <?php
@@ -48,11 +45,9 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
 
               echo "<tr id='$group->id'> 
                     <td> <a href='group.php?id=$group->id'> $group->name </a> </td>
-                    <td> $group->term </td>
-                    <td> <a onclick=\"editGroup($group->id);\" class='tiny button secondary'>Editar</a> </td> 
+                    <td> <a href='editGroup.php?g=$group->id' class='tiny button secondary'>Editar</a> </td> 
                     </tr>";
               }
-
          ?>
 
        </tbody>

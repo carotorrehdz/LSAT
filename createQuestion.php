@@ -35,7 +35,7 @@ $topics = $topic->getTopics();
           <div class="row">
             <div class="large-12 columns">
               <label>Texto de la pregunta
-                <textarea  id="qtext" name="text"></textarea>
+                <textarea id="qtext" name="text" style="width:100%"></textarea>
               </label>
             </div>
           </div>
@@ -53,9 +53,9 @@ $topics = $topic->getTopics();
               <label>Dificultad
                 <select id="qgrade" name="grade">
                   <?php
-                    foreach ($difficulties as $item) {
-                      echo "<option value='$item->id'>$item->name</option>";
-                    }
+                  foreach ($difficulties as $item) {
+                    echo "<option value='$item->id'>$item->name</option>";
+                  }
                   ?>
                 </select>
               </label>
@@ -65,9 +65,9 @@ $topics = $topic->getTopics();
               <label>Tema
                 <select id="qtopic" name="topic">
                   <?php
-                    foreach ($topics as $item) {
-                      echo "<option value='$item->id'>$item->name</option>";
-                    }
+                  foreach ($topics as $item) {
+                    echo "<option value='$item->id'>$item->name</option>";
+                  }
                   ?>
                 </select>
               </label>
@@ -171,45 +171,63 @@ $topics = $topic->getTopics();
 
   <script src="js/vendor/jquery.js"></script>
   <script src="js/foundation.min.js"></script>
-  <script>
-    $(document).foundation();
+  <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="js/quill/quill.min.js"></script>
+  <script type="text/javascript">
+    /*
+    tinymce.init({
+      selector: "#qtext",
+      plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern"
+      ],
+      toolbar1: "insertfile undo redo | forecolor backcolor emoticons | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+      image_advtab: true
+    });
+    */
+    
+</script>
+<script>
+  $(document).foundation();
 
-    function createQuestion(){
+  function createQuestion(){
 
-      var fields = $("#newQuestion").serializeArray();
-      console.log(fields);
+    var fields = $("#newQuestion").serializeArray();
+    console.log(fields);
 
 
-      var topic  = $("#qtopic").val();
-      var grade  = $("#qgrade").val();
-      var url    = $("#qurl").val();
-      var text   = $("#qtext").val();
+    var topic  = $("#qtopic").val();
+    var grade  = $("#qgrade").val();
+    var url    = $("#qurl").val();
+    var text   = $("#qtext").val();
 
-      var len = fields.length,
-      dataObj = {};
+    var len = fields.length,
+    dataObj = {};
 
-      for (i=0; i<len; i++) {
-        dataObj[fields[i].name] = fields[i].value;
-      }
-
-      var data = JSON.stringify(dataObj);
-      console.log(data);
-
-      $.post( "controls/doAction.php", {  action: "createQuestion",
-        data: data})
-      .done(function( data ) {
-
-        data = JSON.parse(data);
-        if(data.message == 'success'){
-          alert("La pregunta fue creada");
-          window.location.reload();
-        }else{
-          alert("Error: \n\n" + data.message);
-        }
-
-      });
+    for (i=0; i<len; i++) {
+      dataObj[fields[i].name] = fields[i].value;
     }
 
-  </script>
+    var data = JSON.stringify(dataObj);
+    console.log(data);
+
+    $.post( "controls/doAction.php", {  action: "createQuestion",
+      data: data})
+    .done(function( data ) {
+
+      data = JSON.parse(data);
+      if(data.message == 'success'){
+        alert("La pregunta fue creada");
+        window.location.reload();
+      }else{
+        alert("Error: \n\n" + data.message);
+      }
+
+    });
+  }
+
+</script>
 </body>
 </html>
