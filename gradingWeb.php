@@ -59,7 +59,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
 								$answersForQuestion = $answers[$question->id];
 								$maxLevel = count($levels);
 								$options = "";
-								for ($i=1-$level; $i <=$maxLevel-$level; $i++) { 
+								for ($i=1-$level; $i <= 0; $i++) {
 									$options .= "<option value='$i'>$i</option>";
 								}
 								foreach($answersForQuestion as $a){
