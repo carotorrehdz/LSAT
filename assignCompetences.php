@@ -44,7 +44,7 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
               }
 
             }
-            echo "</ul><a href='#' onclick='showAvailableCompetences($group->id)'>+</a></div></div>";
+            echo "</ul><a href='#' onclick='showAvailableCompetences($group->id)'>Asignar competencia</a></div></div>";
           }
           ?>
 
