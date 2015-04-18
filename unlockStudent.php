@@ -81,8 +81,6 @@ $blockedStudentsByGroup = $user->getBlockedStudents($groupsIds);
         if(data.message == 'error'){
           alert("Error: \n\n" + data.message);
         }else{
-          console.log(data);
-          //Llevar al explorador de la red para mostrar detalle de la red creada
           window.location.reload();
         }
       });
