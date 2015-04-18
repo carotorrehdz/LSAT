@@ -225,15 +225,22 @@ class User {
 
 	public function getBlockedStudents($groupsIds = null) {
 		$idList = implode(",", $groupsIds);
+		$studentsBlockedByGroup = array();
 
-		$sql = "SELECT * FROM studentrecord SR JOIN user U ON U.id = SR.studentId WHERE groupId IN ($idList) AND isBlocked=1 GROUP BY studentId";
-		if(!$this->_db->query($sql, array())->error()) {
-			if($this->_db->count()) {
-				return $this->_db->results();
+		foreach($groupsIds as $groupId) {
+			$sql = "SELECT U.username, U.id as studentId, SR.competenceId, C.name as competenceName, G.name as groupName FROM
+			`user` U JOIN `studentrecord` SR ON U.id = SR.studentId
+			JOIN `competence` C ON SR.competenceId = C.id
+			JOIN `groups` G ON G.id = SR.groupId
+			WHERE groupId = $groupId AND isBlocked=1 GROUP BY studentId";
+			if(!$this->_db->query($sql, array())->error()) {
+				if($this->_db->count()) {
+					$studentsBlockedByGroup[$groupId] = $this->_db->results();
+				}
 			}
 		}
 
-		return array();
+	return $studentsBlockedByGroup;
 	}
 
 }

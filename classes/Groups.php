@@ -69,6 +69,12 @@ class Groups {
 		}
 	}
 
+	public function update($groupId, $fields = array()) {
+		if(!$this->_db->update($this->_tableName, $groupId, $fields)) {
+			throw new Exception('There was a problem updating.');
+		}
+	}
+
 	public function data() {
 		return $this->_data;
 	}

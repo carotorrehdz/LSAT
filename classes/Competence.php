@@ -330,6 +330,47 @@ class Competence {
 	}
 
 	public function unlockCompetence($studentId, $groupId, $competenceId) {
-		
+
+		try{
+				$u = new User();
+				$sp = $u->getStudentProgress($studentId, $groupId, $competenceId);
+				$ids = array();
+
+				foreach ($sp as $key => $studentprogress) {
+						$firstQ = $studentprogress->firstQuestion;
+						$lastQ = $studentprogress->lastQuestion;
+						array_push($ids, $studentprogress->id);
+
+
+						$sql = "DELETE FROM questionsforstudent WHERE id BETWEEN ? AND ?";
+
+						if($this->_db->query($sql, array($firstQ, $lastQ))->error()) {
+							throw new Exception('There was a problem deleting questionsforstudent.');
+						}
+				}
+
+				$idsList = implode(",", $ids);
+
+				$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
+
+				if($this->_db->query($sql, array())->error()) {
+					throw new Exception('There was a problem deleting studentprogres.');
+				}
+
+				$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
+
+				if($this->_db->query($sql, array())->error()) {
+					throw new Exception('There was a problem deleting studentrecord.');
+				}
+
+		}
+
+		catch(Exception $e) {
+			$response = array( "message" => "Error:015 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+
 	}
+
 }

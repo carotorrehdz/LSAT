@@ -617,6 +617,55 @@ if(Input::exists()) {
 		echo json_encode($response);
 		break;
 
+		case "unlockStudent":
+
+		$user = new User();
+		/*Solo un maestro puede hacerlo*/
+		if($user->data()->role != 'teacher'){ return; }
+
+		try{
+
+			$studentId = Input::get('sId');
+			$competenceId = Input::get('cId');
+			$groupId = Input::get('gId');
+
+			$c = new Competence();
+			$c->unlockCompetence($studentId, $groupId, $competenceId);
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:013 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+
+		break;
+
+		case "updateGroup":
+
+		$user = new User();
+		/*Solo un maestro puede hacerlo*/
+		if($user->data()->role != 'teacher'){ return; }
+
+		try{
+
+			$groupId = Input::get('g');
+			$name = Input::get('name');
+
+			$g = new Group();
+			$g->update($groupId, array("name" => $name));
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:014 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+
+		break;
+
 
 		default:
 		echo "Error: 002";
