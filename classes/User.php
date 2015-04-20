@@ -100,6 +100,7 @@ class User {
 
 	}
 
+	/*Regresa la informacion de los grupos en los que esta inscrito un alumno y las cometencias que tiene asignadas*/
 	public function getInformationForStudent($studentId = null) {
 		$sql = "SELECT U.username as professorName, G.id as groupId, G.name as groupName, GROUP_CONCAT(C.name SEPARATOR ', ')as competences,  GROUP_CONCAT(CONVERT(C.id, CHAR(8)) SEPARATOR ', ') as competencesIds  FROM
 		`studentsingroup` SG JOIN `groups` G ON  SG.groupId = G.id
@@ -223,6 +224,7 @@ class User {
 		}
 	}
 
+
 	public function getBlockedStudents($groupsIds = null) {
 		$idList = implode(",", $groupsIds);
 		$studentsBlockedByGroup = array();
@@ -241,6 +243,18 @@ class User {
 		}
 
 	return $studentsBlockedByGroup;
+	}
+
+	public function getStudentsUserData($studentIdList = ""){
+
+		$sql = "SELECT id, username, mail, idNumber FROM user WHERE id IN ($studentIdList)";
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
+		}else{
+			return array();
+		}
 	}
 
 }

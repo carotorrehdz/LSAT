@@ -44,7 +44,7 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
             }
 
           }
-          echo "</ul><a href='#' onclick='showAvailableCompetences($group->id)'>Asignar competencia</a></div></div>";
+          echo "</ul><a onclick='showAvailableCompetences($group->id)'>Asignar competencia</a></div></div>";
         }
         ?>
 
@@ -54,7 +54,7 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
           <ul>
             <?php
             foreach ($teacherCompetences as $competence) {
-              echo "<li name='$competence->id'>$competence->name <a href='#' onclick='addCompetence($competence->id)'>+</a> </li>";
+              echo "<li name='$competence->id'>$competence->name <a onclick='addCompetence($competence->id)'>+</a> </li>";
             }
             ?>
           </ul>

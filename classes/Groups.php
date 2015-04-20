@@ -63,6 +63,25 @@ class Groups {
 		return $details;
 	}
 
+	//Regresa una lista separada por comas de los ids de los alumnos que estan inscritos a ese grupo
+	public function getAllStudentsIdsFromGroup($groupId = null) {
+
+		$sql = "SELECT GROUP_CONCAT(studentId SEPARATOR ', ') as studentIds FROM studentsingroup WHERE groupId = $groupId GROUP BY groupId";
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count()) {
+				return $this->_db->first()->studentIds;
+			}
+		}else{
+			return "";
+		}
+	}
+
+	public function getAllStudentsFromGroup($groupId = null){
+		$studentIds = $this->getAllStudentsIdsFromGroup($groupId);
+		$u = new User();
+		return $u->getStudentsUserData($studentIds);
+	}
+
 	public function create($fields = array()) {
 		if(!$this->_db->insert($this->_tableName, $fields)) {
 			throw new Exception('There was a problem creating the group.');

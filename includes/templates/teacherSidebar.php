@@ -28,6 +28,11 @@
         <li><a href="competences.php">Mis competencias</a></li>
         <li><a href="newCompetence.php">Crear nueva competencia</a></li>
 
+        <li class="divider"></li>
+
+        <li class="heading">Estadisticas</li>
+        <li><a href="groupStats.php">Avance por grupo</a></li>
+
       </ul>
     </nav>
 

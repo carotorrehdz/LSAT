@@ -603,3 +603,35 @@ a.finished{
 .blockedStudent div.body{
   padding: 5px;
 }
+
+
+.stats .progress ul{
+  list-style: none;
+}
+
+.stats .progress ul li{
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  float: left;
+  line-height: 20px;
+  text-align: center;
+}
+.stats .progress ul li:hover{
+  box-shadow: 0 0 3px #1843E0;
+}
+
+.stats .progress .notStarted{
+  background: #C4D1FC;
+}
+
+.stats .progress .started{
+  background: #4CB7FF;
+}
+
+.stats .progress .blocked{
+  background: #FF802B;
+}
+.stats .progress .finished{
+  background: #6EBA1D;
+}
