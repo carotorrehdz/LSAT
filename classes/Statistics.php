@@ -20,6 +20,7 @@ class Statistics {
 			//Obtener competencias asigandas al grupo
 			$competences = $g->getCompetencesForGroup($groupId);
 
+
 			//Obtener lista de estudiantes del grupo
 			$students = $g->getAllStudentsFromGroup($groupId);
 			//$students = $u->getStudentsUserData($studentsIds);
@@ -27,48 +28,51 @@ class Statistics {
 			$results["activeCompNumber"] = count($competences);
 			$studentsProgress = array();
 
-			//Obtener el progreso de cada estudiante en cada competencia
-			foreach ($students as $key => $student) {
-				$competencesDetails = array();
-				foreach ($competences as $key => $competence) {
-
-					$studentId = $student->id;
-					$competenceId = $competence->id;
-					$status = 0;
-
-					$studentProgress = $u->getStudentProgress($studentId, $groupId, $competenceId);
-	           		//El status indica cual es el avance del alumno en esa competencia
-	           		//  0 - No ha empezado a contestar
-	           		//  1 - Empezado, pero aun no termina
-	           		//  2 - Termino de contestar la competencia
-	           		// -1 - Esta bloqueado
-
-           			//Checar el status de esta competencia
-					if(count($studentProgress) == 0) {
+			if ($results["activeCompNumber"] > 0) {
+				//Obtener el progreso de cada estudiante en cada competencia
+				foreach ($students as $key => $student) {
+					$competencesDetails = array();
+					foreach ($competences as $key => $competence) {
+						$studentId = $student->id;
+						$competenceId = $competence->id;
 						$status = 0;
-					} else {
-						$isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
-						if($isBlocked == true) {
-							$status = -1;
+
+						$studentProgress = $u->getStudentProgress($studentId, $groupId, $competenceId);
+		           		//El status indica cual es el avance del alumno en esa competencia
+		           		//  0 - No ha empezado a contestar
+		           		//  1 - Empezado, pero aun no termina
+		           		//  2 - Termino de contestar la competencia
+		           		// -1 - Esta bloqueado
+
+	           			//Checar el status de esta competencia
+						if(count($studentProgress) == 0) {
+							$status = 0;
 						} else {
-							$isCompleted = $c->isCompetenceCompleted($studentProgress);
-							if($isCompleted == true) {
-								$status = 2;
+							$isBlocked = $c->isCompetenceBlocked($studentId, $groupId, $competenceId);
+							if($isBlocked == true) {
+								$status = -1;
 							} else {
-								$status = 1;
+								$isCompleted = $c->isCompetenceCompleted($studentProgress);
+								if($isCompleted == true) {
+									$status = 2;
+								} else {
+									$status = 1;
+								}
 							}
 						}
-					}
 
-					$competencesDetails[$competenceId] = array($status, $competence->name);
+						$competencesDetails[$competenceId] = array($status, $competence->name);
 
-			} //foreach competencias
+					} //foreach competencias
 
-			$studentsProgress[$studentId] = array($student, $competencesDetails);
+					$studentsProgress[$studentId] = array($student, $competencesDetails);
 
-		} //foreach estudiantes
+				} //foreach estudiantes
 
-		$results["students"] = $studentsProgress;
+				$results["students"] = $studentsProgress;
+			} else {
+				$results["students"] = null;
+			}
 
 	} catch(Exception $e) {
 		die(array());
