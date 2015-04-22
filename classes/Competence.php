@@ -164,7 +164,19 @@ class Competence {
 	}
 
 	public function isCompetencePublishedAndBelongsToGroup($groupId, $competenceId) {
-		$sql = "SELECT * FROM  `competenceingroup` CG JOIN `competence` C ON CG.competenceId = C.id WHERE CG.groupId = $groupId AND C.id = $competenceId";
+		$sql = "SELECT * FROM  competenceingroup CG JOIN competence C ON CG.competenceId = C.id WHERE CG.groupId = $groupId AND C.id = $competenceId";
+
+		if(!$this->_db->query($sql, array())->error()) {
+			if($this->_db->count() && $this->_db->count() == 1) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public function competenceExistsInGroup($groupId, $competenceId) {
+		$sql = "SELECT * FROM  competenceingroup  WHERE groupId = $groupId AND competenceId = $competenceId";
 
 		if(!$this->_db->query($sql, array())->error()) {
 			if($this->_db->count() && $this->_db->count() == 1) {

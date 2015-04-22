@@ -605,11 +605,11 @@ a.finished{
 }
 
 
-.stats .progress ul{
+.stats .progr ul{
   list-style: none;
 }
 
-.stats .progress ul li{
+.stats .progr ul li{
   width: 20px;
   height: 20px;
   margin: 0;
@@ -617,21 +617,36 @@ a.finished{
   line-height: 20px;
   text-align: center;
 }
-.stats .progress ul li:hover{
+
+.stats .progr ul li:first-child{
+  border-radius: 6px 0 0 6px;
+}
+
+.stats .progr ul li:last-child{
+  border-radius: 0 6px 6px 0;
+}
+
+.stats .progr ul li:only-child{
+ border-radius: 6px; 
+}
+
+.stats .progr ul li:hover{
   box-shadow: 0 0 3px #1843E0;
 }
 
-.stats .progress .notStarted{
-  background: #C4D1FC;
+.stats .progr .notStarted{
+  background: #DADADA;
 }
 
-.stats .progress .started{
+.stats .progr .started{
   background: #4CB7FF;
 }
 
-.stats .progress .blocked{
+.stats .progr .blocked{
   background: #FF802B;
 }
-.stats .progress .finished{
+.stats .progr .finished{
   background: #6EBA1D;
 }
+
+.stats table tr, .stats table td  { line-height: 10px; }

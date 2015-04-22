@@ -34,16 +34,16 @@ class Statistics {
 					$competencesDetails = array();
 					foreach ($competences as $key => $competence) {
 						$studentId = $student->id;
-						$competenceId = $competence->id;
+						$competenceId = $competence->competenceId;
 						$status = 0;
-
+						
 						$studentProgress = $u->getStudentProgress($studentId, $groupId, $competenceId);
 		           		//El status indica cual es el avance del alumno en esa competencia
 		           		//  0 - No ha empezado a contestar
 		           		//  1 - Empezado, pero aun no termina
 		           		//  2 - Termino de contestar la competencia
 		           		// -1 - Esta bloqueado
-
+						//var_dump($studentProgress);
 	           			//Checar el status de esta competencia
 						if(count($studentProgress) == 0) {
 							$status = 0;

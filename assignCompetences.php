@@ -106,7 +106,7 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
     $.post( "controls/doAction.php", {  action: "addCompetenceToGroup", competenceId: competenceId, groupId: currentGroup})
     .done(function( data ) {
       data = JSON.parse(data);
-      if(data.message == 'error'){
+      if(data.message != 'success'){
         alert("Error: \n\n" + data.message);
       }else{
         window.location.reload();

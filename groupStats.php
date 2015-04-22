@@ -59,22 +59,22 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
               echo "<tr sid='$studentId'>
               <td> $studentInfo->idNumber </td>
               <td> $studentInfo->username </td>
-              <td class='progress'><ul>";
+              <td class='progr'><ul>";
                 foreach ($competencesDetails as $competenceId => $cdata) {
                   $status = $cdata[0];
                   $competenceName = $cdata[1];
                   switch ($status) {
                     case 0:
-                    echo "<li id='$competenceId' title='$competenceName' class='notStarted'> $status  </li>";
+                    echo "<li id='$competenceId' title='No ha empezado - $competenceName' class='notStarted'>  </li>";
                     break;
                     case 1:
-                    echo "<li id='$competenceId' title='$competenceName' class='started'> $status  </li>";
+                    echo "<li id='$competenceId' title='Incompleta - $competenceName' class='started'>  </li>";
                     break;
                     case 2:
-                    echo "<li id='$competenceId' title='$competenceName' class='finished'> $status  </li>";
+                    echo "<li id='$competenceId' title='Terminada - $competenceName' class='finished'>  </li>";
                     break;
                     case -1:
-                    echo "<li id='$competenceId' title='$competenceName' class='blocked'> $status  </li>";
+                    echo "<li id='$competenceId' title='Asesoria - $competenceName' class='blocked'>  </li>";
                     break;
                   }
 
