@@ -100,7 +100,11 @@ foreach ($answersIds as $answerId){
 					<!-- Default panel contents -->
 					<h4 id="text">
 						<?php
-						echo "$nextQuestion->text"
+						echo "$nextQuestion->text";
+						$urlImage = $nextQuestion->urlImage;
+						if (!empty($urlImage)) {
+							echo "<img src='$urlImage' style='display: block;'>";
+						}
 						?>
 					</h4>
 
@@ -109,8 +113,16 @@ foreach ($answersIds as $answerId){
 						foreach($answersInfo as $a){
 							$text = $a[0]->text;
 							$answerId = $a[0]->id;
-							$feedback = $a[0]->textFeedback;
-							echo "<li><input id=$answerId type='radio' name='answer'> <span> $text </span> <span> $feedback </span> </input></li>";
+							$urlImage = $a[0]->urlImage;
+							echo "<li>
+											<div class='row'>
+											<div class='large-12 columns'>
+													<input id=$answerId type='radio' name='answer'>
+													<label> $text </label>";
+							if (!empty($urlImage)) {
+								echo "<img src='$urlImage' style='display: block;'>";
+							}
+							echo "</div> </div> </li>";
 						}
 						?>
 					</ul>
@@ -122,9 +134,11 @@ foreach ($answersIds as $answerId){
 						$answerId = $a[0]->id;
 						$textFeedback = $a[0]->textFeedback;
 						$imageFeedback = $a[0]->imageFeedback;
-						echo "<div id=a-$answerId class='panel' style='display: none'>";
-						echo "<span>$textFeedback</span>";
-						echo "<img src='$imageFeedback'></div>";
+						echo "<div id=a-$answerId class='panel' style='display: none'> <h4>Retroalimentaci&oacuten</h4> <span>$textFeedback</span>";
+						if (!empty($imageFeedback)) {
+							echo "<img src='$imageFeedback'>";
+						}
+						echo "</div>";
 					}
 				?>
 
