@@ -109,13 +109,27 @@ foreach ($answersIds as $answerId){
 						foreach($answersInfo as $a){
 							$text = $a[0]->text;
 							$answerId = $a[0]->id;
-							echo "<li><input id=$answerId type='radio' name='answer'> <span> $text </span> </input></li>";
+							$feedback = $a[0]->textFeedback;
+							echo "<li><input id=$answerId type='radio' name='answer'> <span> $text </span> <span> $feedback </span> </input></li>";
 						}
 						?>
 					</ul>
 
 				</div>
-				<a href="#" onclick="answerQuestion()" class="button round small right">Siguiente</a>
+
+				<?php
+					foreach($answersInfo as $a){
+						$answerId = $a[0]->id;
+						$textFeedback = $a[0]->textFeedback;
+						$imageFeedback = $a[0]->imageFeedback;
+						echo "<div id=a-$answerId class='panel' style='display: none'>";
+						echo "<span>$textFeedback</span>";
+						echo "<img src='$imageFeedback'></div>";
+					}
+				?>
+
+				<a id="answerBtn" href="#" onclick="answerQuestion()" class="button round small right">Contestar</a>
+				<a id="nextQBtn" href="#" onclick="nextQuestion()" class="button round small right" style="display:none">Siguiente</a>
 
 			</div>
 		</div>
@@ -129,38 +143,43 @@ foreach ($answersIds as $answerId){
 	<script>
 		$(document).foundation();
 
+		function nextQuestion() {
+			window.location.reload();
+		}
 
 		function answerQuestion(){
-			var c = <?php
-			if (isset($competenceId)) {
-				echo "$competenceId";
-			}else{
-				echo "-1";
-			}
+			var c =
+			<?php
+				if (isset($competenceId)) {
+					echo "$competenceId";
+				}else{
+					echo "-1";
+				}
 			?>;
-			var qfs = <?php
-			if (isset($questionForStudentId)) {
-				echo "$questionForStudentId";
-			}else{
-				echo "-1";
-			}
+			var qfs =
+			<?php
+				if (isset($questionForStudentId)) {
+					echo "$questionForStudentId";
+				}else{
+					echo "-1";
+				}
 			?>;
-			var w = <?php
-			if (isset($webId)) {
-				echo "$webId";
-			}else{
-				echo "-1";
-			}
+			var w =
+			<?php
+				if (isset($webId)) {
+					echo "$webId";
+				}else{
+					echo "-1";
+				}
 			?>;
-
-			var sp = <?php
-			if (isset($sp)) {
-				echo "$sp";
-			}else{
-				echo "-1";
-			}
+			var sp =
+			<?php
+				if (isset($sp)) {
+					echo "$sp";
+				}else{
+					echo "-1";
+				}
 			?>;
-
 			var a = $("input[name=answer]:checked").attr("id");
 
 			if(a == undefined){
@@ -168,11 +187,16 @@ foreach ($answersIds as $answerId){
 			}else{
 				$.post( "controls/doAction.php", { action:"answerQuestion", c:c, qfs:qfs , w:w , a:a, sp:sp  })
 				.done(function( data ) {
-					//console.log(data);
+					console.log(data);
 					data = JSON.parse(data);
 					if(data.message == 'success'){
-						window.location.reload();
-					}else{
+						$("#a-"+a).css("display", "");
+
+						//No se si la respuesta correcta tambien tenga feedback o no
+						//Por eso estoy forzando a que le den click a Siguiente despues de mostrar el feedback de la respuesta correcta
+						$("#answerBtn").css("display", "none");
+						$("#nextQBtn").css("display", "");
+					} else {
 						alert("There was an error: " + data.message);
 					}
 
