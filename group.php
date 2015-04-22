@@ -18,7 +18,7 @@ if(!$isOwner){
 $group = $groups->getGroupById($groupId);
 //Las competencias asignadas a este grupo
 $competences = $groups->getCompetencesForGroup($groupId);
-//var_dump($competences);
+
 ?>
 
 <!doctype html>
@@ -38,9 +38,9 @@ $competences = $groups->getCompetencesForGroup($groupId);
       <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
         <h3>Detalle de grupo <?php echo $group->name ?></h3>
-        <h4 class="subheader">Administracion de grupos</h4>
+        <h4 class="subheader">Competencias asignadas</h4>
         <hr>  
-        <ul>
+        <ol>
           <?php
           if($competences != null){
 
@@ -53,7 +53,7 @@ $competences = $groups->getCompetencesForGroup($groupId);
           }
           
           ?>
-        </ul>
+        </ol>
         
       </div>
     </div>

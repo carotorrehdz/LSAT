@@ -128,10 +128,9 @@ if ($webId != ''){
 
                 <div id="questionModal" class="reveal-modal small" data-reveal>
                   <div id="questionDetail" class="panel">
-                    <!-- Default panel contents -->
-                    <h4 id="text"></h4>
 
-                    <!-- Table -->
+                    <p id="text"></p>
+
                     <table class="questionDetails">
                       <thead>
                         <tr>

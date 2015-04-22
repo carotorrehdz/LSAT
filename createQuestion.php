@@ -13,8 +13,9 @@ $topics = $topic->getTopics();
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | New Question</title>
+  <title>LSAT | Crear pregunta</title>
   <?php include 'includes/templates/headTags.php' ?>
+  <link rel="stylesheet" href="css/jquery.wysiwyg.css" type="text/css"/>
 </head>
 
 <body>
@@ -26,8 +27,8 @@ $topics = $topic->getTopics();
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
-        <h3>Pregunta</h3>
-        <h4 class="subheader">Crear nueva pregunta</h4>
+        <br/>
+        <h3>Crear nueva pregunta</h3>
         <hr>
 
         <form id="newQuestion">
@@ -35,7 +36,7 @@ $topics = $topic->getTopics();
           <div class="row">
             <div class="large-12 columns">
               <label>Texto de la pregunta
-                <textarea id="qtext" name="text" style="width:100%"></textarea>
+                <textarea id="qtext" name="text" style="width:100%; height: 200px;"></textarea>
               </label>
             </div>
           </div>
@@ -171,62 +172,61 @@ $topics = $topic->getTopics();
 
   <script src="js/vendor/jquery.js"></script>
   <script src="js/foundation.min.js"></script>
-  <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
-  <script type="text/javascript" src="js/quill/quill.min.js"></script>
+
+  <script type="text/javascript" src="js/jquery.wysiwyg.js"></script>
+  <script type="text/javascript" src="js/controls/wysiwyg.image.js"></script>
+  <script type="text/javascript" src="js/controls/wysiwyg.link.js"></script>
+  <script type="text/javascript" src="js/controls/wysiwyg.table.js"></script>
+
   <script type="text/javascript">
-    /*
-    tinymce.init({
-      selector: "#qtext",
-      plugins: [
-      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-      "searchreplace wordcount visualblocks visualchars code fullscreen",
-      "insertdatetime media nonbreaking save table contextmenu directionality",
-      "emoticons template paste textcolor colorpicker textpattern"
-      ],
-      toolbar1: "insertfile undo redo | forecolor backcolor emoticons | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-      image_advtab: true
-    });
-    */
-    
-</script>
-<script>
-  $(document).foundation();
 
-  function createQuestion(){
-
-    var fields = $("#newQuestion").serializeArray();
-    console.log(fields);
+    (function ($) {
+      $(document).ready(function () {
+        $('#qtext').wysiwyg({autoGrow: true, maxHeight: 400, autoSave:true, initialContent: "" });
+      });
+    })(jQuery);
 
 
-    var topic  = $("#qtopic").val();
-    var grade  = $("#qgrade").val();
-    var url    = $("#qurl").val();
-    var text   = $("#qtext").val();
+  </script>
+  <script>
+    $(document).foundation();
 
-    var len = fields.length,
-    dataObj = {};
+    function createQuestion(){
 
-    for (i=0; i<len; i++) {
-      dataObj[fields[i].name] = fields[i].value;
-    }
+      var fields = $("#newQuestion").serializeArray();
+//      console.log(fields);
 
-    var data = JSON.stringify(dataObj);
-    console.log(data);
+      var topic  = $("#qtopic").val();
+      var grade  = $("#qgrade").val();
+      var url    = $("#qurl").val();
+      var text   = $("#qtext").val();
+      console.log(text);
 
-    $.post( "controls/doAction.php", {  action: "createQuestion",
-      data: data})
-    .done(function( data ) {
+      var len = fields.length,
+      dataObj = {};
 
-      data = JSON.parse(data);
-      if(data.message == 'success'){
-        alert("La pregunta fue creada");
-        window.location.reload();
-      }else{
-        alert("Error: \n\n" + data.message);
+      for (i=0; i<len; i++) {
+        dataObj[fields[i].name] = fields[i].value;
       }
 
-    });
-  }
+      var data = JSON.stringify(dataObj);
+      console.log(data);
+
+
+      $.post( "controls/doAction.php", {  action: "createQuestion", data: data})
+      .done(function( data ) {
+
+        data = JSON.parse(data);
+        if(data.message == 'success'){
+          alert("La pregunta fue creada");
+          window.location.reload();
+        }else{
+          alert("Error: \n\n" + data.message);
+        }
+
+      });
+
+}
 
 </script>
 </body>

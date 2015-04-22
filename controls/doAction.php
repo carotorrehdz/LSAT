@@ -155,11 +155,13 @@ if(Input::exists()) {
 		try {
 			//Esto lo usamos para convertir el objeto que le mandamos con toda la informacion
             //De esta forma nos queda como un hash map en el que podemos accesar a todos los valores facilmente
-			$data = json_decode(stripslashes($_POST['data']),true);
-
+			$data = json_decode($_POST['data'],true);
 			//Datos de la pregunta
 			$text = $data['text'];
-			$url = $data['url'];
+
+			//var_dump($text);
+			$data = json_decode(stripslashes($_POST['data']),true);
+			$url  =  $data['url'];
 			$grade = $data['grade'];
 			$topic = $data['topic'];
 
@@ -493,13 +495,22 @@ if(Input::exists()) {
 
 			$competenceId = Input::get('competenceId');
 			$groupId = Input::get('groupId');
+			//Verificar que la competencia no haya sido agregada al grupo anteriormente
+			$c = new Competence();
+			if($c->competenceExistsInGroup($groupId, $competenceId) ) { 
+				$response = array( "message" => "Error: La competencia ya fue asignada a ese grupo.");
+				echo json_encode($response);
+				return; 
+			}
 
+			//Crear la relacion competencia-grupo
 			$db = DB::getInstance();
-
 			$fields = array(
 				'competenceId' 	=> intval($competenceId),
 				'groupId' => intval($groupId));
-			if(!$db->insert('competenceingroup', $fields)) {
+
+			if(!$db->insert('competenceingroup', $fields)) 
+			{
 				throw new Exception('There was a problem assigning the student to the group.');
 			}
 

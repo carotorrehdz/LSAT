@@ -11,7 +11,7 @@ class Answer {
 
 	public function create($fields = array()) {
 		if(!$this->_db->insert($this->_tableName, $fields)) {
-			throw new Exception('There was a problem creating the question.');
+			throw new Exception('There was a problem creating the answer.');
 		}
 	}
 
