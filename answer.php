@@ -96,33 +96,33 @@ foreach ($answersIds as $answerId){
 				<h4 class="subheader"><?php echo "$web->name - Nivel: $nextQuestionForStudent->level"?></h4>
 				<hr>
 
-				<div id="questionDetail" class="panel">
-					<!-- Default panel contents -->
-					<h4 id="text">
+				<div id="questionDetail" class="questionDetail" class="panel">
+					<p id="text">
 						<?php
 						echo "$nextQuestion->text";
 						$urlImage = $nextQuestion->urlImage;
 						if (!empty($urlImage)) {
-							echo "<img src='$urlImage' style='display: block;'>";
+							echo "<img src='$urlImage'>";
 						}
 						?>
-					</h4>
+					</p>
 
-					<ul style='list-style:none'>
+					<ul>
 						<?php
 						foreach($answersInfo as $a){
 							$text = $a[0]->text;
 							$answerId = $a[0]->id;
 							$urlImage = $a[0]->urlImage;
 							echo "<li>
-											<div class='row'>
-											<div class='large-12 columns'>
-													<input id=$answerId type='radio' name='answer'>
-													<label> $text </label>";
+									<div class='ansBox'>
+										<input id=$answerId type='radio' name='answer'>
+									</div>
+									<div class='ansText'>
+									<p> $text </p>";
 							if (!empty($urlImage)) {
-								echo "<img src='$urlImage' style='display: block;'>";
+									echo "<img src='$urlImage' >";
 							}
-							echo "</div> </div> </li>";
+							echo "</div> </li>";
 						}
 						?>
 					</ul>

@@ -59,7 +59,7 @@ class Groups {
 		$competences = new Competence();
 		$competencesIds = $competences->getCompetencesIdsForGroup($groupId);
 		$details = $competences->getCompetencesDetails($competencesIds);
-
+		
 		return $details;
 	}
 

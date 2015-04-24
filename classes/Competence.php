@@ -93,8 +93,7 @@ class Competence {
 		if ($competencesIds == null) return;
 
 		$ids = implode(",", $competencesIds);
-		$sql = "SELECT * FROM competence C JOIN websincompetence WC ON
-		C.id = WC.competenceId WHERE C.id IN ($ids)";
+		$sql = "SELECT * FROM competence C WHERE id IN ($ids)";
 
 		if(!$this->_db->query($sql, array())->error()) {
 			if($this->_db->count()) {

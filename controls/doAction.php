@@ -160,7 +160,8 @@ if(Input::exists()) {
 			$text = $data['text'];
 
 			//var_dump($text);
-			$data = json_decode(stripslashes($_POST['data']),true);
+			//$data = json_decode(stripslashes($_POST['data']),true);
+			//var_dump($data);
 			$url  =  $data['url'];
 			$grade = $data['grade'];
 			$topic = $data['topic'];
@@ -233,7 +234,6 @@ if(Input::exists()) {
 		$answer = new Answer();
 
 		$q = $question->getQuestion($id);
-
 		$response[] = $q[0]->text;
 		$answersIds = array($q[0]->optionA, $q[0]->optionB, $q[0]->optionC, $q[0]->optionD);
 

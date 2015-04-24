@@ -650,3 +650,48 @@ a.finished{
 }
 
 .stats table tr, .stats table td  { line-height: 10px; }
+
+
+/*Contestar alumno*/
+.questionDetail{
+
+}
+
+.questionDetail ul{
+  list-style: none;
+}
+
+.questionDetail ul li{
+  border: 1px solid #AAA;
+  margin-bottom: 5px;
+  width: 900px;
+  min-height: 100px;
+  clear: both;
+  position: relative;
+}
+
+
+.questionDetail .ansBox{
+  background: #237791;
+  text-align: center;
+  width: 20px;
+  height: 100%;
+  float: left;
+  position: absolute;
+}
+
+.questionDetail .ansBox input{
+  position: absolute;
+  top: 50%;
+  margin: 0 0 0 -6px;
+}
+
+.questionDetail .ansText{
+  width: 870px;
+  float: right;
+}
+
+.questionDetail .ansText p{
+  margin: 0;
+  padding: 0;
+}
