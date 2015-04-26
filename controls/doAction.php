@@ -39,6 +39,39 @@ if(Input::exists()) {
 		echo json_encode($response);
 		break;
 
+		case "registerTopic":
+		$name = Input::get('name');
+		$name = trim($name);
+		if($name == ""){
+			$response = array( "message" => "Nombre del tema vacio ");
+			die(json_encode($response));
+		}
+
+		$t = new Topics();
+		$t->create($name);
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+
+		break;
+
+
+		case "registerLevel":
+		$name = Input::get('name');
+		$name = trim($name);
+		if($name == ""){
+			$response = array( "message" => "Nombre del nvel vacio ");
+			die(json_encode($response));
+		}
+
+		$t = new Levels();
+		$t->create($name);
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+
+		break;
+
 		case "registerTeacher":
 		$user = new User();
 		$salt = Hash::salt(32);

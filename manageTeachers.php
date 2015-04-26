@@ -10,7 +10,7 @@ $teachers = $user->getUsersByRole('teacher');
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Template</title>
+  <title>LSAT | Maestros</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -23,18 +23,17 @@ $teachers = $user->getUsersByRole('teacher');
     <div class="row">
       <?php include 'includes/templates/adminSidebar.php' ?>
       <div class="large-9 medium-8 columns">
-        <h3>List of registered teachers</h3>
-        <h4 class="subheader"> Here you can view and edit all the registered teachers</h4>
+        <h3>Lista de todos los maestros registrados</h3>
         <hr>
 
         <table> 
          <thead> 
            <tr> 
-             <th width="300">Usename</th> 
+             <th width="300">Username</th> 
              <th width="200">Mail</th> 
-             <th width="200">Id number</th> 
-             <th width="200">Registered Date</th> 
-             <th width="300">Edit</th> 
+             <th width="200">Nomina</th> 
+             <th width="200">Fecha de registro</th> 
+             <th width="300">Editar</th> 
            </tr> 
          </thead>
 
@@ -68,22 +67,6 @@ $teachers = $user->getUsersByRole('teacher');
 <script>
   $(document).foundation();
 
-  function X(){
-    var xx  = $("#xx").val();
-
-    $.post( "controls/doAction.php", { action:"xx", xx: xx })
-    .done(function( data ) {
-      console.log(data);
-      data = JSON.parse(data);
-      if(data.message == 'success'){
-        alert("Success");
-        window.location.reload();
-      }else{
-        alert("There was an error: " + data.message);
-      }
-
-    });
-  }
 </script>
 </body>
 </html>
