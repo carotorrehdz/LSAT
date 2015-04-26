@@ -61,28 +61,62 @@ $answers = $answer->getAnswersForQuestionList($questions);
             }else{
 
             foreach($levels as $level) {
-              echo "<div class='webExplorerLevel'><h6 class='panel-title'>Nivel $level</h6> <div class='body'><ol>";
+              echo "<div class='webExplorerLevel'>
+                      <h6 class='panel-title'>Nivel $level</h6>
+                      <div class='body'>
+                        <ol>";
               foreach($questions as $question) {
                 if ($level == $questionsByLevel[$question->id]){
                   $urlImage = $question->urlImage;
-                  echo "<li class='questionForLevel'> <div class='question'> <p>$question->text</p>";
+                  echo "  <li class='questionForLevel'>
+                          <div class='question'>
+                            <p>$question->text</p>";
                   if (!empty($urlImage)) {
-                    echo "<img src='$urlImage'>";
+                    echo "  <img src='$urlImage'>";
                   }
-                  echo "</div><div class='answers'> <ul id='answersForQuestion'>";
+                  echo "  </div>
+                          <div class='answers'>
+                            <table width='100%'>
+                              <thead>
+                                <tr>
+                                  <th width='50%'>Respuesta</th>
+                                  <th width='50%'>Feedback</th>
+                                </tr>
+                              </thead>
+                              <tbody>";
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
-                    $text = $a[0]->text;
+                    $answerText = $a[0]->text;
+                    $answerImage = $a[0]->urlImage;
+                    $feedbackText = $a[0]->textFeedback;
+                    $feedbackImage = $a[0]->imageFeedback;
                     if ($a[0]->correct == 1){
-                      echo "<li> <label class='label'>Correcta</label> <span> $text </span> </li>";
+
                     } else {
-                      echo "<li> <span>$text </span> </li>";
+                      echo "  <tr>
+                                <td>
+                                  <p> $answerText </p>";
+                      if (!empty($answerImage)) {
+                        echo "    <img src='$answerImage' >";
+                      }
+                      echo "    </td>
+                                <td>
+                                  <p> $feedbackText </p>";
+                      if (!empty($feedbackImage)) {
+                        echo "    <img src='$feedbackImage' >";
+                      }
+                      echo "    </td>
+                              </tr>";
                     }
                   }
-                  echo "</ul> </li> <hr>";
+                  echo "      </tbody>
+                            </table>
+                          </div><hr>";
                 }
               }
-              echo "</ol></div>";
+              echo "    </li></ol>
+                      </div>
+                    </div>";
             }
 
             }
