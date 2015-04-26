@@ -64,7 +64,12 @@ $answers = $answer->getAnswersForQuestionList($questions);
               echo "<div class='webExplorerLevel'><h6 class='panel-title'>Nivel $level</h6> <div class='body'><ol>";
               foreach($questions as $question) {
                 if ($level == $questionsByLevel[$question->id]){
-                  echo "<li> <span>$question->text</span> <ul id='answersForQuestion'>";
+                  $urlImage = $question->urlImage;
+                  echo "<li class='questionForLevel'> <div class='question'> <p>$question->text</p>";
+                  if (!empty($urlImage)) {
+                    echo "<img src='$urlImage'>";
+                  }
+                  echo "</div><div class='answers'> <ul id='answersForQuestion'>";
                   $answersForQuestion = $answers[$question->id];
                   foreach($answersForQuestion as $a){
                     $text = $a[0]->text;
@@ -74,10 +79,10 @@ $answers = $answer->getAnswersForQuestionList($questions);
                       echo "<li> <span>$text </span> </li>";
                     }
                   }
-                  echo "</ul> </li>";
+                  echo "</ul> </li> <hr>";
                 }
               }
-              echo "</ol></div></div>";
+              echo "</ol></div>";
             }
 
             }

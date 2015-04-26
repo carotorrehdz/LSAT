@@ -23,9 +23,9 @@ class Web {
 	}
 
 	public function isWebReadyToUseInCompetence($webId = null) {
-		
+
 		$web = $this->getWeb($webId);
-		
+
 		if( $web!= null && $web->isPublished){
 			return true;
 		}
@@ -34,10 +34,11 @@ class Web {
 	}
 
 	public function getAllPublishedWebs() {
-		$db = $this->_db->get($this->_tableName, array('isPublished', '=', 1));
-
-		if($db && $db->count()) {
-			return $db->results();
+		$sql = "SELECT W.id, W.name, W.createdDate, W.isPublished, U.username as professor FROM web W JOIN user U ON W.professor = U.id WHERE isPublished = 1";
+		if(!$this->_db->query($sql)->error()) {
+			if($this->_db->count()) {
+				return $this->_db->results();
+			}
 		}
 
 		return null;

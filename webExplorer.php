@@ -33,6 +33,7 @@ $allWebs = $web->getAllPublishedWebs();
 						<tr>
 							<th width="50">ID</th>
 							<th width="300">Nombre de la red</th>
+							<th width="200">Profesor</th>
 							<th width="200">Fecha de creacion</th>
 							<th width="300">Detalle</th>
 						</tr>
@@ -44,10 +45,10 @@ $allWebs = $web->getAllPublishedWebs();
 						if($allWebs != null){
 
 							foreach ($allWebs as $web) {
-
 								echo "<tr id='$web->id'>
 								<td> $web->id </td>
 								<td> $web->name </td>
+								<td> $web->professor </td>
 								<td> $web->createdDate </td>";
 								echo "<td> <a href=\"webDetail.php?web=$web->id\" class='tiny button secondary'>Ver detalle</a> </td></tr>";
 							}
