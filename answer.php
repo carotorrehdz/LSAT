@@ -99,7 +99,7 @@ foreach ($answersIds as $answerId){
 				<div id="questionDetail" class="questionDetail" class="panel">
 					<p id="text">
 						<?php
-						echo "$nextQuestion->text";
+						echo "<p>$nextQuestion->text</p>";
 						$urlImage = $nextQuestion->urlImage;
 						if (!empty($urlImage)) {
 							echo "<img src='$urlImage'>";
