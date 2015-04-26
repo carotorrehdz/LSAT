@@ -497,10 +497,10 @@ if(Input::exists()) {
 			$groupId = Input::get('groupId');
 			//Verificar que la competencia no haya sido agregada al grupo anteriormente
 			$c = new Competence();
-			if($c->competenceExistsInGroup($groupId, $competenceId) ) { 
+			if($c->competenceExistsInGroup($groupId, $competenceId) ) {
 				$response = array( "message" => "Error: La competencia ya fue asignada a ese grupo.");
 				echo json_encode($response);
-				return; 
+				return;
 			}
 
 			//Crear la relacion competencia-grupo
@@ -509,7 +509,7 @@ if(Input::exists()) {
 				'competenceId' 	=> intval($competenceId),
 				'groupId' => intval($groupId));
 
-			if(!$db->insert('competenceingroup', $fields)) 
+			if(!$db->insert('competenceingroup', $fields))
 			{
 				throw new Exception('There was a problem assigning the student to the group.');
 			}
@@ -552,6 +552,15 @@ if(Input::exists()) {
 			if(!$db->query($sql)->error()) {
 				if($db->count()) {
 					$wic = $db->first();
+				}
+			}
+
+			//Con el id de la respuesta obtenemos su feedback
+			$feedback = null;
+			$sql = "SELECT textFeedback, imageFeedback FROM answer WHERE id = $answerId";
+			if(!$db->query($sql)->error()) {
+				if($db->count()) {
+					$feedback = $db->first();
 				}
 			}
 
@@ -624,7 +633,7 @@ if(Input::exists()) {
 			$response = array( "message" => "Error:012 ".$e->getMessage());
 			die(json_encode($response));
 		}
-		$response = array( "message" => "success");
+		$response = array( "message" => "success", "feedback" => $feedback);
 		echo json_encode($response);
 		break;
 

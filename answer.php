@@ -130,16 +130,13 @@ foreach ($answersIds as $answerId){
 				</div>
 
 				<?php
-					foreach($answersInfo as $a){
-						$answerId = $a[0]->id;
-						$textFeedback = $a[0]->textFeedback;
-						$imageFeedback = $a[0]->imageFeedback;
-						echo "<div id=a-$answerId class='panel' style='display: none'> <h4>Retroalimentaci&oacuten</h4> <span>$textFeedback</span>";
-						if (!empty($imageFeedback)) {
-							echo "<img src='$imageFeedback'>";
-						}
-						echo "</div>";
-					}
+					echo "<div id=feedback class='panel' style='display: none'>
+									<h4>Retroalimentaci&oacuten</h4>
+									<div>
+										<p id=textFeedback></p>
+										<img id=imageFeedback>
+									</div>
+								</div>";
 				?>
 
 				<a id="answerBtn" href="#" onclick="answerQuestion()" class="button round small right">Contestar</a>
@@ -201,10 +198,19 @@ foreach ($answersIds as $answerId){
 			}else{
 				$.post( "controls/doAction.php", { action:"answerQuestion", c:c, qfs:qfs , w:w , a:a, sp:sp  })
 				.done(function( data ) {
-					console.log(data);
 					data = JSON.parse(data);
+					console.log(data);
 					if(data.message == 'success'){
-						$("#a-"+a).css("display", "");
+						var feedback = data.feedback;
+						$("#textFeedback").append(feedback.textFeedback);
+
+						if (feedback.imageFeedback != "") {
+							$("#imageFeedback").attr({src : feedback.imageFeedback});
+						}
+
+						$("#feedback").css("display", "");
+
+						console.log(data.feedback);
 
 						//No se si la respuesta correcta tambien tenga feedback o no
 						//Por eso estoy forzando a que le den click a Siguiente despues de mostrar el feedback de la respuesta correcta
