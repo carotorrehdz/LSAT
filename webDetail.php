@@ -111,7 +111,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
                   }
                   echo "      </tbody>
                             </table>
-                          </div>";
+                          </div><hr>";
                 }
               }
               echo "    </li></ol>
