@@ -34,7 +34,7 @@ class Statistics {
 					$competencesDetails = array();
 					foreach ($competences as $key => $competence) {
 						$studentId = $student->id;
-						$competenceId = $competence->competenceId;
+						$competenceId = $competence->id;
 						$status = 0;
 						
 						$studentProgress = $u->getStudentProgress($studentId, $groupId, $competenceId);

@@ -117,6 +117,7 @@ $c = new Competence();
 		$(document).foundation();
 
 		function showCompetence(groupId) {
+			$("div.competences").hide();
 			var group = "#"+groupId;
 			$(group).show();
 		}

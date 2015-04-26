@@ -14,7 +14,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Estadisticas</title>
+  <title>LSAT | Estadísticas</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -27,7 +27,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns stats">
-        <h3>Estadisticas</h3>
+        <h3>Estadísticas</h3>
         <h4 class="subheader">Avance detallado de alumnos por grupo</h4>
         <hr>
 
@@ -45,7 +45,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
             echo "<table>
                     <thead>
                       <tr>
-                        <th width='300'>Matricula</th>
+                        <th width='300'>Matrícula</th>
                         <th width='300'>Nombre</th>
                         <th width='300'>Competencias</th>
                         </tr>

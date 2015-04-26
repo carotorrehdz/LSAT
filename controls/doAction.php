@@ -68,7 +68,7 @@ if(Input::exists()) {
 
 		case "createGroup":
 
-		//Necesitamos la matricula del profesor, que es el usuario logueado
+		//Necesitamos la Matrícula del profesor, que es el usuario logueado
 		$user = new User();
 		$teacherId = $user->data()->id;
 		$groupname = Input::get('groupname');

@@ -35,7 +35,7 @@ $user->checkIsValidUser('teacher');
           </div>
           <div class="row"> 
             <div class="large-12 columns"> 
-              <label>Alumnos<input id="students" type="text" placeholder="Matriculas de alumnos separadas por comas"/> </label>
+              <label>Alumnos<input id="students" type="text" placeholder="Matrículas de alumnos separadas por comas"/> </label>
             </div> 
           </div>  
           <a href="#" onclick="createGroup()" class="button round small right">Crear</a>
