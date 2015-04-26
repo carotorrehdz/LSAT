@@ -37,14 +37,17 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
 
         <?php
         foreach ($teacherGroups as $group) {
-          echo "<div class='assignCompetence' id='g-$group->id'><h6 class='panel-title'>Grupo $group->name</h6> <div class='body'><ul>";
+          echo "<div class='assignCompetence' id='g-$group->id'>
+                  <h6 class='panel-title'>Grupo $group->name</h6> 
+                  <div class='body'>
+                    <ol>";
           foreach ($groupCompetences as $competence) {
             if ($competence->groupId == $group->id){
               echo "<li name='$competence->competenceId'>$competence->name </li>";
             }
 
           }
-          echo "</ul><a onclick='showAvailableCompetences($group->id)'>Asignar competencia</a></div></div>";
+          echo "</ol><a onclick='showAvailableCompetences($group->id)'>Asignar competencia</a></div></div>";
         }
         ?>
 
@@ -54,7 +57,10 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
           <ul>
             <?php
             foreach ($teacherCompetences as $competence) {
-              echo "<li name='$competence->id'>$competence->name <a onclick='addCompetence($competence->id)'>+</a> </li>";
+              echo "<li name='$competence->id'>
+                           <a onclick='addCompetence($competence->id)'>+</a> 
+                           $competence->name 
+                    </li>";
             }
             ?>
           </ul>

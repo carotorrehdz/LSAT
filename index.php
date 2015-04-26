@@ -36,7 +36,7 @@ if ($user->isLoggedIn()){
           </div>
           <button type="submit">Login</button>
         </form>
-        <a href="recoverPassword.php">Forgot Password</a>
+        <a href="recoverPassword.php">Recuperar contraseña </a>
       </div>          
   </div>
 

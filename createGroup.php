@@ -64,7 +64,7 @@ $user->checkIsValidUser('teacher');
         data = JSON.parse(data);
         if(data.message == 'success'){
           alert("El grupo fue creado exitosamente");
-          window.location.reload();
+          window.location.replace('./groups.php');
         }else{
           alert("Error: \n\n" + data.message);
         }

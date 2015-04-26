@@ -28,7 +28,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
     <?php include 'includes/templates/teacherSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
         <h3>Grupos</h3>
-        <h4 class="subheader">Administracion de grupos</h4>
+        <h4 class="subheader">Administracion de mis grupos</h4>
         <hr>  
 
         <table> 

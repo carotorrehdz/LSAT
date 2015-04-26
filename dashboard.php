@@ -28,7 +28,7 @@ $c = new Competence();
 			<div class="large-9 medium-8 columns">
 				<br/>
 				<h3>Bienvenido <?php echo $user->data()->username ?> </h3>
-				<h4 class="subheader">Aqui puedes encontrar una lista de tus grupos y las actividades que debes contestar</h4>
+				<h4 class="subheader">Aquí puedes encontrar una lista de tus grupos y las actividades que debes contestar.</h4>
 				<hr>
 
 				<div id="studentCompetences">
