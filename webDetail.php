@@ -90,12 +90,12 @@ $answers = $answer->getAnswersForQuestionList($questions);
                     $answerImage = $a[0]->urlImage;
                     $feedbackText = $a[0]->textFeedback;
                     $feedbackImage = $a[0]->imageFeedback;
+                    echo "<tr>
+                              <td>";
                     if ($a[0]->correct == 1){
-
-                    } else {
-                      echo "  <tr>
-                                <td>
-                                  <p> $answerText </p>";
+                      echo "    <label class='label'> Correcta </label>";
+                    }
+                      echo "    <p> $answerText </p>";
                       if (!empty($answerImage)) {
                         echo "    <img src='$answerImage' >";
                       }
@@ -107,7 +107,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
                       }
                       echo "    </td>
                               </tr>";
-                    }
+                    
                   }
                   echo "      </tbody>
                             </table>
