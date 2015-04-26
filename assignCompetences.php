@@ -30,8 +30,8 @@ $groupCompetences = $competence->getCompetencesByGroupOfTeacher($teacherId);
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
+        <br/>
         <h3>Asignar competencias</h3>
-        <h4 class="subheader">Asignar competencias a los grupos</h4>
         <hr>
 
 

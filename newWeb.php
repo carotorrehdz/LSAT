@@ -40,11 +40,11 @@ if ($webId != ''){
       <div class="large-9 medium-8 columns">
         <br/>
         <?php
-          if (isset($web)) {
-            echo "<h3>Editar red</h3>";
-          }else{
-            echo "<h3>Nueva red</h3><h4 class='subheader'>Crear una nueva red de aprendizaje</h4>";
-          }
+        if (isset($web)) {
+          echo "<h3>Editar red</h3>";
+        }else{
+          echo "<h3>Nueva red</h3><h4 class='subheader'>Crear una nueva red de aprendizaje</h4>";
+        }
         ?>
 
         <hr>
@@ -58,146 +58,143 @@ if ($webId != ''){
               }else{
                 echo "";
               }
-            ?>"/></label>
+              ?>"/></label>
 
-            <div id="weblevels" class="weblevels">
-              <ul class="">
-                <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> </li>
-                <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> </li>
-                <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> </li>
-                <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> </li>
-              </ul>
-            </div>
+              <div id="weblevels" class="weblevels">
+                <ul class="">
+                  <li class="level1" onclick="changeLevel(1)"> <h5>Nivel 1</h5> </li>
+                  <li class="level2" onclick="changeLevel(2)"> <h5>Nivel 2</h5> </li>
+                  <li class="level3" onclick="changeLevel(3)"> <h5>Nivel 3</h5> </li>
+                  <li class="addLevel level10" onclick="addLevel()"> <h5> + </h5> </li>
+                </ul>
+              </div>
 
-            <div id="webStructure" class="webStructure level1">
+              <div id="webStructure" class="webStructure level1">
 
-              <div id="questionFilter" class="questionFilter">
+                <div id="questionFilter" class="questionFilter">
 
-                <div id="filter">
-                  <div class="component">
-                    Tema
-                    <select id="topic" name="topic">
-                      <?php
+                  <div id="filter">
+                    <div class="component">
+                      Tema
+                      <select id="topic" name="topic">
+                        <?php
                         foreach ($topics as $item) {
                           echo "<option value='$item->id'>$item->name</option>";
                         }
-                      ?>
-                    </select>
-                  </div>
+                        ?>
+                      </select>
+                    </div>
 
-                  <div class="component">
-                    Dificultad
-                    <select id="difficulty" name="difficulty">
-                      <?php
+                    <div class="component">
+                      Dificultad
+                      <select id="difficulty" name="difficulty">
+                        <?php
                         foreach ($difficulties as $item) {
                           echo "<option value='$item->id'>$item->name</option>";
                         }
-                      ?>
-                   </select>
+                        ?>
+                      </select>
+                    </div>
+
+                    <a href="#" onclick="filterQuestions()" class="button tiny btn">Get</a>
                   </div>
 
-                  <a href="#" onclick="filterQuestions()" class="button tiny btn">Get</a>
-                </div>
-
-                <div id="questionsForLevel">
-                  <div>
-                    <h6>Preguntas seleccionadas</h6>
-                    <ul>
-                    </ul>
+                  <div id="questionsForLevel">
+                    <div>
+                      <h6>Preguntas seleccionadas</h6>
+                      <ul>
+                      </ul>
+                    </div>
                   </div>
+
                 </div>
 
+                <div id="searchResults" class="searchResults">
+
+                  <div id="noQuestions" class="noQuestions">
+                    No has buscado ninguna pregunta
+                  </div>
+
+                  <table class="results">
+                    <thead>
+                      <tr>
+                        <th width="700">Texto Pregunta</th>
+                        <th width="80">Agregar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+
+                  <div id="questionModal" class="reveal-modal medium" data-reveal>
+
+                    <p id="qText"></p>
+                    <img id="qImage" src=""/>
+
+                    <div class="ans">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th width="400px">Respuesta</th>
+                            <th width="400px">Feedback</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <a class="close-reveal-modal">&#215;</a>
+                  </div>
+
+                </div>
+
+                <div style="clear: both;"></div>
               </div>
-
-              <div id="searchResults" class="searchResults">
-
-                <div id="noQuestions" class="noQuestions">
-                  No has buscado ninguna pregunta
-                </div>
-
-                <table class="results">
-                  <thead>
-                    <tr>
-                      <th width="700">Texto Pregunta</th>
-                      <th width="80">Agregar</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-
-                <div id="questionModal" class="reveal-modal small" data-reveal>
-                  <div id="questionDetail" class="panel">
-
-                    <p id="text"></p>
-
-                    <table class="questionDetails">
-                      <thead>
-                        <tr>
-                          <th width="250">Respuesta</th>
-                          <th width="250">Feedback</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-
-                  </div>
-                  <a class="close-reveal-modal">&#215;</a>
-                </div>
-
-              </div>
-
-              <div style="clear: both;"></div>
             </div>
-          </div>
 
-        </form>
+          </form>
 
-        <a href="#" onclick="saveWeb()" class="button round small right">Guardar</a>
-        <a href="#" onclick="publishWeb()" class="button round small right alerta">Publicar</a>
+          <a href="#" onclick="saveWeb()" class="button round small right">Guardar</a>
+          <a href="#" onclick="publishWeb()" class="button round small right alerta">Publicar</a>
 
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
+    <?php include 'includes/templates/footer.php' ?>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
 
+    <script>
+      $(document).foundation();
 
-  <?php include 'includes/templates/footer.php' ?>
-
-  <script src="js/vendor/jquery.js"></script>
-  <script src="js/foundation.min.js"></script>
-
-
-
-  <script>
-    $(document).foundation();
-
-    var webId = <?php
+      var webId = <?php
       if (isset($web)) {
         echo "$webId";
       }else{
         echo "0";
       }
-    ?>;
+      ?>;
 
-    var currentLevel = 1;
-    var maxLevels = 10;
-    var nextLevel = 4;
-    var questionsForLevel = [[],[],[],[],[],[],[],[],[],[]]; //Maximo de 10 niveles
-    var usedQuestions = [];
-    var webStructure = $("#webStructure");
-    var weblevels = $("#weblevels ul");
-    var addNewLi = $(".addLevel");
-    var noQustions = $(".noQuestions");
-    var resultsTable = $("table.results");
-    var questionsForLevelUl = $("#questionsForLevel ul");
-    var questionLiTemplate = "<li> <a class='delete' onclick='deleteQuestion($id)'> X </a> <a class='number' onclick='showQuestion($id)'>$number</a></li>";
+      var currentLevel = 1;
+      var maxLevels = 10;
+      var nextLevel = 4;
+      var questionsForLevel = [[],[],[],[],[],[],[],[],[],[]]; /*Maximo de 10 niveles*/
+      var usedQuestions = [];
+      var webStructure = $("#webStructure");
+      var weblevels = $("#weblevels ul");
+      var addNewLi = $(".addLevel");
+      var noQustions = $(".noQuestions");
+      var resultsTable = $("table.results");
+      var questionsForLevelUl = $("#questionsForLevel ul");
+      var questionLiTemplate = "<li> <a class='delete' onclick='deleteQuestion($id)'> X </a> <a class='number' onclick='showQuestion($id)'>$number</a></li>";
 
-    var questionModal = $("#questionModal");
-    var qtitle = $("#questionModal #text");
+      var questionModal = $("#questionModal");
+      var qText = $("#questionModal #qText");
+      var qImage = $("#questionModal #qImage");
 
-    if (webId != 0) {
+      if (webId != 0) {
       //Vamos a editar la red
       $.post( "controls/doAction.php", {  action: "getWebElementsForEdition", webId: webId})
       .done(function( data ) {
@@ -273,7 +270,8 @@ if ($webId != ''){
     }
 
     function showQuestion(id){
-      var template =  "<tr> <td> $text </td><td> $feedback </td> </tr>";
+      var template =  "<tr> <td> <p> $text </p> <img style='display:$dA' src='$imgA' width='100px' /> </td> <td> <p> $feedback </p>  <img style='display:$dF' src='$imgF' width='100px' /> </td> </tr>";
+
       $.post( "controls/doAction.php", {  action: "getQuestion", id: id})
       .done(function( data ) {
 
@@ -281,20 +279,42 @@ if ($webId != ''){
         if(data.message == 'error'){
           alert("Error: \n\n" + data.message);
         }else{
-        //Llenar el contenedor con los datos de la pregunta
-        qtitle.html(data[0]);
+          /*Llenar el contenedor con los datos de la pregunta*/
+          console.log(data);
+          qImage.show();
+          qText.html(data['text']);
+          qImage.attr("src", data['urlImage']);
+          if(data['urlImage'] == ""){
+            qImage.hide();
+          }
 
-        var tbody = $("table.questionDetails tbody");
-        tbody.empty();
+          var tbody = $("#questionModal .ans tbody");
+          tbody.empty();
 
-        for(i=1; i<5; i++){
-          var t = template;
-          t = t.replace("$text", data[i].text);
-          t = t.replace("$feedback", data[i].textFeedback);
-          tbody.append(t);
-        }
+          for(i=0; i<4; i++){
 
-        $('#questionModal').foundation('reveal', 'open');
+            var t = template;
+            t = t.replace("$text", data[i].text);
+            t = t.replace("$imgA", data[i].urlImage);
+            t = t.replace("$feedback", data[i].textFeedback);
+            t = t.replace("$imgF", data[i].imageFeedback);
+
+            if(data[i].urlImage == ""){
+              t = t.replace("$dA", 'none');
+            }else{
+              t = t.replace("$dA", 'block');
+            }
+
+            if(data[i].imageFeedback == ""){
+              t = t.replace("$dF", 'none');
+            }else{
+              t = t.replace("$dF", 'block');
+            }
+
+            tbody.append(t);
+          }
+
+          $('#questionModal').foundation('reveal', 'open');
 
         }
       });
@@ -322,9 +342,9 @@ if ($webId != ''){
 
     function publishWeb(){
       var r = confirm("Estas seguro que deseas publicar la red?");
-        if (r == true) {
-          createWeb(1);
-        }
+      if (r == true) {
+        createWeb(1);
+      }
     }
 
     function deleteQuestion(id){

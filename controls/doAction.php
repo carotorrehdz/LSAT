@@ -234,11 +234,12 @@ if(Input::exists()) {
 		$answer = new Answer();
 
 		$q = $question->getQuestion($id);
-		$response[] = $q[0]->text;
+		$response['text'] = $q[0]->text;
+		$response['urlImage'] = $q[0]->urlImage;
 		$answersIds = array($q[0]->optionA, $q[0]->optionB, $q[0]->optionC, $q[0]->optionD);
 
-		foreach ($answersIds as $item){
-			$answersText = $answer->getAnswer($item);
+		foreach ($answersIds as $id){
+			$answersText = $answer->getAnswer($id);
 			$response[] = $answersText[0];
 		}
 

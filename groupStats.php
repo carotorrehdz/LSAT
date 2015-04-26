@@ -27,6 +27,7 @@ $teacherGroups = $groups->getGroupsForTeacher($teacherId);
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns stats">
+        <br/>
         <h3>Estadísticas</h3>
         <h4 class="subheader">Avance detallado de alumnos por grupo</h4>
         <hr>
