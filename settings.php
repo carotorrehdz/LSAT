@@ -11,7 +11,7 @@ $user->checkIsValidUser();
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LSAT | Settings </title>
+  <title>LSAT | Mi información </title>
   <link rel="stylesheet" href="css/foundation.css" />
   <link rel="stylesheet" href="css/lsat.css" />
   <script src="js/vendor/modernizr.js"></script>
@@ -21,28 +21,39 @@ $user->checkIsValidUser();
 
   <?php include 'includes/templates/header.php' ?>
 
-  <br/><br/>
+  <section class="scroll-container" role="main">
 
-  <div class="row">
-    <div class="large-12 columns">
-     <div class="panel">
-       <h3>Settings </h3>
-       <p>View and edit your settings</p>
+    <div class="row">
 
-       
+      <?php 
+
+      if($user->data()->role == 'admin'){
+        include 'includes/templates/adminSidebar.php';
+      }else if($user->data()->role == 'teacher'){
+        include 'includes/templates/teacherSidebar.php';  
+      }else  if($user->data()->role == 'student'){
+        include 'includes/templates/studentSidebar.php';
+      }
+      
+      ?>  
+
+      <div class="large-9 medium-8 columns">
+       <br/>
+       <h3>Ver y editar mi información</h3>
+       <hr/>
+
        <h5>Username</h5>
        <input id="username" type="text" value="<?php echo $user->data()->username; ?>"> <br/>
        <h5>Mail</h5>
        <input id="mail" type="text" value="<?php echo $user->data()->mail;  ?>">
-       <h5>New password</h5>
+       <h5>Nueva contraseña</h5>
        <input id="password" pattern=".{6,}" type="password">
-       <p class="grey">Because of its encryptation we cant show you your old password, however if you decide to change it you can type a new one in the box. An empty box will result in NO change to your old password.</p>
-       <a href="#" onclick="updateSettings()" class="button">Update my settings</a>
+       <p class="grey">Por seguridad no mostramos tu antigua contraseña, si la quieres cambiar escribe una nueva. Si dejas el campo vacio tu contraseña no sera cambiada.</p>
+       <a href="#" onclick="updateSettings()" class="button">Realizar cambios</a>
 
      </div>
    </div>
- </div>
-
+ </section>
 
  <script src="js/vendor/jquery.js"></script>
  <script src="js/foundation.min.js"></script>
@@ -69,7 +80,7 @@ $user->checkIsValidUser();
       alert("There was an error: " + data.message);
     }
 
-});
+  });
 }
 
 </script>

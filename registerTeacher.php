@@ -10,7 +10,7 @@ $user->checkIsValidUser('admin');
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
-  <title>LSAT | Dashboard</title>
+  <title>LSAT | Registrar maestro</title>
   <?php include 'includes/templates/headTags.php' ?>
 </head>
 
@@ -21,17 +21,18 @@ $user->checkIsValidUser('admin');
   <section class="scroll-container" role="main">
 
     <div class="row">
-    <?php include 'includes/templates/adminSidebar.php' ?>  
+      <?php include 'includes/templates/adminSidebar.php' ?>  
       <div class="large-9 medium-8 columns">
-        <h3>Register new teacher</h3>
-        <h4 class="subheader"> Here you can register a new teacher. Watch out for duplicates.</h4>
+        <br/>
+        <h3>Registrar nuevo maestro</h3>
+        <h4 class="subheader"> Ten cuidado de no registrar profesores duplicados.</h4>
         <hr>  
         <div id="">
-         Name:
+        Nombre:
          <input id="username" type="text">
          Mail:
          <input id="mail" type="text">
-         Id number:
+         Nómina / Matrícula:
          <input id="idnumber" type="text">
          <a href="#" onclick="registerTeacher()" class="button">Register</a>
        </div>
@@ -41,26 +42,29 @@ $user->checkIsValidUser('admin');
  </section>
 
 
-<?php include 'includes/templates/footer.php' ?>
+ <?php include 'includes/templates/footer.php' ?>
 
 
-<script src="js/vendor/jquery.js"></script>
-<script src="js/foundation.min.js"></script>
-<script>
+ <script src="js/vendor/jquery.js"></script>
+ <script src="js/foundation.min.js"></script>
+ <script>
   $(document).foundation();
 
   function registerTeacher(){
-    var username  = $("#username").val();
-    var mail      = $("#mail").val();
-    var idnumber  = $("#idnumber").val();
+    var username  = $("#username").val().trim();
+    var mail      = $("#mail").val().trim();
+    var idnumber  = $("#idnumber").val().trim();
+
+    if(username == "" || mail == "" || idnumber == ""){
+      alert("No puedes dejar campos vacíos.");
+      return;
+    }
 
     $.post( "controls/doAction.php", { action:"registerTeacher", username: username, mail: mail, idnumber: idnumber })
     .done(function( data ) {
-      console.log(data);
       data = JSON.parse(data);
       if(data.message == 'success'){
-        alert("The teacher was registered");
-        window.location.reload();
+        window.location.replace('./manageTeachers.php');
       }else{
         alert("There was an error: " + data.message);
       }
