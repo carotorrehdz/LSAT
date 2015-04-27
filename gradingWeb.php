@@ -51,32 +51,71 @@ $answers = $answer->getAnswersForQuestionList($questions);
 				<!-- WAAA-->
 				<div class="">
 					<?php
-					foreach($levels as $level) {
-						echo "<div class='webExplorerLevel'><h6 class='panel-title'>Nivel $level</h6> <div class='body'><ol>";
-						foreach($questions as $question) {
-							if ($level == $questionsByLevel[$question->id]){
-								echo "<li> <span>$question->text</span> <ul id='answersForQuestion'>";
-								$answersForQuestion = $answers[$question->id];
-								$maxLevel = count($levels);
-								$options = "";
-								for ($i=1-$level; $i <= 0; $i++) {
-									$options .= "<option value='$i'>$i</option>";
-								}
-								foreach($answersForQuestion as $a){
-									$text = $a[0]->text;
-									$answerId = $a[0]->id;
-
-									if ($a[0]->correct == 1){
-										echo "<li> <label class='label answer' name='$question->id-$answerId'>Correcta</label> <span> $text </span> </li>";
-									} else {
-										echo "<li> <select class='answer' name='$question->id-$answerId'> $options </select><span>$text </span> </li>";
-									}
-								}
-								echo "</ul> </li>";
+						foreach($levels as $level) {
+							echo "<div class='webExplorerLevel'>
+											<h6 class='panel-title'>Nivel $level</h6>
+											<div class='body'>
+												<ol>";
+							foreach($questions as $question) {
+								if ($level == $questionsByLevel[$question->id]){
+                  $urlImage = $question->urlImage;
+                  echo "  <li class='questionForLevel'>
+                          <div class='question'>
+                            <p>$question->text</p>";
+                  if (!empty($urlImage)) {
+                    echo "  <img src='$urlImage'>";
+                  }
+                  echo "  </div>
+                          <div class='answers'>
+                            <table width='100%'>
+                              <thead>
+                                <tr>
+																	<th width='10%'>Ponderaci&oacuten</th>
+                                  <th width='45%'>Respuesta</th>
+                                  <th width='45%'>Feedback</th>
+                                </tr>
+                              </thead>
+                              <tbody>";
+                  $answersForQuestion = $answers[$question->id];
+									$maxLevel = count($levels);
+								  $options = "";
+								  for ($i=1-$level; $i <= 0; $i++) {
+								    $options .= "<option value='$i'>$i</option>";
+								  }
+									foreach($answersForQuestion as $a){
+										$answerId = $a[0]->id;
+                    $answerText = $a[0]->text;
+                    $answerImage = $a[0]->urlImage;
+                    $feedbackText = $a[0]->textFeedback;
+                    $feedbackImage = $a[0]->imageFeedback;
+                    echo "<tr>";
+                    if ($a[0]->correct == 1){
+                      echo "<td><label class='label'> Correcta </label></td>";
+                    } else{
+											echo "<td><select class='answer' name='$question->id-$answerId'> $options </select></td>";
+										}
+										echo "<td><p> $answerText </p>";
+										if (!empty($answerImage)) {
+											echo "    <img width='100px' src='$answerImage' >";
+										}
+										echo "    </td>
+                                <td>
+                                  <p> $feedbackText </p>";
+                      if (!empty($feedbackImage)) {
+                        echo "    <img width='100px' src='$feedbackImage' >";
+                      }
+                      echo "    </td>
+                              </tr>";
+                  }
+                  echo "      </tbody>
+                            </table>
+                          </div><hr>";
+                }
 							}
+							echo "    </li></ol>
+                      </div>
+                    </div>";
 						}
-						echo "</ol></div></div>";
-					}
 
 					?>
 				</div>

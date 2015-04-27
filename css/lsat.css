@@ -482,6 +482,7 @@ a.finished{
 .webExplorerLevel div.body ol{
   list-style: outside none none;
   margin-left: 0px;
+  padding: 0px;
 }
 
 .webExplorerLevel div.body ol li div.question{
@@ -492,7 +493,7 @@ a.finished{
   border: none;
 }
 
-.webExplorerLevel div.body ol ul li select{
+.webExplorerLevel div.body ol li div.answers table select{
   width:70px;
   padding:0px;
   border-radius: 2px;

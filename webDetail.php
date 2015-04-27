@@ -97,17 +97,17 @@ $answers = $answer->getAnswersForQuestionList($questions);
                     }
                       echo "    <p> $answerText </p>";
                       if (!empty($answerImage)) {
-                        echo "    <img src='$answerImage' >";
+                        echo "    <img width='100px' src='$answerImage' >";
                       }
                       echo "    </td>
                                 <td>
                                   <p> $feedbackText </p>";
                       if (!empty($feedbackImage)) {
-                        echo "    <img src='$feedbackImage' >";
+                        echo "    <img width='100px' src='$feedbackImage' >";
                       }
                       echo "    </td>
                               </tr>";
-                    
+
                   }
                   echo "      </tbody>
                             </table>
