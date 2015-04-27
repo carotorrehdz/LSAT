@@ -145,6 +145,10 @@ if(Input::exists()) {
 		$teacherId = $user->data()->id;
 		$groupname = Input::get('groupname');
 		$students  = Input::get('students');
+		if (empty($students)) {
+			$response = array( "message" => "No se puede crear un grupo vacío");
+			die(json_encode($response));
+		}
 
 		try {
 
@@ -160,8 +164,7 @@ if(Input::exists()) {
 
 			$group->create(array(
 				'professor' => intval($teacherId),
-				'name'  => $groupname,
-				'term'  => '1'
+				'name'  => $groupname
 				));
 
 			// Obtener el id que se le asigno en la BD
