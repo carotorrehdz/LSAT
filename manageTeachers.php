@@ -34,6 +34,7 @@ $teachers = $user->getUsersByRole('teacher');
              <th width="200">Nomina</th> 
              <th width="200">Fecha de registro</th> 
              <th width="300">Editar</th> 
+             <th width="300">Eliminar</th> 
            </tr> 
          </thead>
 
@@ -47,6 +48,7 @@ $teachers = $user->getUsersByRole('teacher');
              <td> $teacher->idNumber </td>
              <td> $teacher->registeredDate </td> 
              <td> <a href='editUser.php?uId=$teacher->id' class='tiny button secondary'>Editar</a> </td> 
+             <td> <a onclick='deleteUser($teacher->id)'   class='tiny button alert'>Eliminar</a> </td> 
            </tr>";
          }
 
@@ -66,6 +68,13 @@ $teachers = $user->getUsersByRole('teacher');
 <script src="js/foundation.min.js"></script>
 <script>
   $(document).foundation();
+
+      function deleteUser(id){
+      var r = confirm("Estas seguro que deseas eliminar este usuario?");
+      if (r == true) {
+        window.location.replace('./deleteUser.php?uId='+id);
+      }
+    }
 
 </script>
 </body>

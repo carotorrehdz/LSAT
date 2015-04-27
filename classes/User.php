@@ -60,6 +60,14 @@ class User {
 		}
 	}
 
+	public function delete($id){
+		$sql = "DELETE FROM user WHERE id = ?";
+
+		if($this->_db->query($sql, array($id))->error()) {
+			throw new Exception('There was a problem deleting the user.');
+		}
+	}
+
 	public function checkIsLoggedIn(){
 		//el usuario no esta logeado
 		if(!$this->isLoggedIn()) {
@@ -242,7 +250,7 @@ class User {
 			}
 		}
 
-	return $studentsBlockedByGroup;
+		return $studentsBlockedByGroup;
 	}
 
 	public function getStudentsUserData($studentIdList = ""){

@@ -7,14 +7,13 @@ $user->checkIsValidUser();
 //Id del usuario a editar
 $uId = Input::get('uId');
 $uId = trim($uId);
-var_dump($uId);
+
 if($uId == "" || !is_numeric($uId)){
-  //Redirect::to('./index.php');
+  Redirect::to('./index.php');
 }
 if(!$user->find($uId)){
   //El usuario no existe
-  //Redirect::to('./index.php');
-  var_dump("nofind");
+  Redirect::to('./index.php');
 }
 $userToEdit = $user->data();
 
