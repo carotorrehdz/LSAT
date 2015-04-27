@@ -36,6 +36,25 @@ class Competence {
 
 	}
 
+	//Regresa un arreglo con los ids de websincompetence que le corresponden a una competencia
+	public function getWebsInCompetenceIds($competenceId = null){
+		if ($competenceId == null) return;
+
+		$sql = "SELECT WC.id FROM web W JOIN websincompetence WC ON
+		W.id = WC.webId WHERE WC.competenceId = $competenceId";
+
+		if(!$this->_db->query($sql)->error()) {
+			if($this->_db->count()) {
+				$ids = array();
+				foreach($this->_db->results() as $competence){
+					array_push($ids, $competence->id);
+				}
+				return $ids;
+			}
+		}
+
+	}
+
 	public function getCompetencesForTeacher($teacherId = null){
 		if ($teacherId == null) return;
 
@@ -365,13 +384,57 @@ class Competence {
 				$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
 
 				if($this->_db->query($sql, array())->error()) {
-					throw new Exception('There was a problem deleting studentprogres.');
+					throw new Exception('There was a problem deleting studentprogress.'.$sql);
 				}
 
 				$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
 
 				if($this->_db->query($sql, array())->error()) {
 					throw new Exception('There was a problem deleting studentrecord.');
+				}
+
+		}
+
+		catch(Exception $e) {
+			$response = array( "message" => "Error:015 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+
+	}
+
+	public function deleteStudentProgress($studentId, $groupId, $competenceId) {
+
+		try{
+				$u = new User();
+				$sp = $u->getStudentProgress($studentId, $groupId, $competenceId);
+				$ids = array();
+
+				foreach ($sp as $key => $studentprogress) {
+						$firstQ = $studentprogress->firstQuestion;
+						$lastQ = $studentprogress->lastQuestion;
+						array_push($ids, $studentprogress->id);
+
+
+						$sql = "DELETE FROM questionsforstudent WHERE id BETWEEN ? AND ?";
+
+						if($this->_db->query($sql, array($firstQ, $lastQ))->error()) {
+
+						}
+				}
+
+				$idsList = implode(",", $ids);
+
+				$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
+
+				if($this->_db->query($sql, array())->error()) {
+
+				}
+
+				$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
+
+				if($this->_db->query($sql, array())->error()) {
+
 				}
 
 		}

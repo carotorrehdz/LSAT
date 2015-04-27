@@ -26,29 +26,29 @@ $teachers = $user->getUsersByRole('teacher');
         <h3>Lista de todos los maestros registrados</h3>
         <hr>
 
-        <table> 
-         <thead> 
-           <tr> 
-             <th width="300">Username</th> 
-             <th width="200">Mail</th> 
-             <th width="200">Nomina</th> 
-             <th width="200">Fecha de registro</th> 
-             <th width="300">Editar</th> 
-             <th width="300">Eliminar</th> 
-           </tr> 
+        <table>
+         <thead>
+           <tr>
+             <th width="300">Username</th>
+             <th width="200">Mail</th>
+             <th width="200">Nomina</th>
+             <th width="200">Fecha de registro</th>
+             <th width="300">Editar</th>
+             <th width="300">Eliminar</th>
+           </tr>
          </thead>
 
-         <tbody> 
+         <tbody>
            <?php
            foreach ($teachers as $teacher) {
 
-             echo "<tr id='$teacher->id'> 
+             echo "<tr id='$teacher->id'>
              <td> $teacher->username </td>
              <td> $teacher->mail </td>
              <td> $teacher->idNumber </td>
-             <td> $teacher->registeredDate </td> 
-             <td> <a href='editUser.php?uId=$teacher->id' class='tiny button secondary'>Editar</a> </td> 
-             <td> <a onclick='deleteUser($teacher->id)'   class='tiny button alert'>Eliminar</a> </td> 
+             <td> $teacher->registeredDate </td>
+             <td> <a href='editUser.php?uId=$teacher->id' class='tiny button secondary'>Editar</a> </td>
+             <td> <a onclick='deleteUser($teacher->id)'   class='tiny button alert'>Eliminar</a> </td>
            </tr>";
          }
 
@@ -72,7 +72,7 @@ $teachers = $user->getUsersByRole('teacher');
       function deleteUser(id){
       var r = confirm("Estas seguro que deseas eliminar este usuario?");
       if (r == true) {
-        window.location.replace('./deleteUser.php?uId='+id);
+        window.location.replace('./deleteTeacher.php?uId='+id);
       }
     }
 
