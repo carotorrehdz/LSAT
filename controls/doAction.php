@@ -7,6 +7,45 @@ if(Input::exists()) {
 
 	switch ($action) {
 
+		case "updateUser":
+		$username = trim(Input::get('username'));
+		$mail     = trim(Input::get('mail'));
+		$password = trim(Input::get('password'));
+		$userId   = trim(Input::get('uId')); 
+		$idNumber = trim(Input::get('idNumber')); 
+		
+		$salt = Hash::salt(32);
+		$user = new User();
+
+		try {
+			$userId = intval($userId);
+
+			if(strlen($password) != 0 ){
+				$user->update(array(
+					'username'  => $username,
+					'mail'      => $mail,
+					'password' 	=> Hash::make($password, $salt),
+					'salt'		=> $salt,
+					'idNumber' => $idNumber
+					), $userId);
+			}
+			else{
+				$user->update(array(
+					'username'  => $username,
+					'mail'      => $mail,
+					'idNumber' => $idNumber
+					), $userId);
+			}
+
+		} catch(Exception $e) {
+			$response = array( "message" => "Error:031 ".$e->getMessage());
+			die(json_encode($response));
+		}
+
+		$response = array( "message" => "success");
+		echo json_encode($response);
+		break;
+
 		case "updateSettings":
 		$username = Input::get('username');
 		$mail     = Input::get('mail');

@@ -46,7 +46,7 @@ $teachers = $user->getUsersByRole('teacher');
              <td> $teacher->mail </td>
              <td> $teacher->idNumber </td>
              <td> $teacher->registeredDate </td> 
-             <td> <a onclick=\"editTeacher($teacher->id);\" class='tiny button secondary'>Edit</a> </td> 
+             <td> <a href='editUser.php?uId=$teacher->id' class='tiny button secondary'>Editar</a> </td> 
            </tr>";
          }
 
