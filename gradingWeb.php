@@ -10,6 +10,13 @@ $webId =  Input::get("web");
 $webName = $web->getWeb($webId);
 
 $competenceId = Input::get("c");
+
+$webInCompetence = $web->getWebsInCompetenceId($webId, $competenceId);
+$isGraded = $webInCompetence->isGraded;
+if($isGraded) {
+	Redirect::to('competenceDetail.php?competence='.$competenceId);
+}
+
 $c = new Competence();
 $competence = $c->getCompetence($competenceId);
 
