@@ -11,9 +11,9 @@ if(Input::exists()) {
 		$username = trim(Input::get('username'));
 		$mail     = trim(Input::get('mail'));
 		$password = trim(Input::get('password'));
-		$userId   = trim(Input::get('uId')); 
-		$idNumber = trim(Input::get('idNumber')); 
-		
+		$userId   = trim(Input::get('uId'));
+		$idNumber = trim(Input::get('idNumber'));
+
 		$salt = Hash::salt(32);
 		$user = new User();
 
@@ -411,6 +411,9 @@ if(Input::exists()) {
 			foreach ($webIds as $key => $id) {
 				if( $w->isWebReadyToUseInCompetence($id)){
 					array_push($cleanWebIds, $id);
+				} else {
+					$response = array( "message" => "Asegurate que sean ids de redes existentes");
+					die(json_encode($response));
 				}
 			}
 
@@ -422,7 +425,7 @@ if(Input::exists()) {
 			die(json_encode($response));
 		}
 
-		$response = array( "message" => $competenceId);
+		$response = array( "message" => "success", "response" => $competenceId);
 		echo json_encode($response);
 
 		break;

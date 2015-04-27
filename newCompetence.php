@@ -76,11 +76,12 @@ $teacherId = $user->data()->id;
       .done(function( data ) {
 
         data = JSON.parse(data);
-        if(data.message == 'error'){
-          alert("Error: \n\n" + data.message);
-        }else{
+        console.log(data);
+        if(data.message == 'success'){
           //Llevar al explorador de la red para mostrar detalle de la red creada
-          window.location.replace('./competenceDetail.php?competence='+data.message);
+          window.location.replace('./competenceDetail.php?competence='+data.response);
+        }else{
+          alert("Error: \n\n" + data.message);
       }
     });
   }
