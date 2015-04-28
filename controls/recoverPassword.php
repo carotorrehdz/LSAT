@@ -30,8 +30,8 @@ if(Input::exists()) {
 				), $user->data()->id);
 
 			$to = Input::get('to');
-			$subject = "LSAT - Password recovery";
-			$message = "Your new password is: $password \n\n Please don't reply to this message.";
+			$subject = "LSAT - Recuperar contrasena";
+			$message = "Tu nueva contrasena es: $password \n\n Este es un email automático, por favor no responda a este mensaje";
 			$mailer->send($to, $subject, $message);
 
 			$response = array( "message" => "success");

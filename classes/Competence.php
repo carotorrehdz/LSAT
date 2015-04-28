@@ -300,7 +300,7 @@ class Competence {
 					throw new Exception('There was a problem inserting into studentprogress.');
 				}
 
-				$studentProgressId = intval($this->_db->lastInsertId());
+				$studentProgressId = intval($thiss->_db->lastInsertId());
 
 				//StudentRecord tiene las estadisticas del avance por Red,
 				//Entoncesva a haber un regisro en la base de datos por cada una de las redes en studentprogress
@@ -336,11 +336,22 @@ class Competence {
 		return $isCompleted;
 	}
 
-	public function blockCompetence($studentId, $groupId, $competenceId){
+	public function blockCompetence($studentId, $groupId, $competenceId, $level, $webName){
+		//Nesecitamos hacer dos cosas
+		//1) Marcar la competencia como bloqueada para ese alumno en la base de datos
+        //2) Enviarle un email al maestro y otro al alumno 
+		try {
+			// 1)
+			$sql = "UPDATE studentrecord SET isBlocked = 1 WHERE studentId = ? AND groupId = ? AND competenceId = ?";
+			if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
+			    // 2)
+			    $mailer = new Mailer();
+			    $mailer->sendBlockedMails($studentId, $groupId, $competenceId, $level, $webName);
 
-		$sql = "UPDATE studentrecord SET isBlocked = 1 WHERE studentId = ? AND groupId = ? AND competenceId = ?";
-		if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
-			return true;
+				return true;
+			}
+		} catch(Exception $e) {
+			die($e->getMessage());
 		}
 
 		return false;
@@ -362,36 +373,36 @@ class Competence {
 	public function unlockCompetence($studentId, $groupId, $competenceId) {
 
 		try{
-				$u = new User();
-				$sp = $u->getStudentProgress($studentId, $groupId, $competenceId);
-				$ids = array();
+			$u = new User();
+			$sp = $u->getStudentProgress($studentId, $groupId, $competenceId);
+			$ids = array();
 
-				foreach ($sp as $key => $studentprogress) {
-						$firstQ = $studentprogress->firstQuestion;
-						$lastQ = $studentprogress->lastQuestion;
-						array_push($ids, $studentprogress->id);
+			foreach ($sp as $key => $studentprogress) {
+				$firstQ = $studentprogress->firstQuestion;
+				$lastQ = $studentprogress->lastQuestion;
+				array_push($ids, $studentprogress->id);
 
 
-						$sql = "DELETE FROM questionsforstudent WHERE id BETWEEN ? AND ?";
+				$sql = "DELETE FROM questionsforstudent WHERE id BETWEEN ? AND ?";
 
-						if($this->_db->query($sql, array($firstQ, $lastQ))->error()) {
-							throw new Exception('There was a problem deleting questionsforstudent.');
-						}
+				if($this->_db->query($sql, array($firstQ, $lastQ))->error()) {
+					throw new Exception('There was a problem deleting questionsforstudent.');
 				}
+			}
 
-				$idsList = implode(",", $ids);
+			$idsList = implode(",", $ids);
 
-				$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
+			$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
 
-				if($this->_db->query($sql, array())->error()) {
-					throw new Exception('There was a problem deleting studentprogress.'.$sql);
-				}
+			if($this->_db->query($sql, array())->error()) {
+				throw new Exception('There was a problem deleting studentprogress.'.$sql);
+			}
 
-				$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
+			$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
 
-				if($this->_db->query($sql, array())->error()) {
-					throw new Exception('There was a problem deleting studentrecord.');
-				}
+			if($this->_db->query($sql, array())->error()) {
+				throw new Exception('There was a problem deleting studentrecord.');
+			}
 
 		}
 
@@ -406,36 +417,36 @@ class Competence {
 	public function deleteStudentProgress($studentId, $groupId, $competenceId) {
 
 		try{
-				$u = new User();
-				$sp = $u->getStudentProgress($studentId, $groupId, $competenceId);
-				$ids = array();
+			$u = new User();
+			$sp = $u->getStudentProgress($studentId, $groupId, $competenceId);
+			$ids = array();
 
-				foreach ($sp as $key => $studentprogress) {
-						$firstQ = $studentprogress->firstQuestion;
-						$lastQ = $studentprogress->lastQuestion;
-						array_push($ids, $studentprogress->id);
+			foreach ($sp as $key => $studentprogress) {
+				$firstQ = $studentprogress->firstQuestion;
+				$lastQ = $studentprogress->lastQuestion;
+				array_push($ids, $studentprogress->id);
 
 
-						$sql = "DELETE FROM questionsforstudent WHERE id BETWEEN ? AND ?";
+				$sql = "DELETE FROM questionsforstudent WHERE id BETWEEN ? AND ?";
 
-						if($this->_db->query($sql, array($firstQ, $lastQ))->error()) {
-
-						}
-				}
-
-				$idsList = implode(",", $ids);
-
-				$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
-
-				if($this->_db->query($sql, array())->error()) {
+				if($this->_db->query($sql, array($firstQ, $lastQ))->error()) {
 
 				}
+			}
 
-				$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
+			$idsList = implode(",", $ids);
 
-				if($this->_db->query($sql, array())->error()) {
+			$sql = "DELETE FROM studentprogress WHERE id IN ($idsList)";
 
-				}
+			if($this->_db->query($sql, array())->error()) {
+
+			}
+
+			$sql = "DELETE FROM studentrecord WHERE studentProgressId IN ($idsList)";
+
+			if($this->_db->query($sql, array())->error()) {
+
+			}
 
 		}
 

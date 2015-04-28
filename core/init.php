@@ -45,3 +45,5 @@ spl_autoload_register('autoload');
 
 // Include functions
 require_once (ABPATH.'/functions/sanitize.php');
+
+require_once(ABPATH.'/controls/PHPMailer/PHPMailerAutoload.php');

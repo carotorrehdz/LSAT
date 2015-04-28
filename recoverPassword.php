@@ -15,20 +15,21 @@ require 'core/init.php';
     <div class="small-9 small-centered columns ">
       <div class="panel text-centered">
 
-         <a href="index.php"> <img src="img/icon.png" width="120px"> </a>
-          <h2>Recover password</h2>
-          <h4>A new password will be sent to your email</h4>
-          <br/><br/>
-
+         <a href="index.php"> <h1>LSAT</h1></a>
+          <h4>Recuperar contraseña</h4>
+          <h4>Una nueva contraseña será enviada a tu correo electrónico.</h4>
+          <br/>
+          <br/>
           <form id="recover" data-abide="ajax">
             <input name="mail" placeholder="e-mail" type="email">
-            <small class="error">An email address is required.</small>
-            <button type="submit">Get a new password</button>
+            <small class="error">Se necesita una dirección valida de email.</small>
+            <button type="submit">Obtener nueva contraseña </button>
           </form>
 
           <div id="wrap" style="display:none">
-            <p>You have a new password, we have sent it to your mail.</p>
+            <p>Listo, te mandamos la contraseña a tu email.</p>
           </div>
+
       </div>          
     </div>
   </div>
@@ -54,14 +55,13 @@ $.post( "controls/recoverPassword.php", { mail:mymail })
       .done(function( data ) {
     try{ 
       data = JSON.parse(data);}
-        catch(e){  alert("There was an error, please try again."); return;}
+        catch(e){  alert("Hubo un error."); return;}
         if(data.message == 'success'){
           $("#recover").hide();
           $("#wrap").show();
         }else{
-          alert("There was an error: " + data.message);
+          alert("Hubo un error: " + data.message);
         }
-
       
   }, "json");
 }
