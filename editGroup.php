@@ -32,24 +32,24 @@ $students = $g->getAllStudentsFromGroup($groupId);
     <div class="row">
       <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
+        <br/>
         <h3>Editar grupo</h3>
         <hr>
         <h5>Nombre del grupo</h5>
         <input id="name" type="text" value="<?php echo $group->name; ?>"> <br/>
-        <a onclick="updateGroup()" class="button">Guardar cambios</a>
+        <a onclick="updateGroup()" class="button tiny">Guardar cambios</a>
 
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th width='300'>Matrícula</th>
-            <th width='300'>Nombre</th>
-            <th width='300'>Eliminar</th>
+        <h5>Alumnos inscritos</h5>
+        <table>
+          <thead>
+            <tr>
+              <th width='300'>Matrícula</th>
+              <th width='300'>Nombre</th>
+              <th width='300'>Eliminar</th>
             </tr>
-        </thead>
-        <tbody>
-          <?php
+          </thead>
+          <tbody>
+            <?php
             foreach($students as $student) {
               echo "
               <tr>
@@ -59,9 +59,10 @@ $students = $g->getAllStudentsFromGroup($groupId);
               </tr>
               ";
             }
-          ?>
-        </tbody>
-      </table>
+            ?>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -70,38 +71,38 @@ $students = $g->getAllStudentsFromGroup($groupId);
   <script>
     $(document).foundation();
 
-   function updateGroup(){
-    var name  = $("#name").val();
+    function updateGroup(){
+      var name  = $("#name").val();
 
-    $.post( "controls/doAction.php", { action:"updateGroup", g:<?php echo $groupId; ?>, name: name })
-    .done(function( data ) {
+      $.post( "controls/doAction.php", { action:"updateGroup", g:<?php echo $groupId; ?>, name: name })
+      .done(function( data ) {
 
-      data = JSON.parse(data);
-      if(data.message == 'success'){
-        window.location.replace('./groups.php');
-      }else{
-        alert("There was an error: " + data.message);
-      }
+        data = JSON.parse(data);
+        if(data.message == 'success'){
+          window.location.replace('./groups.php');
+        }else{
+          alert("There was an error: " + data.message);
+        }
 
-    });
+      });
 
-  }
+    }
 
-  function deleteUser(id){
-    var gId = <?php
+    function deleteUser(id){
+      var gId = <?php
       if (isset($groupId)) {
         echo "$groupId";
       }else{
         echo "-1";
       }
-    ?>;
+      ?>;
 
-    var r = confirm("Estas seguro que deseas eliminar este usuario?");
-    if (r == true) {
-      window.location.replace('./deleteStudent.php?sId='+id+'&gId='+gId);
+      var r = confirm("Estas seguro que deseas eliminar este usuario?");
+      if (r == true) {
+        window.location.replace('./deleteStudent.php?sId='+id+'&gId='+gId);
+      }
     }
-  }
 
-</script>
+  </script>
 </body>
 </html>
