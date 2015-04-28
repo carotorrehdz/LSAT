@@ -300,7 +300,7 @@ class Competence {
 					throw new Exception('There was a problem inserting into studentprogress.');
 				}
 
-				$studentProgressId = intval($thiss->_db->lastInsertId());
+				$studentProgressId = intval($this->_db->lastInsertId());
 
 				//StudentRecord tiene las estadisticas del avance por Red,
 				//Entoncesva a haber un regisro en la base de datos por cada una de las redes en studentprogress
