@@ -9,7 +9,7 @@ $difficulty = new Difficulty();
 $difficulties = $difficulty->getDifficulties();
 $topic = new Topic();
 $topics = $topic->getTopics();
-$webId = Input::get("web");
+$webId = trim(Input::get("web"));
 
 if ($webId != ''){
   $w = new Web();
@@ -318,38 +318,43 @@ if ($webId != ''){
 
         }
       });
-    }
+}
 
-    function createWeb(isPublished){
-      var name = $("input#name").val();
+function createWeb(isPublished){
+  var name = $("input#name").val().trim();
 
-      $.post( "controls/doAction.php", {  action: "createWeb", webId:webId, name: name, questionsForLevel:questionsForLevel, isPublished: isPublished})
-      .done(function( data ) {
+  if(name == ""){
+    alert("Por favor asigne un nombre a la red.");
+    return;
+  }
 
-        data = JSON.parse(data);
-        if(data.message == 'error'){
-          alert("Error: \n\n" + data.message);
-        }else{
+  $.post( "controls/doAction.php", {  action: "createWeb", webId:webId, name: name, questionsForLevel:questionsForLevel, isPublished: isPublished})
+  .done(function( data ) {
+
+    data = JSON.parse(data);
+    if(data.message == 'error'){
+      alert("Error: \n\n" + data.message);
+    }else{
           //Llevar al explorador de la red para mostrar detalle de la red creada
           window.location.replace('./webs.php');
         }
       });
-    }
+}
 
-    function saveWeb(){
-      createWeb(0);
-    }
+function saveWeb(){
+  createWeb(0);
+}
 
-    function publishWeb(){
-      var r = confirm("Estas seguro que deseas publicar la red?");
-      if (r == true) {
-        createWeb(1);
-      }
-    }
+function publishWeb(){
+  var r = confirm("Estas seguro que deseas publicar la red?");
+  if (r == true) {
+    createWeb(1);
+  }
+}
 
-    function deleteQuestion(id){
-      console.log("deleteQuestion"+id);
-      var arr = questionsForLevel[currentLevel-1];
+function deleteQuestion(id){
+  console.log("deleteQuestion"+id);
+  var arr = questionsForLevel[currentLevel-1];
       //Le quita al arreglo el id de la pregunta que queremos eliminar
       arr = $.grep(arr, function(value) {
         return value != id;
