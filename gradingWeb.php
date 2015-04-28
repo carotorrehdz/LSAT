@@ -97,7 +97,7 @@ $answers = $answer->getAnswersForQuestionList($questions);
                     $feedbackImage = $a[0]->imageFeedback;
                     echo "<tr>";
                     if ($a[0]->correct == 1){
-                      echo "<td><label class='label'> Correcta </label></td>";
+                      echo "<td><label class='label answer' name='$question->id-$answerId'> Correcta </label></td>";
                     } else{
 											echo "<td><select class='answer' name='$question->id-$answerId'> $options </select></td>";
 										}
