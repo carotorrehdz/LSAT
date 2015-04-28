@@ -234,6 +234,12 @@ if(Input::exists()) {
 			//Datos de la pregunta
 			$text = $data['text'];
 
+			//Validar que la pregunta tenga texto
+			if (empty($text)) {
+			  $response = array( "message" => "No se puede crear una pregunta vacia");
+			  die(json_encode($response));
+			}
+
 			//var_dump($text);
 			//$data = json_decode(stripslashes($_POST['data']),true);
 			//var_dump($data);
@@ -248,6 +254,10 @@ if(Input::exists()) {
 			//Crear las 4 respuestas
 			$ans = new Answer();
 			for ($i = 1; $i <= 4; $i++) {
+				if (empty($data['ans'.$i])) {
+					$response = array( "message" => "No se puede crear una pregunta sin respuesta");
+					die(json_encode($response));
+				}
 
 				//Crear la respuesta
 				$ans->create(array(
