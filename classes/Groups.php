@@ -9,6 +9,18 @@ class Groups {
 		$this->_db = DB::getInstance();
 	}
 
+	public function find($groupId = null) {
+		// Check if group_id is specified
+		if($groupId) {
+			$data = $this->_db->get($this->_tableName, array('id', '=', $groupId));
+
+			if($data->count()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function getGroupsForTeacher($teacherId = null){
 		if ($teacherId == null) return;
 
@@ -59,7 +71,7 @@ class Groups {
 		$competences = new Competence();
 		$competencesIds = $competences->getCompetencesIdsForGroup($groupId);
 		$details = $competences->getCompetencesDetails($competencesIds);
-		
+
 		return $details;
 	}
 

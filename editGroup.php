@@ -13,6 +13,7 @@ if ($group == false){
   Redirect::to("./groups.php");
 }
 
+$students = $g->getAllStudentsFromGroup($groupId);
 ?>
 
 <!doctype html>
@@ -29,15 +30,38 @@ if ($group == false){
   <section class="scroll-container" role="main">
 
     <div class="row">
-      <?php include 'includes/templates/teacherSidebar.php' ?>  
+      <?php include 'includes/templates/teacherSidebar.php' ?>
       <div class="large-9 medium-8 columns">
         <h3>Editar grupo</h3>
-        <hr>  
+        <hr>
         <h5>Nombre del grupo</h5>
         <input id="name" type="text" value="<?php echo $group->name; ?>"> <br/>
         <a onclick="updateGroup()" class="button">Guardar cambios</a>
 
       </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th width='300'>Matrícula</th>
+            <th width='300'>Nombre</th>
+            <th width='300'>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+          <?php
+            foreach($students as $student) {
+              echo "
+              <tr>
+                <td>$student->idNumber</td>
+                <td>$student->username</td>
+                <td><a onclick='deleteUser($student->id)'   class='tiny button alert'>Eliminar</a></td>
+              </tr>
+              ";
+            }
+          ?>
+        </tbody>
+      </table>
     </div>
   </section>
 
@@ -45,9 +69,6 @@ if ($group == false){
   <script src="js/foundation.min.js"></script>
   <script>
     $(document).foundation();
-  </script>
-
-  <script>
 
    function updateGroup(){
     var name  = $("#name").val();
@@ -63,6 +84,22 @@ if ($group == false){
       }
 
     });
+
+  }
+
+  function deleteUser(id){
+    var gId = <?php
+      if (isset($groupId)) {
+        echo "$groupId";
+      }else{
+        echo "-1";
+      }
+    ?>;
+
+    var r = confirm("Estas seguro que deseas eliminar este usuario?");
+    if (r == true) {
+      window.location.replace('./deleteStudent.php?sId='+id+'&gId='+gId);
+    }
   }
 
 </script>
