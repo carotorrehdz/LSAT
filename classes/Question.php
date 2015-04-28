@@ -62,7 +62,6 @@ class Question {
 
 			$u = new User();
 			$c = new Competence();
-			$w = new Web();
 			$competenciaTerminada = true;
 			$studentprogress = array();
 
@@ -176,17 +175,12 @@ class Question {
 				if($this->_db->count() == 0) {
 					//Ya no hay preguntas de ese nivel para esa red, entonces te BLOQUEO
 					$nextQuestion = 'blocked';
-					//AGREGAR RED Y NIVEL
-					$web = $w->getWeb($webAContestar);
-					$webName = $web->name;
-					var_dump($nextLevel);
-					var_dump($webName);
-					$c->blockCompetence($studentId, $groupId, $competenceId, $nextLevel, $webName);
+					$c->blockCompetence($studentId, $groupId, $competenceId);
 				}else{
 					$nextQuestion = $this->_db->first();
 				}
 			}
-
+			
 
 			//Buscar el studentProgressId para la red que estoy contestando
 

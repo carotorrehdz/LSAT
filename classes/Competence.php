@@ -336,9 +336,8 @@ class Competence {
 		return $isCompleted;
 	}
 
-	public function blockCompetence($studentId, $groupId, $competenceId, $nextLevel, $webName){
+	public function blockCompetence($studentId, $groupId, $competenceId){
 
-		
 		$sql = "UPDATE studentrecord SET isBlocked = 1 WHERE studentId = ? AND groupId = ? AND competenceId = ?";
 		if(!$this->_db->query($sql, array($studentId, $groupId, $competenceId))->error()) {
 			return true;
