@@ -23,6 +23,7 @@ $teachers = $user->getUsersByRole('teacher');
     <div class="row">
       <?php include 'includes/templates/adminSidebar.php' ?>
       <div class="large-9 medium-8 columns">
+        <br/>
         <h3>Lista de todos los maestros registrados</h3>
         <hr>
 
@@ -69,12 +70,12 @@ $teachers = $user->getUsersByRole('teacher');
 <script>
   $(document).foundation();
 
-      function deleteUser(id){
-      var r = confirm("Estas seguro que deseas eliminar este usuario?");
-      if (r == true) {
-        window.location.replace('./deleteTeacher.php?uId='+id);
-      }
+  function deleteUser(id){
+    var r = confirm("Estas seguro que deseas eliminar este usuario?");
+    if (r == true) {
+      window.location.replace('./deleteTeacher.php?uId='+id);
     }
+  }
 
 </script>
 </body>

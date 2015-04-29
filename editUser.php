@@ -11,11 +11,13 @@ $uId = trim($uId);
 if($uId == "" || !is_numeric($uId)){
   Redirect::to('./index.php');
 }
-if(!$user->find($uId)){
+
+$userToEdit = new User();
+if(!$userToEdit->find($uId)){
   //El usuario no existe
   Redirect::to('./index.php');
 }
-$userToEdit = $user->data();
+$userToEdit = $userToEdit->data();
 
 ?>
 
@@ -39,7 +41,6 @@ $userToEdit = $user->data();
     <div class="row">
 
       <?php 
-
       if($user->data()->role == 'admin'){
         include 'includes/templates/adminSidebar.php';
       }else if($user->data()->role == 'teacher'){
@@ -64,7 +65,7 @@ $userToEdit = $user->data();
        <h5>Nueva contraseña</h5>
        <input id="password" pattern=".{6,}" type="password">
        <p class="grey">Por seguridad no mostramos tu antigua contraseña, si la quieres cambiar escribe una nueva. Si dejas el campo vacio tu contraseña no sera cambiada.</p>
-       <a href="#" onclick="updateSettings()" class="button">Realizar cambios</a>
+       <a href="#" onclick="updateSettings()" class="button small right">Realizar cambios</a>
 
      </div>
    </div>
@@ -93,7 +94,7 @@ $userToEdit = $user->data();
       window.location.replace('./index.php');
 
     }else{
-      alert("There was an error: " + data.message);
+      alert("Error: " + data.message);
     }
 
   });

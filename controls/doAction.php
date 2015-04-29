@@ -8,16 +8,26 @@ if(Input::exists()) {
 	switch ($action) {
 
 		case "updateUser":
-		$username = trim(Input::get('username'));
-		$mail     = trim(Input::get('mail'));
-		$password = trim(Input::get('password'));
-		$userId   = trim(Input::get('uId'));
-		$idNumber = trim(Input::get('idNumber'));
-
-		$salt = Hash::salt(32);
-		$user = new User();
-
 		try {
+
+			$user = new User();
+			if($user->data()->role != 'teacher' && $user->data()->role != 'admin'){
+				return; /*Solo un maestro o administrador puede crear preguntas*/
+			}
+
+			$username = trim(stripslashes(Input::get('username')));
+			$mail     = trim(stripslashes(Input::get('mail')));
+			$password = trim(stripslashes(Input::get('password')));
+			$userId   = trim(stripslashes(Input::get('uId')));
+			$idNumber = trim(stripslashes(Input::get('idNumber')));
+
+
+			if(!isValidIdNumber($idNumber) || $username == "" || $mail == "" || !is_numeric($userId) ){
+				$response = array( "message" => "Datos incorrectos.");
+				die(json_encode($response));
+			}
+
+			$salt = Hash::salt(32);
 			$userId = intval($userId);
 
 			if(strlen($password) != 0 ){
@@ -112,14 +122,19 @@ if(Input::exists()) {
 		break;
 
 		case "registerTeacher":
-		$user = new User();
-		$salt = Hash::salt(32);
-
-		$username = Input::get('username');
-		$mail     = Input::get('mail');
-		$idnumber = Input::get('idnumber');
-
 		try {
+
+			$user = new User();
+			$salt = Hash::salt(32);
+
+			$username = trim(stripslashes(Input::get('username')));
+			$mail     = trim(stripslashes(Input::get('mail')));
+			$idnumber = trim(stripslashes(Input::get('idnumber')));
+
+			if(!isValidIdNumber($idnumber) || $username == "" || $mail == "" ){
+				$response = array( "message" => "Datos incorrectos.");
+				die(json_encode($response));
+			}
 
 			$user->create(array(
 				'mail' 	=> $mail,
@@ -155,30 +170,11 @@ if(Input::exists()) {
 			
 			$studentIds = explode(',', $students);
 			foreach ($studentIds as $idnumber){
-				$error = false;
-				$idnumber = trim($idnumber);
-				//Si alguna matricula NO esta en el formato correcto 
-				//detenemos el proceso, no creamos el grupo, y avisamos con un mensaje de error
-
-				//El primer caracter debe de ser una A o a
-				$firstPart = $idnumber[0];
-				if($firstPart != 'a' && $firstPart != 'A'){
-					$error = true;
-				}
-
-				//El resto debe de ser numerico
-				$sndPart = substr($idnumber, 1);
-				if(!is_numeric($sndPart)){
-					$error = true;
-				}
-
-				if($error){
+				if(!isValidIdNumber($idnumber)){
 					$response = array( "message" => "Matriculas incorrectas");
 					die(json_encode($response));
-					break;
 				}
 			}
-
 
 			$db = DB::getInstance();
 
@@ -811,6 +807,33 @@ if(Input::exists()) {
 
 }else{
 	echo "Error: 001";
+}
+
+function isValidIdNumber($idnumber = ""){
+	$idnumber = trim($idnumber);
+	$error = false;
+
+	if($idnumber == ""){
+		return false;
+	}
+	
+	//El primer caracter debe de ser una A,a,L o l
+	$firstPart = $idnumber[0];
+	if($firstPart != 'a' && $firstPart != 'A' && $firstPart != 'l' && $firstPart != 'L'){
+		$error = true;
+	}
+
+	//El resto debe de ser numerico
+	$sndPart = substr($idnumber, 1);
+	if(!is_numeric($sndPart)){
+		$error = true;
+	}
+
+	if($error){
+		return false;
+	}
+
+	return true;
 }
 
 

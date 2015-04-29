@@ -34,7 +34,7 @@ $user->checkIsValidUser('admin');
          <input id="mail" type="text">
          Nómina / Matrícula:
          <input id="idnumber" type="text">
-         <a href="#" onclick="registerTeacher()" class="button">Register</a>
+         <a href="#" onclick="registerTeacher()" class="button tiny right">Registrar</a>
        </div>
 
      </div>
@@ -66,7 +66,7 @@ $user->checkIsValidUser('admin');
       if(data.message == 'success'){
         window.location.replace('./manageTeachers.php');
       }else{
-        alert("There was an error: " + data.message);
+        alert("Error: " + data.message);
       }
 
     });
