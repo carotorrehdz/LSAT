@@ -200,7 +200,7 @@ if ($webId != ''){
       .done(function( data ) {
         data = JSON.parse(data);
 
-        console.log(data);
+        //console.log(data);
         for (var questionId in data) {
           if (data.hasOwnProperty(questionId)) {
             var level = parseInt(data[questionId]);
@@ -255,11 +255,11 @@ if ($webId != ''){
     function refreshLis(){
       var t = questionLiTemplate;
       var len = questionsForLevel[currentLevel-1].length;
-      console.log("len" + len);
+      //console.log("len" + len);
       questionsForLevelUl.empty();
 
       for(var i=0; i<len; i++){
-        console.log(i);
+        //console.log(i);
         var id = questionsForLevel[currentLevel-1][i];
         var li = t.replace('$id', id);
         li = li.replace('$id', id);
@@ -270,7 +270,7 @@ if ($webId != ''){
     }
 
     function showQuestion(id){
-      var template =  "<tr> <td> <p> $text </p> <img style='display:$dA' src='$imgA' width='100px' /> </td> <td> <p> $feedback </p>  <img style='display:$dF' src='$imgF' width='100px' /> </td> </tr>";
+      var template =  "<tr> <td id='answer'> <p> $text </p> <img id='imageAnswer-$i' style='display:$dA' src='$imgA' width='100px' /> </td> <td id='feedback'> <p> $feedback </p>  <img id='imageFeedback-$i' style='display:$dF' src='$imgF' width='100px' /> </td> </tr>";
 
       $.post( "controls/doAction.php", {  action: "getQuestion", id: id})
       .done(function( data ) {
@@ -280,13 +280,18 @@ if ($webId != ''){
           alert("Error: \n\n" + data.message);
         }else{
           /*Llenar el contenedor con los datos de la pregunta*/
-          console.log(data);
+          //console.log(data);
           qImage.show();
           qText.html(data['text']);
           qImage.attr("src", data['urlImage']);
           if(data['urlImage'] == ""){
             qImage.hide();
           }
+
+          qImage.error(function() {
+            var link = qImage.attr('src');
+            qImage.replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
 
           var tbody = $("#questionModal .ans tbody");
           tbody.empty();
@@ -295,8 +300,10 @@ if ($webId != ''){
 
             var t = template;
             t = t.replace("$text", data[i].text);
+            t = t.replace("$i", i);
             t = t.replace("$imgA", data[i].urlImage);
             t = t.replace("$feedback", data[i].textFeedback);
+            t = t.replace("$i", i);
             t = t.replace("$imgF", data[i].imageFeedback);
 
             if(data[i].urlImage == ""){
@@ -313,6 +320,60 @@ if ($webId != ''){
 
             tbody.append(t);
           }
+
+          /*for(i=0; i<4; i++){
+            $("#imageAnswer-"+i).error(function() {
+              var link = $("#imageAnswer-"+i).attr('src');
+              $("#imageAnswer-"+i).replaceWith("<a href="+link+" target=_blank>Video</a>");
+            });
+          }
+
+          for(i=0; i<4; i++){
+            $("#imageFeedback-"+i).error(function() {
+              var link = $("#imageFeedback-"+i).attr('src');
+              $("#imageFeedback-"+i).replaceWith("<a href="+link+" target=_blank>Video</a>");
+            });
+          }*/
+
+          $("#imageAnswer-0").error(function() {
+            var link = $("#imageAnswer-0").attr('src');
+            $("#imageAnswer-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageAnswer-1").error(function() {
+            var link = $("#imageAnswer-0").attr('src');
+            $("#imageAnswer-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageAnswer-2").error(function() {
+            var link = $("#imageAnswer-0").attr('src');
+            $("#imageAnswer-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageAnswer-3").error(function() {
+            var link = $("#imageAnswer-0").attr('src');
+            $("#imageAnswer-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageFeedback-0").error(function() {
+            var link = $("#imageFeedback-0").attr('src');
+            $("#imageFeedback-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageFeedback-1").error(function() {
+            var link = $("#imageFeedback-0").attr('src');
+            $("#imageFeedback-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageFeedback-2").error(function() {
+            var link = $("#imageFeedback-0").attr('src');
+            $("#imageFeedback-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
+
+          $("#imageFeedback-3").error(function() {
+            var link = $("#imageFeedback-0").attr('src');
+            $("#imageFeedback-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
+          });
 
           $('#questionModal').foundation('reveal', 'open');
 
@@ -353,7 +414,7 @@ function publishWeb(){
 }
 
 function deleteQuestion(id){
-  console.log("deleteQuestion"+id);
+  //console.log("deleteQuestion"+id);
   var arr = questionsForLevel[currentLevel-1];
       //Le quita al arreglo el id de la pregunta que queremos eliminar
       arr = $.grep(arr, function(value) {
@@ -367,8 +428,8 @@ function deleteQuestion(id){
         return value != id;
       });
 
-      console.log(arr);
-      console.log(questionsForLevel[currentLevel-1]);
+      //console.log(arr);
+      //console.log(questionsForLevel[currentLevel-1]);
 
       refreshLis();
     }
