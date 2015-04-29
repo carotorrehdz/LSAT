@@ -319,26 +319,13 @@ if ($webId != ''){
             }
 
             tbody.append(t);
-
-            //Checar que imgAnswer tenga un url, si no no mostrar nada
-            if(data[i].urlImage != ""){
-              var imgA = "#imageAnswer-"+i;
-              $(imgA).error = imageLoadError(imgA);
-            }
-
-            //Checar que imgFeedback tenga un url, si no no mostrar nada
-            if(data[i].urlImage != ""){
-              var imgF = "#imageFeedback-"+i;
-              $(imgF).error = imageLoadError(imgF);
-            }
-
           }
-          /*var j = 0;
-          for(j=0; j<4; j++){
-            var id = "#imageAnswer-"+j;
-            console.log(id);
-            console.log($(id));
-            $(id).error = imageLoadError(id);
+
+          /*for(i=0; i<4; i++){
+            $("#imageAnswer-"+i).error(function() {
+              var link = $("#imageAnswer-"+i).attr('src');
+              $("#imageAnswer-"+i).replaceWith("<a href="+link+" target=_blank>Video</a>");
+            });
           }
 
           for(i=0; i<4; i++){
@@ -346,7 +333,7 @@ if ($webId != ''){
               var link = $("#imageFeedback-"+i).attr('src');
               $("#imageFeedback-"+i).replaceWith("<a href="+link+" target=_blank>Video</a>");
             });
-          }
+          }*/
 
           $("#imageAnswer-0").error(function() {
             var link = $("#imageAnswer-0").attr('src');
@@ -387,16 +374,11 @@ if ($webId != ''){
             var link = $("#imageFeedback-0").attr('src');
             $("#imageFeedback-0").replaceWith("<a href="+link+" target=_blank>Video</a>");
           });
-          */
+
           $('#questionModal').foundation('reveal', 'open');
 
         }
       });
-}
-
-function imageLoadError(id){
-  var link = $(id).attr('src');
-  $(id).replaceWith("<a href="+link+" target=_blank>Video</a>");
 }
 
 function createWeb(isPublished){
