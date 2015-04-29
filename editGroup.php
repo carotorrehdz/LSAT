@@ -36,16 +36,17 @@ $students = $g->getAllStudentsFromGroup($groupId);
         <h3>Editar grupo</h3>
         <hr>
         <h5>Nombre del grupo</h5>
-        <input id="name" type="text" value="<?php echo $group->name; ?>"> <br/>
-        <a onclick="updateGroup()" class="button tiny">Guardar cambios</a>
-
+        <input id="name" type="text" value="<?php echo $group->name; ?>">
+        <a onclick="updateGroup()" class="button tiny right">Guardar cambios</a>
+        <br/>
+        <hr>
         <h5>Alumnos inscritos</h5>
         <table>
           <thead>
             <tr>
-              <th width='300'>Matrícula</th>
-              <th width='300'>Nombre</th>
-              <th width='300'>Eliminar</th>
+              <th width='330'>Matrícula</th>
+              <th width='330'>Nombre</th>
+              <th width='330'>Eliminar (Dar de baja del grupo)</th>
             </tr>
           </thead>
           <tbody>

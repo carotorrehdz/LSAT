@@ -140,24 +140,52 @@ if(Input::exists()) {
 
 		case "createGroup":
 
-		//Necesitamos la Matrícula del profesor, que es el usuario logueado
-		$user = new User();
-		$teacherId = $user->data()->id;
-		$groupname = Input::get('groupname');
-		$students  = Input::get('students');
-		if (empty($students)) {
-			$response = array( "message" => "No se puede crear un grupo vacío");
-			die(json_encode($response));
-		}
-
 		try {
+			
+			//Necesitamos la Matrícula del profesor, que es el usuario logueado
+			$user = new User();
+			$teacherId = $user->data()->id;
+			$groupname = trim(Input::get('groupname'));
+			$students  = trim(Input::get('students'));
+			
+			if ( empty($groupname) || empty($students)) {
+				$response = array( "message" => "No se puede crear un grupo vacío");
+				die(json_encode($response));
+			}
+			
+			$studentIds = explode(',', $students);
+			foreach ($studentIds as $idnumber){
+				$error = false;
+				$idnumber = trim($idnumber);
+				//Si alguna matricula NO esta en el formato correcto 
+				//detenemos el proceso, no creamos el grupo, y avisamos con un mensaje de error
+
+				//El primer caracter debe de ser una A o a
+				$firstPart = $idnumber[0];
+				if($firstPart != 'a' && $firstPart != 'A'){
+					$error = true;
+				}
+
+				//El resto debe de ser numerico
+				$sndPart = substr($idnumber, 1);
+				if(!is_numeric($sndPart)){
+					$error = true;
+				}
+
+				if($error){
+					$response = array( "message" => "Matriculas incorrectas");
+					die(json_encode($response));
+					break;
+				}
+			}
+
 
 			$db = DB::getInstance();
 
 			// Crear el nuevo grupo
 			$group = new Groups();
 			if($group->getGroupByName($groupname)){
-				$response = array( "message" => "El grupo ya existe");
+				$response = array( "message" => "El grupo ya existe, cambia el nombre. ");
 				echo json_encode($response);
 				return;
 			}
@@ -171,7 +199,6 @@ if(Input::exists()) {
 			$groupId = $group->getGroupByName($groupname)->id;
 
 			//Crear cada estudiante
-			$studentIds = explode(',', $students);
 			foreach ($studentIds as $idnumber){
 				/*Debemos de crear una nueva cuenta para cada alumno y asignarle el nuevo grupo
 				pero si el alumno ya existe solo le asignamos el grupo*/
@@ -179,7 +206,7 @@ if(Input::exists()) {
 				$student = $user->getByIdNumber($idnumber);
 				if($student == false){
 					$salt = Hash::salt(32);
-					$mail = $idnumber . "@itesm.mx";
+					$mail = trim($idnumber) . "@itesm.mx";
 					$username = "Estudiante - " . $idnumber;
 
 					$user->create(array(
@@ -236,8 +263,8 @@ if(Input::exists()) {
 
 			//Validar que la pregunta tenga texto
 			if (empty($text)) {
-			  $response = array( "message" => "No se puede crear una pregunta vacia");
-			  die(json_encode($response));
+				$response = array( "message" => "No se puede crear una pregunta vacia");
+				die(json_encode($response));
 			}
 
 			//var_dump($text);
