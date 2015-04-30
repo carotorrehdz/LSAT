@@ -270,8 +270,7 @@ if ($webId != ''){
   }
 
   function showQuestion(id){
-    var templateIdAnswer = "imageAnswer-$i";
-    var template =  "<tr><td><p> $text </p><img id='templateIdAnswer' style='display:$dA' src='$imgA' width='100px' onerror='imageLoadError(templateIdAnswer)'/></td><td><p> $feedback </p><img style='display:$dF' src='$imgF' width='100px' /></td></tr>";
+    var template =  "<tr><td><p> $text </p><img style='display:$dA' src='$imgA' width='100px'/></td><td><p> $feedback </p><img style='display:$dF' src='$imgF' width='100px' /></td></tr>";
 
     $.post( "controls/doAction.php", {  action: "getQuestion", id: id})
     .done(function( data ) {
@@ -294,13 +293,9 @@ if ($webId != ''){
 
         for(i=0; i<4; i++){
 
-          var tA = templateIdAnswer;
-          tA = tA.replace("$i", i);
           var t = template;
           t = t.replace("$text", data[i].text);
-          t = t.replace("$i", i);
           t = t.replace("$imgA", data[i].urlImage);
-          t = t.replace("$i", i);
           t = t.replace("$feedback", data[i].textFeedback);
           t = t.replace("$imgF", data[i].imageFeedback);
 
@@ -323,12 +318,6 @@ if ($webId != ''){
 
       }
     });
-  }
-
-  function imageLoadError(id){
-    var link = $(id).attr('src');
-    console.log(link)
-    //$(id).replaceWith("<a href="+link+" target=_blank>Video</a>");
   }
 
   function createWeb(isPublished){
